@@ -10,6 +10,10 @@ import Workout from "./pages/Workout";
 import Nutrition from "./pages/Nutrition";
 import Profile from "./pages/Profile";
 import Progress from "./pages/Progress";
+import Measurements from "./pages/Measurements";
+import Records from "./pages/Records";
+import Templates from "./pages/Templates";
+import Reminders from "./pages/Reminders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +32,10 @@ const App = () => (
             <Route path="/nutrition" element={<Nutrition />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/progress" element={<Progress />} />
+            <Route path="/measurements" element={<Measurements />} />
+            <Route path="/records" element={<Records />} />
+            <Route path="/templates" element={<Templates />} />
+            <Route path="/reminders" element={<Reminders />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

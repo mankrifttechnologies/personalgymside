@@ -3,12 +3,13 @@ import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useWorkouts, useMuscleRecovery } from '@/hooks/useWorkouts';
 import { useAICoach } from '@/hooks/useAICoach';
+import { usePersonalRecords } from '@/hooks/usePersonalRecords';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MUSCLE_GROUPS, EXERCISE_SUGGESTIONS, MuscleGroup } from '@/types/fitness';
 import { 
   Dumbbell, Plus, Check, ChevronLeft, Sparkles, 
-  Activity, Utensils, User, Loader2, X
+  Activity, Utensils, User, Loader2, X, Layers, Trophy
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -17,6 +18,7 @@ export default function Workout() {
   const { todayWorkout, createWorkout, addExercise } = useWorkouts();
   const { getRecoveryStatus } = useMuscleRecovery();
   const { isLoading: aiLoading, response: aiResponse, error: aiError, getWorkoutRecommendation } = useAICoach();
+  const { checkAndUpdatePR, getPRForExercise } = usePersonalRecords();
   
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<string>('');
@@ -70,7 +72,23 @@ export default function Workout() {
         weight_kg: weight || null,
       });
 
-      toast.success(`Added ${exerciseName}!`);
+      // Check for new PR if weight is provided
+      if (weight && typeof weight === 'number') {
+        const prResult = await checkAndUpdatePR.mutateAsync({
+          exerciseName,
+          muscleGroup: selectedMuscle,
+          weight,
+          reps,
+        });
+        
+        if (prResult.isNewPR) {
+          toast.success(`🏆 New PR! ${exerciseName}: ${weight}kg × ${reps}`);
+        } else {
+          toast.success(`Added ${exerciseName}!`);
+        }
+      } else {
+        toast.success(`Added ${exerciseName}!`);
+      }
       
       // Reset form
       setSelectedExercise('');
@@ -101,15 +119,26 @@ export default function Workout() {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
           </p>
         </div>
-        <Button 
-          variant="glass" 
-          size="sm" 
-          onClick={() => setShowAIPanel(!showAIPanel)}
-          className="gap-2"
-        >
-          <Sparkles className="w-4 h-4" />
-          AI Coach
-        </Button>
+        <div className="flex gap-2">
+          <Link to="/templates">
+            <Button variant="glass" size="sm" className="gap-1">
+              <Layers className="w-4 h-4" />
+            </Button>
+          </Link>
+          <Link to="/records">
+            <Button variant="glass" size="sm" className="gap-1">
+              <Trophy className="w-4 h-4" />
+            </Button>
+          </Link>
+          <Button 
+            variant="glass" 
+            size="sm" 
+            onClick={() => setShowAIPanel(!showAIPanel)}
+            className="gap-2"
+          >
+            <Sparkles className="w-4 h-4" />
+          </Button>
+        </div>
       </header>
 
       <main className="px-4 space-y-6">
