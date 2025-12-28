@@ -14,6 +14,9 @@ import Measurements from "./pages/Measurements";
 import Records from "./pages/Records";
 import Templates from "./pages/Templates";
 import Reminders from "./pages/Reminders";
+import Schedule from "./pages/Schedule";
+import Friends from "./pages/Friends";
+import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +39,9 @@ const App = () => (
             <Route path="/records" element={<Records />} />
             <Route path="/templates" element={<Templates />} />
             <Route path="/reminders" element={<Reminders />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/history" element={<History />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -8,7 +8,7 @@ import { FitnessGoal, ActivityLevel, DietPreference } from '@/types/fitness';
 import { 
   User, ChevronLeft, Save, LogOut, 
   Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale,
-  Bell, Ruler, ChevronRight
+  Bell, Ruler, ChevronRight, Users, CalendarDays
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -145,22 +145,44 @@ export default function Profile() {
             <div className="p-2 rounded-lg bg-accent/20">
               <Ruler className="w-5 h-5 text-accent" />
             </div>
-            <div className="flex-1">
-              <p className="font-medium text-sm">Body Measurements</p>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Measurements</p>
               <p className="text-xs text-muted-foreground">Track progress</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </Link>
           
           <Link to="/reminders" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
             <div className="p-2 rounded-lg bg-primary/20">
               <Bell className="w-5 h-5 text-primary" />
             </div>
-            <div className="flex-1">
-              <p className="font-medium text-sm">Reminders</p>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Reminders</p>
               <p className="text-xs text-muted-foreground">Set schedule</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </Link>
+
+          <Link to="/schedule" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-warning/20">
+              <CalendarDays className="w-5 h-5 text-warning" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Weekly Plan</p>
+              <p className="text-xs text-muted-foreground">Schedule workouts</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </Link>
+
+          <Link to="/friends" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-destructive/20">
+              <Users className="w-5 h-5 text-destructive" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Friends</p>
+              <p className="text-xs text-muted-foreground">Compare PRs</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </Link>
         </div>
 
