@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { FitnessGoal, ActivityLevel, DietPreference } from '@/types/fitness';
 import { 
   User, ChevronLeft, Save, LogOut, 
-  Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale
+  Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale,
+  Bell, Ruler, ChevronRight
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -138,6 +139,31 @@ export default function Profile() {
       </header>
 
       <main className="px-4 space-y-6">
+        {/* Quick Links */}
+        <div className="grid grid-cols-2 gap-3 animate-slide-up">
+          <Link to="/measurements" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-accent/20">
+              <Ruler className="w-5 h-5 text-accent" />
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-sm">Body Measurements</p>
+              <p className="text-xs text-muted-foreground">Track progress</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </Link>
+          
+          <Link to="/reminders" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-primary/20">
+              <Bell className="w-5 h-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="font-medium text-sm">Reminders</p>
+              <p className="text-xs text-muted-foreground">Set schedule</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </Link>
+        </div>
+
         {/* Basic Info */}
         <div className="glass rounded-xl p-4 animate-slide-up">
           <h3 className="font-semibold mb-4 flex items-center gap-2">

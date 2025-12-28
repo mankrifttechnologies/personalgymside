@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      body_measurements: {
+        Row: {
+          biceps_cm: number | null
+          body_fat_percentage: number | null
+          chest_cm: number | null
+          created_at: string
+          hips_cm: number | null
+          id: string
+          measurement_date: string
+          notes: string | null
+          thighs_cm: number | null
+          user_id: string
+          waist_cm: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          biceps_cm?: number | null
+          body_fat_percentage?: number | null
+          chest_cm?: number | null
+          created_at?: string
+          hips_cm?: number | null
+          id?: string
+          measurement_date?: string
+          notes?: string | null
+          thighs_cm?: number | null
+          user_id: string
+          waist_cm?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          biceps_cm?: number | null
+          body_fat_percentage?: number | null
+          chest_cm?: number | null
+          created_at?: string
+          hips_cm?: number | null
+          id?: string
+          measurement_date?: string
+          notes?: string | null
+          thighs_cm?: number | null
+          user_id?: string
+          waist_cm?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
       calorie_entries: {
         Row: {
           calories: number
@@ -76,6 +121,42 @@ export type Database = {
           last_trained_date?: string
           muscle_group?: string
           updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      personal_records: {
+        Row: {
+          achieved_date: string
+          created_at: string
+          exercise_name: string
+          id: string
+          max_reps: number
+          max_weight_kg: number
+          muscle_group: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achieved_date?: string
+          created_at?: string
+          exercise_name: string
+          id?: string
+          max_reps?: number
+          max_weight_kg: number
+          muscle_group: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achieved_date?: string
+          created_at?: string
+          exercise_name?: string
+          id?: string
+          max_reps?: number
+          max_weight_kg?: number
+          muscle_group?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -168,6 +249,113 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      workout_reminders: {
+        Row: {
+          created_at: string
+          days_of_week: number[]
+          id: string
+          is_enabled: boolean
+          reminder_message: string | null
+          reminder_time: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          days_of_week?: number[]
+          id?: string
+          is_enabled?: boolean
+          reminder_message?: string | null
+          reminder_time?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          days_of_week?: number[]
+          id?: string
+          is_enabled?: boolean
+          reminder_message?: string | null
+          reminder_time?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workout_template_exercises: {
+        Row: {
+          created_at: string
+          exercise_name: string
+          id: string
+          muscle_group: string
+          notes: string | null
+          order_index: number
+          reps: number
+          sets: number
+          template_id: string
+        }
+        Insert: {
+          created_at?: string
+          exercise_name: string
+          id?: string
+          muscle_group: string
+          notes?: string | null
+          order_index?: number
+          reps?: number
+          sets?: number
+          template_id: string
+        }
+        Update: {
+          created_at?: string
+          exercise_name?: string
+          id?: string
+          muscle_group?: string
+          notes?: string | null
+          order_index?: number
+          reps?: number
+          sets?: number
+          template_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_template_exercises_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "workout_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_templates: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_system: boolean
+          name: string
+          user_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          name: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          name?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       workouts: {
         Row: {
