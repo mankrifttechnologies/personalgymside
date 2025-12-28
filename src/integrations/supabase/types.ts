@@ -98,6 +98,33 @@ export type Database = {
         }
         Relationships: []
       }
+      friendships: {
+        Row: {
+          created_at: string
+          friend_id: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_id: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_id?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       muscle_recovery: {
         Row: {
           created_at: string | null
@@ -169,9 +196,11 @@ export type Database = {
           daily_calorie_target: number | null
           diet_preference: string | null
           fitness_goal: string | null
+          friend_code: string | null
           gender: string | null
           height_cm: number | null
           id: string
+          is_public: boolean | null
           name: string | null
           updated_at: string | null
           user_id: string
@@ -184,9 +213,11 @@ export type Database = {
           daily_calorie_target?: number | null
           diet_preference?: string | null
           fitness_goal?: string | null
+          friend_code?: string | null
           gender?: string | null
           height_cm?: number | null
           id?: string
+          is_public?: boolean | null
           name?: string | null
           updated_at?: string | null
           user_id: string
@@ -199,15 +230,52 @@ export type Database = {
           daily_calorie_target?: number | null
           diet_preference?: string | null
           fitness_goal?: string | null
+          friend_code?: string | null
           gender?: string | null
           height_cm?: number | null
           id?: string
+          is_public?: boolean | null
           name?: string | null
           updated_at?: string | null
           user_id?: string
           weight_kg?: number | null
         }
         Relationships: []
+      }
+      weekly_schedule: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          id: string
+          template_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          id?: string
+          template_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          id?: string
+          template_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weekly_schedule_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "workout_templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       workout_exercises: {
         Row: {
