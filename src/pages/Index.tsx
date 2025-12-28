@@ -1,15 +1,16 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useWorkouts, useMuscleRecovery } from '@/hooks/useWorkouts';
 import { useCalories } from '@/hooks/useCalories';
+import { useWeeklySchedule } from '@/hooks/useWeeklySchedule';
 import { Button } from '@/components/ui/button';
 import { MUSCLE_GROUPS } from '@/types/fitness';
+import BottomNav from '@/components/BottomNav';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
-  LogOut, Plus, User, Utensils, Activity
+  LogOut, User, Activity, Play, CalendarDays
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 export default function Index() {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -17,6 +18,7 @@ export default function Index() {
   const { todayWorkout } = useWorkouts();
   const { getRecoveryStatus } = useMuscleRecovery();
   const { totals } = useCalories();
+  const { getTodaySchedule, isLoading: scheduleLoading } = useWeeklySchedule();
 
   if (authLoading) {
     return (
@@ -35,11 +37,14 @@ export default function Index() {
   const exerciseCount = todayWorkout?.workout_exercises?.length || 0;
   const calorieTarget = profile?.daily_calorie_target || 2000;
   const calorieProgress = Math.min((totals.calories / calorieTarget) * 100, 100);
+  const todaySchedule = getTodaySchedule();
 
   const suggestedMuscles = MUSCLE_GROUPS.filter(m => {
     const status = getRecoveryStatus(m.value);
     return status.status === 'recovered' || status.status === 'fresh';
   }).slice(0, 3);
+
+  const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
 
   return (
     <div className="min-h-screen pb-24">
@@ -69,9 +74,48 @@ export default function Index() {
       </header>
 
       <main className="px-4 space-y-6">
+        {/* Today's Scheduled Workout Widget */}
+        <div className="glass rounded-xl p-4 animate-slide-up border-l-4 border-primary">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <CalendarDays className="w-5 h-5 text-primary" />
+              <span className="text-sm text-muted-foreground">{dayName}'s Plan</span>
+            </div>
+            <Link to="/schedule">
+              <Button variant="ghost" size="sm" className="text-xs">
+                Edit Schedule
+              </Button>
+            </Link>
+          </div>
+          
+          {todaySchedule?.template ? (
+            <div>
+              <h2 className="text-xl font-bold mb-1">{todaySchedule.template.name}</h2>
+              <p className="text-sm text-muted-foreground mb-3">
+                {todaySchedule.template.description || 'Time to hit it!'}
+              </p>
+              <Link to="/templates">
+                <Button variant="energy" className="w-full gap-2">
+                  <Play className="w-4 h-4" />
+                  Start Workout
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="text-center py-2">
+              <p className="text-muted-foreground mb-2">No workout scheduled</p>
+              <Link to="/schedule">
+                <Button variant="outline" size="sm">
+                  Plan Your Week
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="glass rounded-xl p-4 animate-slide-up">
+          <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <div className="flex items-center gap-2 mb-2">
               <Activity className="w-5 h-5 text-primary" />
               <span className="text-sm text-muted-foreground">Today's Workout</span>
@@ -80,7 +124,7 @@ export default function Index() {
             <p className="text-sm text-muted-foreground">exercises logged</p>
           </div>
 
-          <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.15s' }}>
             <div className="flex items-center gap-2 mb-2">
               <Flame className="w-5 h-5 text-primary" />
               <span className="text-sm text-muted-foreground">Calories</span>
@@ -164,32 +208,7 @@ export default function Index() {
         </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-4 py-3">
-        <div className="flex justify-around items-center max-w-lg mx-auto">
-          <Link to="/" className="flex flex-col items-center text-primary">
-            <Activity className="w-6 h-6" />
-            <span className="text-xs mt-1">Home</span>
-          </Link>
-          <Link to="/workout" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-            <Dumbbell className="w-6 h-6" />
-            <span className="text-xs mt-1">Workout</span>
-          </Link>
-          <Link to="/workout" className="relative -top-4">
-            <Button variant="energy" size="icon" className="w-14 h-14 rounded-full shadow-lg">
-              <Plus className="w-7 h-7" />
-            </Button>
-          </Link>
-          <Link to="/nutrition" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-            <Utensils className="w-6 h-6" />
-            <span className="text-xs mt-1">Food</span>
-          </Link>
-          <Link to="/profile" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-            <User className="w-6 h-6" />
-            <span className="text-xs mt-1">Profile</span>
-          </Link>
-        </div>
-      </nav>
+      <BottomNav />
     </div>
   );
 }
