@@ -1,14 +1,195 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { useProfile } from '@/hooks/useProfile';
+import { useWorkouts, useMuscleRecovery } from '@/hooks/useWorkouts';
+import { useCalories } from '@/hooks/useCalories';
+import { Button } from '@/components/ui/button';
+import { MUSCLE_GROUPS } from '@/types/fitness';
+import { 
+  Dumbbell, Flame, Target, TrendingUp, 
+  LogOut, Plus, User, Utensils, Activity
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+export default function Index() {
+  const { user, loading: authLoading, signOut } = useAuth();
+  const { profile } = useProfile();
+  const { todayWorkout } = useWorkouts();
+  const { getRecoveryStatus } = useMuscleRecovery();
+  const { totals } = useCalories();
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse-glow p-4 rounded-full bg-primary/20">
+          <Dumbbell className="w-8 h-8 text-primary animate-float" />
+        </div>
       </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+
+  const exerciseCount = todayWorkout?.workout_exercises?.length || 0;
+  const calorieTarget = profile?.daily_calorie_target || 2000;
+  const calorieProgress = Math.min((totals.calories / calorieTarget) * 100, 100);
+
+  const suggestedMuscles = MUSCLE_GROUPS.filter(m => {
+    const status = getRecoveryStatus(m.value);
+    return status.status === 'recovered' || status.status === 'fresh';
+  }).slice(0, 3);
+
+  return (
+    <div className="min-h-screen pb-24">
+      {/* Header */}
+      <header className="p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-primary/20">
+            <Dumbbell className="w-6 h-6 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold">FitAI Coach</h1>
+            <p className="text-sm text-muted-foreground">
+              Hey, {profile?.name || 'Athlete'}! 💪
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Link to="/profile">
+            <Button variant="ghost" size="icon">
+              <User className="w-5 h-5" />
+            </Button>
+          </Link>
+          <Button variant="ghost" size="icon" onClick={signOut}>
+            <LogOut className="w-5 h-5" />
+          </Button>
+        </div>
+      </header>
+
+      <main className="px-4 space-y-6">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="glass rounded-xl p-4 animate-slide-up">
+            <div className="flex items-center gap-2 mb-2">
+              <Activity className="w-5 h-5 text-primary" />
+              <span className="text-sm text-muted-foreground">Today's Workout</span>
+            </div>
+            <p className="text-2xl font-bold">{exerciseCount}</p>
+            <p className="text-sm text-muted-foreground">exercises logged</p>
+          </div>
+
+          <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <div className="flex items-center gap-2 mb-2">
+              <Flame className="w-5 h-5 text-primary" />
+              <span className="text-sm text-muted-foreground">Calories</span>
+            </div>
+            <p className="text-2xl font-bold">{totals.calories}</p>
+            <p className="text-sm text-muted-foreground">of {calorieTarget} kcal</p>
+            <div className="mt-2 h-2 bg-secondary rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-500"
+                style={{ width: `${calorieProgress}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Macros */}
+        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <h3 className="font-semibold mb-3 flex items-center gap-2">
+            <Target className="w-5 h-5 text-accent" />
+            Today's Macros
+          </h3>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <p className="text-2xl font-bold text-primary">{Math.round(totals.protein)}g</p>
+              <p className="text-xs text-muted-foreground">Protein</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-accent">{Math.round(totals.carbs)}g</p>
+              <p className="text-xs text-muted-foreground">Carbs</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-warning">{Math.round(totals.fats)}g</p>
+              <p className="text-xs text-muted-foreground">Fats</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Muscle Recovery */}
+        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <h3 className="font-semibold mb-3 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-primary" />
+            Suggested for Today
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {suggestedMuscles.map((muscle) => (
+              <span 
+                key={muscle.value}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium ${muscle.color} text-white`}
+              >
+                {muscle.label}
+              </span>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground mt-3">
+            These muscle groups are recovered and ready for training!
+          </p>
+        </div>
+
+        {/* Muscle Status Grid */}
+        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+          <h3 className="font-semibold mb-3">Recovery Status</h3>
+          <div className="grid grid-cols-4 gap-2">
+            {MUSCLE_GROUPS.map((muscle) => {
+              const status = getRecoveryStatus(muscle.value);
+              return (
+                <div 
+                  key={muscle.value} 
+                  className="text-center p-2 rounded-lg bg-secondary/50"
+                >
+                  <div 
+                    className={`w-3 h-3 rounded-full mx-auto mb-1 ${
+                      status.status === 'recovered' ? 'bg-accent' :
+                      status.status === 'recovering' ? 'bg-warning' : 'bg-muted-foreground'
+                    }`}
+                  />
+                  <p className="text-xs font-medium truncate">{muscle.label}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </main>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-4 py-3">
+        <div className="flex justify-around items-center max-w-lg mx-auto">
+          <Link to="/" className="flex flex-col items-center text-primary">
+            <Activity className="w-6 h-6" />
+            <span className="text-xs mt-1">Home</span>
+          </Link>
+          <Link to="/workout" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
+            <Dumbbell className="w-6 h-6" />
+            <span className="text-xs mt-1">Workout</span>
+          </Link>
+          <Link to="/workout" className="relative -top-4">
+            <Button variant="energy" size="icon" className="w-14 h-14 rounded-full shadow-lg">
+              <Plus className="w-7 h-7" />
+            </Button>
+          </Link>
+          <Link to="/nutrition" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
+            <Utensils className="w-6 h-6" />
+            <span className="text-xs mt-1">Food</span>
+          </Link>
+          <Link to="/profile" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
+            <User className="w-6 h-6" />
+            <span className="text-xs mt-1">Profile</span>
+          </Link>
+        </div>
+      </nav>
     </div>
   );
-};
-
-export default Index;
+}
