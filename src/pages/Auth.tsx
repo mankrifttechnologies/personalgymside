@@ -63,11 +63,14 @@ export default function Auth() {
       
       <div className="relative w-full max-w-md">
         <div className="glass rounded-2xl p-8 animate-slide-up">
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="p-3 rounded-xl bg-primary/20">
-              <Dumbbell className="w-8 h-8 text-primary" />
+          <div className="flex flex-col items-center mb-8">
+            <div className="flex items-center justify-center gap-3">
+              <div className="p-3 rounded-xl bg-primary/20">
+                <Dumbbell className="w-8 h-8 text-primary" />
+              </div>
+              <h1 className="text-4xl font-bold text-gradient">FitAI Coach</h1>
             </div>
-            <h1 className="text-3xl font-bold text-gradient">FitAI Coach</h1>
+            <p className="text-sm text-muted-foreground mt-2">developed by Ankit Shahi</p>
           </div>
 
           <h2 className="text-xl font-semibold text-center mb-6">
