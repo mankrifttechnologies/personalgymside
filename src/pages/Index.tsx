@@ -7,6 +7,8 @@ import { useWeeklySchedule } from '@/hooks/useWeeklySchedule';
 import { Button } from '@/components/ui/button';
 import { MUSCLE_GROUPS } from '@/types/fitness';
 import BottomNav from '@/components/BottomNav';
+import WorkoutStreakCard from '@/components/WorkoutStreakCard';
+import NotificationBanner from '@/components/NotificationBanner';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays
@@ -18,7 +20,7 @@ export default function Index() {
   const { todayWorkout } = useWorkouts();
   const { getRecoveryStatus } = useMuscleRecovery();
   const { totals } = useCalories();
-  const { getTodaySchedule, isLoading: scheduleLoading } = useWeeklySchedule();
+  const { getTodaySchedule } = useWeeklySchedule();
 
   if (authLoading) {
     return (
@@ -74,6 +76,12 @@ export default function Index() {
       </header>
 
       <main className="px-4 space-y-6">
+        {/* Notification Banner */}
+        <NotificationBanner />
+
+        {/* Workout Streak */}
+        <WorkoutStreakCard />
+
         {/* Today's Scheduled Workout Widget */}
         <div className="glass rounded-xl p-4 animate-slide-up border-l-4 border-primary">
           <div className="flex items-center justify-between mb-3">
