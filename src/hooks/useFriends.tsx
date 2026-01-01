@@ -55,7 +55,7 @@ export function useFriends() {
     enabled: !!user,
   });
 
-  // Get all friendships
+  // Get all friendships with profiles
   const { data: friendships, isLoading } = useQuery({
     queryKey: ['friendships', user?.id],
     queryFn: async () => {
@@ -67,7 +67,20 @@ export function useFriends() {
         .or(`user_id.eq.${user.id},friend_id.eq.${user.id}`);
       
       if (error) throw error;
-      return data as Friendship[];
+      
+      // Fetch profiles for all friends
+      const friendIds = data.map(f => f.user_id === user.id ? f.friend_id : f.user_id);
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, name, fitness_goal')
+        .in('user_id', friendIds);
+      
+      // Attach profiles to friendships
+      return data.map(f => {
+        const friendUserId = f.user_id === user.id ? f.friend_id : f.user_id;
+        const profile = profiles?.find(p => p.user_id === friendUserId);
+        return { ...f, friendUserId, profile };
+      });
     },
     enabled: !!user,
   });
