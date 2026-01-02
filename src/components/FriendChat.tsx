@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { useAuth } from '@/hooks/useAuth';
+import { useTypingIndicator } from '@/hooks/useTypingIndicator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, Loader2 } from 'lucide-react';
@@ -14,6 +15,7 @@ interface FriendChatProps {
 export default function FriendChat({ friendId, friendName }: FriendChatProps) {
   const { user } = useAuth();
   const { messages, isLoading, sendMessage, markAsRead } = useMessages(friendId);
+  const { friendIsTyping, setIsTyping } = useTypingIndicator(friendId);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -29,8 +31,15 @@ export default function FriendChat({ friendId, friendName }: FriendChatProps) {
     }
   }, [friendId, messages?.length]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewMessage(e.target.value);
+    setIsTyping(e.target.value.length > 0);
+  };
+
   const handleSend = async () => {
     if (!newMessage.trim()) return;
+    
+    setIsTyping(false);
     
     try {
       await sendMessage.mutateAsync(newMessage.trim());
@@ -88,6 +97,20 @@ export default function FriendChat({ friendId, friendName }: FriendChatProps) {
             );
           })
         )}
+        
+        {/* Typing indicator */}
+        {friendIsTyping && (
+          <div className="flex justify-start">
+            <div className="bg-secondary rounded-2xl rounded-bl-md px-4 py-2">
+              <div className="flex gap-1 items-center">
+                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </div>
+          </div>
+        )}
+        
         <div ref={messagesEndRef} />
       </div>
 
@@ -97,7 +120,7 @@ export default function FriendChat({ friendId, friendName }: FriendChatProps) {
           <Input
             placeholder="Type a message..."
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             className="flex-1"
           />

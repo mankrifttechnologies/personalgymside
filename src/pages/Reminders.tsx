@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useReminders } from '@/hooks/useReminders';
+import { useNotifications } from '@/hooks/useNotifications';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -24,6 +25,7 @@ const DAYS_OF_WEEK = [
 export default function Reminders() {
   const { user, loading: authLoading } = useAuth();
   const { reminder, isLoading, upsertReminder } = useReminders();
+  const { permission, requestPermission, isSupported } = useNotifications();
   
   const [isEnabled, setIsEnabled] = useState(reminder?.is_enabled ?? true);
   const [reminderTime, setReminderTime] = useState(reminder?.reminder_time?.slice(0, 5) ?? '09:00');
@@ -58,6 +60,18 @@ export default function Reminders() {
         ? prev.filter(d => d !== day)
         : [...prev, day].sort()
     );
+  };
+
+  const handleEnableToggle = async (enabled: boolean) => {
+    setIsEnabled(enabled);
+    
+    // Request notification permission when enabling reminders
+    if (enabled && isSupported && permission !== 'granted') {
+      const granted = await requestPermission();
+      if (!granted) {
+        toast.warning('Enable notifications in your browser settings to receive workout reminders');
+      }
+    }
   };
 
   const handleSave = async () => {
@@ -107,7 +121,7 @@ export default function Reminders() {
             </div>
             <Switch
               checked={isEnabled}
-              onCheckedChange={setIsEnabled}
+              onCheckedChange={handleEnableToggle}
             />
           </div>
         </div>
