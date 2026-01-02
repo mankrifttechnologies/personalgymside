@@ -2,26 +2,21 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
+export interface FriendProfile {
+  user_id: string;
+  name: string | null;
+  fitness_goal: string | null;
+}
+
 export interface Friendship {
   id: string;
   user_id: string;
   friend_id: string;
-  status: 'pending' | 'accepted' | 'declined';
+  status: string;
   created_at: string;
   updated_at: string;
-}
-
-export interface FriendProfile {
-  id: string;
-  user_id: string;
-  name: string | null;
-  friend_code: string | null;
-  fitness_goal: string | null;
-}
-
-export interface FriendWithProfile extends Friendship {
-  friend_profile?: FriendProfile;
-  user_profile?: FriendProfile;
+  friendUserId: string;
+  profile?: FriendProfile;
 }
 
 function generateFriendCode(): string {
