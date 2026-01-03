@@ -106,18 +106,20 @@ export function useFriends() {
     mutationFn: async (friendCode: string) => {
       if (!user) throw new Error('Not authenticated');
       
-      // Find user by friend code
-      const { data: friendProfile, error: findError } = await supabase
-        .from('profiles')
-        .select('user_id')
-        .eq('friend_code', friendCode.toUpperCase())
-        .single();
+      // Use secure database function to find user by friend code
+      const { data: friendUserId, error: findError } = await supabase
+        .rpc('get_user_id_by_friend_code', { code: friendCode.toUpperCase() });
       
-      if (findError || !friendProfile) {
+      if (findError) {
+        console.error('Friend code lookup error:', findError);
         throw new Error('Friend code not found');
       }
 
-      if (friendProfile.user_id === user.id) {
+      if (!friendUserId) {
+        throw new Error('Friend code not found');
+      }
+
+      if (friendUserId === user.id) {
         throw new Error("You can't add yourself as a friend");
       }
 
@@ -125,7 +127,7 @@ export function useFriends() {
       const { data: existing } = await supabase
         .from('friendships')
         .select('id')
-        .or(`and(user_id.eq.${user.id},friend_id.eq.${friendProfile.user_id}),and(user_id.eq.${friendProfile.user_id},friend_id.eq.${user.id})`)
+        .or(`and(user_id.eq.${user.id},friend_id.eq.${friendUserId}),and(user_id.eq.${friendUserId},friend_id.eq.${user.id})`)
         .single();
 
       if (existing) {
@@ -137,7 +139,7 @@ export function useFriends() {
         .from('friendships')
         .insert({
           user_id: user.id,
-          friend_id: friendProfile.user_id,
+          friend_id: friendUserId,
           status: 'pending',
         })
         .select()

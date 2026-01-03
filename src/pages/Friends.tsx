@@ -8,6 +8,7 @@ import BottomNav from '@/components/BottomNav';
 import FriendChat from '@/components/FriendChat';
 import FriendProfileView from '@/components/FriendProfileView';
 import ActivityFeed from '@/components/ActivityFeed';
+import FriendsLeaderboard from '@/components/FriendsLeaderboard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -150,8 +151,12 @@ export default function Friends() {
       <main className="px-4 space-y-6">
         {/* Tabs for Friends and Activity */}
         <Tabs defaultValue="friends" className="w-full">
-          <TabsList className="w-full grid grid-cols-2">
+          <TabsList className="w-full grid grid-cols-3">
             <TabsTrigger value="friends">Friends</TabsTrigger>
+            <TabsTrigger value="leaderboard" className="gap-1">
+              <Trophy className="w-4 h-4" />
+              Ranks
+            </TabsTrigger>
             <TabsTrigger value="activity" className="gap-1">
               <Activity className="w-4 h-4" />
               Activity
@@ -387,6 +392,16 @@ export default function Friends() {
                 </div>
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="leaderboard" className="mt-4">
+            <div className="glass rounded-xl p-4">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-warning" />
+                Leaderboard
+              </h3>
+              <FriendsLeaderboard />
+            </div>
           </TabsContent>
 
           <TabsContent value="activity" className="mt-4">

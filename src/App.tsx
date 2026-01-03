@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
+import { ThemeProvider } from "@/hooks/useTheme";
 import SplashScreen from "@/components/SplashScreen";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -40,31 +41,33 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/workout" element={<Workout />} />
-              <Route path="/nutrition" element={<Nutrition />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/progress" element={<Progress />} />
-              <Route path="/measurements" element={<Measurements />} />
-              <Route path="/records" element={<Records />} />
-              <Route path="/templates" element={<Templates />} />
-              <Route path="/reminders" element={<Reminders />} />
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/friends" element={<Friends />} />
-              <Route path="/history" element={<History />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/workout" element={<Workout />} />
+                <Route path="/nutrition" element={<Nutrition />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/progress" element={<Progress />} />
+                <Route path="/measurements" element={<Measurements />} />
+                <Route path="/records" element={<Records />} />
+                <Route path="/templates" element={<Templates />} />
+                <Route path="/reminders" element={<Reminders />} />
+                <Route path="/schedule" element={<Schedule />} />
+                <Route path="/friends" element={<Friends />} />
+                <Route path="/history" element={<History />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
