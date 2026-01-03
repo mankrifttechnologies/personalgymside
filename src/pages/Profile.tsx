@@ -5,6 +5,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FitnessGoal, ActivityLevel, DietPreference } from '@/types/fitness';
+import ThemeToggle from '@/components/ThemeToggle';
 import { 
   User, ChevronLeft, Save, LogOut, 
   Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale,
@@ -133,6 +134,7 @@ export default function Profile() {
           <h1 className="text-xl font-bold">Profile</h1>
           <p className="text-sm text-muted-foreground">{user.email}</p>
         </div>
+        <ThemeToggle />
         <Button variant="ghost" size="icon" onClick={signOut}>
           <LogOut className="w-5 h-5" />
         </Button>
