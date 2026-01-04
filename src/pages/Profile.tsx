@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FitnessGoal, ActivityLevel, DietPreference } from '@/types/fitness';
 import ThemeToggle from '@/components/ThemeToggle';
+import AvatarUpload from '@/components/AvatarUpload';
 import { 
   User, ChevronLeft, Save, LogOut, 
   Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale,
   Bell, Ruler, ChevronRight, Users, CalendarDays
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 
 const FITNESS_GOALS: { value: FitnessGoal; label: string; description: string }[] = [
   { value: 'muscle_gain', label: 'Muscle Gain', description: 'Build lean muscle mass' },
@@ -37,6 +39,7 @@ const DIET_PREFERENCES: { value: DietPreference; label: string; icon: string }[]
 export default function Profile() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { profile, isLoading, updateProfile } = useProfile();
+  const queryClient = useQueryClient();
   
   const [name, setName] = useState('');
   const [age, setAge] = useState<number | ''>('');
@@ -141,6 +144,18 @@ export default function Profile() {
       </header>
 
       <main className="px-4 space-y-6">
+        {/* Avatar Section */}
+        <div className="flex flex-col items-center py-4 animate-slide-up">
+          <AvatarUpload 
+            currentAvatarUrl={profile?.avatar_url}
+            name={profile?.name}
+            size="lg"
+            onUploadComplete={() => queryClient.invalidateQueries({ queryKey: ['profile', user?.id] })}
+          />
+          <h2 className="mt-3 text-lg font-semibold">{profile?.name || 'Your Name'}</h2>
+          <p className="text-sm text-muted-foreground">{profile?.fitness_goal?.replace('_', ' ') || 'Set your goal'}</p>
+        </div>
+
         {/* Quick Links */}
         <div className="grid grid-cols-2 gap-3 animate-slide-up">
           <Link to="/measurements" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">

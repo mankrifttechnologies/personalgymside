@@ -1,10 +1,11 @@
 import { useFriendData } from '@/hooks/useFriendData';
 import { 
-  User, Flame, Trophy, Dumbbell, Scale, 
-  Utensils, ChevronRight, Loader2 
+  Flame, Trophy, Dumbbell, Scale, 
+  Utensils, Loader2 
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AvatarUpload from '@/components/AvatarUpload';
 
 interface FriendProfileViewProps {
   friendUserId: string;
@@ -46,9 +47,12 @@ export default function FriendProfileView({ friendUserId, onStartChat }: FriendP
     <div className="space-y-4">
       {/* Profile Header */}
       <div className="flex items-center gap-4 p-4 glass rounded-xl">
-        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
-          <User className="w-8 h-8 text-primary" />
-        </div>
+        <AvatarUpload 
+          currentAvatarUrl={profile.avatar_url}
+          name={profile.name}
+          size="md"
+          editable={false}
+        />
         <div className="flex-1">
           <h2 className="text-xl font-bold">{profile.name || 'Athlete'}</h2>
           <p className="text-sm text-muted-foreground capitalize">

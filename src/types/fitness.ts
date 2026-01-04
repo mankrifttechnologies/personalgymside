@@ -20,6 +20,7 @@ export interface Profile {
   activity_level: ActivityLevel | null;
   diet_preference: DietPreference | null;
   daily_calorie_target: number | null;
+  avatar_url: string | null;
   created_at: string;
   updated_at: string;
 }
