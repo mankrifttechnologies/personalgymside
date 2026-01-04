@@ -6,6 +6,7 @@ export interface FriendProfile {
   user_id: string;
   name: string | null;
   fitness_goal: string | null;
+  avatar_url: string | null;
 }
 
 export interface Friendship {
@@ -67,7 +68,7 @@ export function useFriends() {
       const friendIds = data.map(f => f.user_id === user.id ? f.friend_id : f.user_id);
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('user_id, name, fitness_goal')
+        .select('user_id, name, fitness_goal, avatar_url')
         .in('user_id', friendIds);
       
       // Attach profiles to friendships

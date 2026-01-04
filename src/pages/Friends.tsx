@@ -9,6 +9,7 @@ import FriendChat from '@/components/FriendChat';
 import FriendProfileView from '@/components/FriendProfileView';
 import ActivityFeed from '@/components/ActivityFeed';
 import FriendsLeaderboard from '@/components/FriendsLeaderboard';
+import AvatarUpload from '@/components/AvatarUpload';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -245,9 +246,12 @@ export default function Friends() {
                       className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                          <Users className="w-5 h-5 text-primary" />
-                        </div>
+                        <AvatarUpload 
+                          currentAvatarUrl={request.profile?.avatar_url}
+                          name={request.profile?.name}
+                          size="sm"
+                          editable={false}
+                        />
                         <span className="font-medium text-sm">
                           {request.profile?.name || 'New Request'}
                         </span>
@@ -328,9 +332,12 @@ export default function Friends() {
                       className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-                          <Users className="w-5 h-5 text-accent" />
-                        </div>
+                        <AvatarUpload 
+                          currentAvatarUrl={friend.profile?.avatar_url}
+                          name={friend.profile?.name}
+                          size="sm"
+                          editable={false}
+                        />
                         <span className="font-medium text-sm">
                           {friend.profile?.name || 'Friend'}
                         </span>

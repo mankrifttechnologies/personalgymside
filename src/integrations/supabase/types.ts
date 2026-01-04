@@ -249,6 +249,7 @@ export type Database = {
         Row: {
           activity_level: string | null
           age: number | null
+          avatar_url: string | null
           created_at: string | null
           daily_calorie_target: number | null
           diet_preference: string | null
@@ -266,6 +267,7 @@ export type Database = {
         Insert: {
           activity_level?: string | null
           age?: number | null
+          avatar_url?: string | null
           created_at?: string | null
           daily_calorie_target?: number | null
           diet_preference?: string | null
@@ -283,6 +285,7 @@ export type Database = {
         Update: {
           activity_level?: string | null
           age?: number | null
+          avatar_url?: string | null
           created_at?: string | null
           daily_calorie_target?: number | null
           diet_preference?: string | null
