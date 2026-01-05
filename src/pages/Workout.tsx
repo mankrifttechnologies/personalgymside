@@ -4,12 +4,17 @@ import { useAuth } from '@/hooks/useAuth';
 import { useWorkouts, useMuscleRecovery } from '@/hooks/useWorkouts';
 import { useAICoach } from '@/hooks/useAICoach';
 import { usePersonalRecords } from '@/hooks/usePersonalRecords';
+import { useXP } from '@/hooks/useXP';
+import { useBadges } from '@/hooks/useBadges';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MUSCLE_GROUPS, EXERCISE_SUGGESTIONS, MuscleGroup } from '@/types/fitness';
+import RestTimer from '@/components/RestTimer';
+import ExerciseLibrary from '@/components/ExerciseLibrary';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Dumbbell, Plus, Check, ChevronLeft, Sparkles, 
-  Activity, Utensils, User, Loader2, X, Layers, Trophy
+  Activity, Utensils, User, Loader2, X, Layers, Trophy, Clock, BookOpen
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -19,6 +24,8 @@ export default function Workout() {
   const { getRecoveryStatus } = useMuscleRecovery();
   const { isLoading: aiLoading, response: aiResponse, error: aiError, getWorkoutRecommendation } = useAICoach();
   const { checkAndUpdatePR, getPRForExercise } = usePersonalRecords();
+  const { addXP } = useXP();
+  const { awardBadge, hasBadge, earnedBadges } = useBadges();
   
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<string>('');
@@ -27,6 +34,8 @@ export default function Workout() {
   const [reps, setReps] = useState(10);
   const [weight, setWeight] = useState<number | ''>('');
   const [showAIPanel, setShowAIPanel] = useState(false);
+  const [showRestTimer, setShowRestTimer] = useState(false);
+  const [showExerciseLibrary, setShowExerciseLibrary] = useState(false);
 
   if (authLoading) {
     return (
@@ -83,12 +92,29 @@ export default function Workout() {
         
         if (prResult.isNewPR) {
           toast.success(`🏆 New PR! ${exerciseName}: ${weight}kg × ${reps}`);
+          // Award first PR badge
+          if (!hasBadge('first_pr')) {
+            await awardBadge.mutateAsync('first_pr');
+            toast.success('🥇 Badge Earned: New Record!');
+          }
         } else {
           toast.success(`Added ${exerciseName}!`);
         }
       } else {
         toast.success(`Added ${exerciseName}!`);
       }
+
+      // Award XP for adding exercise
+      await addXP.mutateAsync(10);
+
+      // Check for first workout badge
+      if (!hasBadge('first_workout')) {
+        await awardBadge.mutateAsync('first_workout');
+        toast.success('🎯 Badge Earned: First Steps!');
+      }
+
+      // Show rest timer
+      setShowRestTimer(true);
       
       // Reset form
       setSelectedExercise('');
@@ -130,6 +156,26 @@ export default function Workout() {
               <Trophy className="w-4 h-4" />
             </Button>
           </Link>
+          <Dialog open={showExerciseLibrary} onOpenChange={setShowExerciseLibrary}>
+            <DialogTrigger asChild>
+              <Button variant="glass" size="sm" className="gap-1">
+                <BookOpen className="w-4 h-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Exercise Library</DialogTitle>
+              </DialogHeader>
+              <ExerciseLibrary 
+                onSelectExercise={(ex) => {
+                  setSelectedMuscle(ex.muscle_group as MuscleGroup);
+                  setSelectedExercise(ex.name);
+                  setCustomExercise('');
+                  setShowExerciseLibrary(false);
+                }}
+              />
+            </DialogContent>
+          </Dialog>
           <Button 
             variant="glass" 
             size="sm" 
@@ -320,6 +366,17 @@ export default function Workout() {
               Add Exercise
             </Button>
           </div>
+        )}
+
+        {/* Rest Timer */}
+        {showRestTimer && (
+          <RestTimer 
+            defaultSeconds={90} 
+            onComplete={() => {
+              toast.success('Rest complete! Ready for next set.');
+              setShowRestTimer(false);
+            }} 
+          />
         )}
 
         {/* Today's Exercises */}

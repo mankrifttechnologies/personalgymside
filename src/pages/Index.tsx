@@ -9,6 +9,9 @@ import { MUSCLE_GROUPS } from '@/types/fitness';
 import BottomNav from '@/components/BottomNav';
 import WorkoutStreakCard from '@/components/WorkoutStreakCard';
 import NotificationBanner from '@/components/NotificationBanner';
+import LevelProgress from '@/components/LevelProgress';
+import BadgeDisplay from '@/components/BadgeDisplay';
+import WaterTracker from '@/components/WaterTracker';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays
@@ -78,6 +81,9 @@ export default function Index() {
       <main className="px-4 space-y-6">
         {/* Notification Banner */}
         <NotificationBanner />
+
+        {/* Level Progress */}
+        <LevelProgress />
 
         {/* Workout Streak */}
         <WorkoutStreakCard />
@@ -214,6 +220,12 @@ export default function Index() {
             })}
           </div>
         </div>
+
+        {/* Water Tracker */}
+        <WaterTracker />
+
+        {/* Achievements */}
+        <BadgeDisplay />
       </main>
 
       <BottomNav />

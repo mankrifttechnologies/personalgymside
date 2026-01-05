@@ -128,6 +128,42 @@ export type Database = {
         }
         Relationships: []
       }
+      exercise_library: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          instructions: string | null
+          is_system: boolean
+          muscle_group: string
+          name: string
+          user_id: string | null
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          is_system?: boolean
+          muscle_group: string
+          name: string
+          user_id?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          is_system?: boolean
+          muscle_group?: string
+          name?: string
+          user_id?: string | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       friendships: {
         Row: {
           created_at: string
@@ -150,6 +186,36 @@ export type Database = {
           friend_id?: string
           id?: string
           status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      meal_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          meals: Json
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          meals?: Json
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          meals?: Json
+          name?: string
           updated_at?: string
           user_id?: string
         }
@@ -259,10 +325,12 @@ export type Database = {
           height_cm: number | null
           id: string
           is_public: boolean | null
+          level: number | null
           name: string | null
           updated_at: string | null
           user_id: string
           weight_kg: number | null
+          xp: number | null
         }
         Insert: {
           activity_level?: string | null
@@ -277,10 +345,12 @@ export type Database = {
           height_cm?: number | null
           id?: string
           is_public?: boolean | null
+          level?: number | null
           name?: string | null
           updated_at?: string | null
           user_id: string
           weight_kg?: number | null
+          xp?: number | null
         }
         Update: {
           activity_level?: string | null
@@ -295,10 +365,57 @@ export type Database = {
           height_cm?: number | null
           id?: string
           is_public?: boolean | null
+          level?: number | null
           name?: string | null
           updated_at?: string | null
           user_id?: string
           weight_kg?: number | null
+          xp?: number | null
+        }
+        Relationships: []
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      water_entries: {
+        Row: {
+          amount_ml: number
+          created_at: string
+          entry_date: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount_ml?: number
+          created_at?: string
+          entry_date?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          amount_ml?: number
+          created_at?: string
+          entry_date?: string
+          id?: string
+          user_id?: string
         }
         Relationships: []
       }

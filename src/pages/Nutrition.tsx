@@ -6,7 +6,11 @@ import { useCalories } from '@/hooks/useCalories';
 import { useAICoach } from '@/hooks/useAICoach';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MealType } from '@/types/fitness';
+import WaterTracker from '@/components/WaterTracker';
+import MealPlanner from '@/components/MealPlanner';
+import MacroRecommendations from '@/components/MacroRecommendations';
 import { 
   Utensils, Plus, ChevronLeft, Sparkles, Trash2,
   Activity, Dumbbell, User, Loader2, X, Search
@@ -158,240 +162,261 @@ export default function Nutrition() {
       </header>
 
       <main className="px-4 space-y-6">
-        {/* Calorie Summary */}
-        <div className="glass rounded-xl p-4 animate-slide-up">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Daily Goal</p>
-              <p className="text-3xl font-bold">{totals.calories} <span className="text-lg text-muted-foreground">/ {calorieTarget}</span></p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">Remaining</p>
-              <p className={`text-2xl font-bold ${remaining < 0 ? 'text-destructive' : 'text-accent'}`}>
-                {remaining}
-              </p>
-            </div>
-          </div>
-          <div className="h-3 bg-secondary rounded-full overflow-hidden">
-            <div 
-              className={`h-full transition-all duration-500 ${
-                calorieProgress > 100 ? 'bg-destructive' : 'bg-gradient-to-r from-primary to-accent'
-              }`}
-              style={{ width: `${Math.min(calorieProgress, 100)}%` }}
-            />
-          </div>
+        <Tabs defaultValue="log" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-4">
+            <TabsTrigger value="log">Log Food</TabsTrigger>
+            <TabsTrigger value="plan">Meal Plans</TabsTrigger>
+            <TabsTrigger value="hydrate">Hydration</TabsTrigger>
+          </TabsList>
           
-          {/* Macro breakdown */}
-          <div className="grid grid-cols-3 gap-4 mt-4 text-center">
-            <div className="p-2 rounded-lg bg-secondary/50">
-              <p className="text-xl font-bold text-primary">{Math.round(totals.protein)}g</p>
-              <p className="text-xs text-muted-foreground">Protein</p>
-            </div>
-            <div className="p-2 rounded-lg bg-secondary/50">
-              <p className="text-xl font-bold text-accent">{Math.round(totals.carbs)}g</p>
-              <p className="text-xs text-muted-foreground">Carbs</p>
-            </div>
-            <div className="p-2 rounded-lg bg-secondary/50">
-              <p className="text-xl font-bold text-warning">{Math.round(totals.fats)}g</p>
-              <p className="text-xs text-muted-foreground">Fats</p>
-            </div>
-          </div>
-        </div>
-
-        {/* AI Panel */}
-        {showAIPanel && (
-          <div className="glass rounded-xl p-4 animate-slide-up">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-primary" />
-                AI Diet Recommendation
-              </h3>
-              <Button variant="ghost" size="icon" onClick={() => setShowAIPanel(false)}>
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            {!aiResponse && !aiLoading && (
-              <Button 
-                variant="energy" 
-                className="w-full" 
-                onClick={getDietRecommendation}
-              >
-                Get Meal Suggestions
-              </Button>
-            )}
-            
-            {aiLoading && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Generating recommendations...
-              </div>
-            )}
-            
-            {aiError && (
-              <p className="text-destructive text-sm">{aiError}</p>
-            )}
-            
-            {aiResponse && (
-              <div className="prose prose-invert prose-sm max-w-none">
-                <div className="whitespace-pre-wrap text-sm">{aiResponse}</div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Meal Type Selection */}
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {MEAL_TYPES.map((meal) => (
-            <button
-              key={meal.value}
-              onClick={() => setSelectedMeal(meal.value)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
-                selectedMeal === meal.value
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
-              }`}
-            >
-              <span>{meal.icon}</span>
-              <span className="text-sm font-medium">{meal.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Food Search */}
-        <div className="glass rounded-xl p-4 animate-slide-up">
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder="Search foods..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          
-          <div className="space-y-2 max-h-48 overflow-y-auto">
-            {filteredFoods.map((food, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleQuickAdd(food)}
-                className="w-full flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors text-left"
-              >
+          <TabsContent value="log" className="space-y-6">
+            {/* Calorie Summary */}
+            <div className="glass rounded-xl p-4 animate-slide-up">
+              <div className="flex justify-between items-center mb-4">
                 <div>
-                  <p className="font-medium text-sm">{food.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    P: {food.protein}g | C: {food.carbs}g | F: {food.fats}g
+                  <p className="text-sm text-muted-foreground">Daily Goal</p>
+                  <p className="text-3xl font-bold">{totals.calories} <span className="text-lg text-muted-foreground">/ {calorieTarget}</span></p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-muted-foreground">Remaining</p>
+                  <p className={`text-2xl font-bold ${remaining < 0 ? 'text-destructive' : 'text-accent'}`}>
+                    {remaining}
                   </p>
                 </div>
-                <span className="text-primary font-bold">{food.calories}</span>
-              </button>
-            ))}
-          </div>
-          
-          <Button 
-            variant="outline" 
-            className="w-full mt-4"
-            onClick={() => setShowCustomForm(!showCustomForm)}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Custom Food
-          </Button>
-        </div>
-
-        {/* Custom Food Form */}
-        {showCustomForm && (
-          <div className="glass rounded-xl p-4 animate-slide-up">
-            <h3 className="font-semibold mb-3">Add Custom Food</h3>
-            <div className="space-y-3">
-              <Input
-                placeholder="Food name"
-                value={foodName}
-                onChange={(e) => setFoodName(e.target.value)}
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-muted-foreground">Calories *</label>
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    value={calories}
-                    onChange={(e) => setCalories(e.target.value ? Number(e.target.value) : '')}
-                  />
+              </div>
+              <div className="h-3 bg-secondary rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-500 ${
+                    calorieProgress > 100 ? 'bg-destructive' : 'bg-gradient-to-r from-primary to-accent'
+                  }`}
+                  style={{ width: `${Math.min(calorieProgress, 100)}%` }}
+                />
+              </div>
+              
+              {/* Macro breakdown */}
+              <div className="grid grid-cols-3 gap-4 mt-4 text-center">
+                <div className="p-2 rounded-lg bg-secondary/50">
+                  <p className="text-xl font-bold text-primary">{Math.round(totals.protein)}g</p>
+                  <p className="text-xs text-muted-foreground">Protein</p>
                 </div>
-                <div>
-                  <label className="text-xs text-muted-foreground">Protein (g)</label>
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    value={protein}
-                    onChange={(e) => setProtein(e.target.value ? Number(e.target.value) : '')}
-                  />
+                <div className="p-2 rounded-lg bg-secondary/50">
+                  <p className="text-xl font-bold text-accent">{Math.round(totals.carbs)}g</p>
+                  <p className="text-xs text-muted-foreground">Carbs</p>
                 </div>
-                <div>
-                  <label className="text-xs text-muted-foreground">Carbs (g)</label>
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    value={carbs}
-                    onChange={(e) => setCarbs(e.target.value ? Number(e.target.value) : '')}
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-muted-foreground">Fats (g)</label>
-                  <Input
-                    type="number"
-                    placeholder="0"
-                    value={fats}
-                    onChange={(e) => setFats(e.target.value ? Number(e.target.value) : '')}
-                  />
+                <div className="p-2 rounded-lg bg-secondary/50">
+                  <p className="text-xl font-bold text-warning">{Math.round(totals.fats)}g</p>
+                  <p className="text-xs text-muted-foreground">Fats</p>
                 </div>
               </div>
-              <Button 
-                variant="energy" 
-                className="w-full"
-                onClick={handleCustomAdd}
-                disabled={addEntry.isPending}
-              >
-                {addEntry.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Add Food'}
-              </Button>
             </div>
-          </div>
-        )}
 
-        {/* Today's Entries */}
-        {entries && entries.length > 0 && (
-          <div className="glass rounded-xl p-4 animate-slide-up">
-            <h3 className="font-semibold mb-3">Today's Log</h3>
-            <div className="space-y-2">
-              {entries.map((entry) => (
-                <div 
-                  key={entry.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span>{MEAL_TYPES.find(m => m.value === entry.meal_type)?.icon || '🍽️'}</span>
-                      <p className="font-medium text-sm">{entry.food_name}</p>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      P: {entry.protein_g}g | C: {entry.carbs_g}g | F: {entry.fats_g}g
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-primary font-bold">{entry.calories}</span>
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => handleDelete(entry.id)}
-                    >
-                      <Trash2 className="w-4 h-4 text-destructive" />
-                    </Button>
-                  </div>
+            {/* AI Panel */}
+            {showAIPanel && (
+              <div className="glass rounded-xl p-4 animate-slide-up">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    AI Diet Recommendation
+                  </h3>
+                  <Button variant="ghost" size="icon" onClick={() => setShowAIPanel(false)}>
+                    <X className="w-4 h-4" />
+                  </Button>
                 </div>
+                
+                {!aiResponse && !aiLoading && (
+                  <Button 
+                    variant="energy" 
+                    className="w-full" 
+                    onClick={getDietRecommendation}
+                  >
+                    Get Meal Suggestions
+                  </Button>
+                )}
+                
+                {aiLoading && (
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Generating recommendations...
+                  </div>
+                )}
+                
+                {aiError && (
+                  <p className="text-destructive text-sm">{aiError}</p>
+                )}
+                
+                {aiResponse && (
+                  <div className="prose prose-invert prose-sm max-w-none">
+                    <div className="whitespace-pre-wrap text-sm">{aiResponse}</div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Macro Recommendations */}
+            <MacroRecommendations />
+
+            {/* Meal Type Selection */}
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {MEAL_TYPES.map((meal) => (
+                <button
+                  key={meal.value}
+                  onClick={() => setSelectedMeal(meal.value)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
+                    selectedMeal === meal.value
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary hover:bg-secondary/80'
+                  }`}
+                >
+                  <span>{meal.icon}</span>
+                  <span className="text-sm font-medium">{meal.label}</span>
+                </button>
               ))}
             </div>
-          </div>
-        )}
+
+            {/* Food Search */}
+            <div className="glass rounded-xl p-4 animate-slide-up">
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search foods..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {filteredFoods.map((food, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleQuickAdd(food)}
+                    className="w-full flex items-center justify-between p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors text-left"
+                  >
+                    <div>
+                      <p className="font-medium text-sm">{food.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        P: {food.protein}g | C: {food.carbs}g | F: {food.fats}g
+                      </p>
+                    </div>
+                    <span className="text-primary font-bold">{food.calories}</span>
+                  </button>
+                ))}
+              </div>
+              
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                onClick={() => setShowCustomForm(!showCustomForm)}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Custom Food
+              </Button>
+            </div>
+
+            {/* Custom Food Form */}
+            {showCustomForm && (
+              <div className="glass rounded-xl p-4 animate-slide-up">
+                <h3 className="font-semibold mb-3">Add Custom Food</h3>
+                <div className="space-y-3">
+                  <Input
+                    placeholder="Food name"
+                    value={foodName}
+                    onChange={(e) => setFoodName(e.target.value)}
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-muted-foreground">Calories *</label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={calories}
+                        onChange={(e) => setCalories(e.target.value ? Number(e.target.value) : '')}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">Protein (g)</label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={protein}
+                        onChange={(e) => setProtein(e.target.value ? Number(e.target.value) : '')}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">Carbs (g)</label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={carbs}
+                        onChange={(e) => setCarbs(e.target.value ? Number(e.target.value) : '')}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground">Fats (g)</label>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        value={fats}
+                        onChange={(e) => setFats(e.target.value ? Number(e.target.value) : '')}
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    variant="energy" 
+                    className="w-full"
+                    onClick={handleCustomAdd}
+                    disabled={addEntry.isPending}
+                  >
+                    {addEntry.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Add Food'}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Today's Entries */}
+            {entries && entries.length > 0 && (
+              <div className="glass rounded-xl p-4 animate-slide-up">
+                <h3 className="font-semibold mb-3">Today's Log</h3>
+                <div className="space-y-2">
+                  {entries.map((entry) => (
+                    <div 
+                      key={entry.id}
+                      className="flex items-center justify-between p-3 rounded-lg bg-secondary/50"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span>{MEAL_TYPES.find(m => m.value === entry.meal_type)?.icon || '🍽️'}</span>
+                          <p className="font-medium text-sm">{entry.food_name}</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          P: {entry.protein_g}g | C: {entry.carbs_g}g | F: {entry.fats_g}g
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-primary font-bold">{entry.calories}</span>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => handleDelete(entry.id)}
+                        >
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="plan" className="space-y-6">
+            <MealPlanner />
+          </TabsContent>
+
+          <TabsContent value="hydrate" className="space-y-6">
+            <WaterTracker />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Bottom Navigation */}
