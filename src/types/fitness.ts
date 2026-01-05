@@ -21,6 +21,8 @@ export interface Profile {
   diet_preference: DietPreference | null;
   daily_calorie_target: number | null;
   avatar_url: string | null;
+  xp: number | null;
+  level: number | null;
   created_at: string;
   updated_at: string;
 }
