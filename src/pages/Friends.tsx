@@ -339,7 +339,7 @@ export default function Friends() {
                           editable={false}
                         />
                         <span className="font-medium text-sm">
-                          {friend.profile?.name || 'Friend'}
+                          {friend.profile?.name || 'Unnamed User'}
                         </span>
                       </div>
                       <div className="flex gap-1">
@@ -451,7 +451,7 @@ export default function Friends() {
                 Profile
               </Button>
             </div>
-            <SheetTitle>{selectedFriend?.name || 'Friend'}</SheetTitle>
+            <SheetTitle>{selectedFriend?.name || 'Unnamed User'}</SheetTitle>
             <SheetDescription>
               {sheetMode === 'chat' ? 'Send messages' : 'View profile'}
             </SheetDescription>
