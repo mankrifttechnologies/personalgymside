@@ -11,6 +11,7 @@ import { MealType } from '@/types/fitness';
 import WaterTracker from '@/components/WaterTracker';
 import MealPlanner from '@/components/MealPlanner';
 import MacroRecommendations from '@/components/MacroRecommendations';
+import { FoodAnalyzer } from '@/components/FoodAnalyzer';
 import { 
   Utensils, Plus, ChevronLeft, Sparkles, Trash2,
   Activity, Dumbbell, User, Loader2, X, Search
@@ -251,6 +252,9 @@ export default function Nutrition() {
                 )}
               </div>
             )}
+
+            {/* AI Food Analyzer */}
+            <FoodAnalyzer />
 
             {/* Macro Recommendations */}
             <MacroRecommendations />
