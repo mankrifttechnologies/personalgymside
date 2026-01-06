@@ -12,6 +12,7 @@ import NotificationBanner from '@/components/NotificationBanner';
 import LevelProgress from '@/components/LevelProgress';
 import BadgeDisplay from '@/components/BadgeDisplay';
 import WaterTracker from '@/components/WaterTracker';
+import { WeeklyChallenges } from '@/components/WeeklyChallenges';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays
@@ -220,6 +221,9 @@ export default function Index() {
             })}
           </div>
         </div>
+
+        {/* Weekly Challenges */}
+        <WeeklyChallenges />
 
         {/* Water Tracker */}
         <WaterTracker />
