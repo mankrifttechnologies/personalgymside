@@ -44,6 +44,92 @@ export type Database = {
         }
         Relationships: []
       }
+      attendance_logs: {
+        Row: {
+          check_in_time: string
+          check_out_time: string | null
+          created_at: string
+          device_id: string | null
+          duration_minutes: number | null
+          id: string
+          is_on_time: boolean | null
+          member_id: string
+          notes: string | null
+          status: Database["public"]["Enums"]["attendance_status"]
+          updated_at: string
+        }
+        Insert: {
+          check_in_time: string
+          check_out_time?: string | null
+          created_at?: string
+          device_id?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_on_time?: boolean | null
+          member_id: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["attendance_status"]
+          updated_at?: string
+        }
+        Update: {
+          check_in_time?: string
+          check_out_time?: string | null
+          created_at?: string
+          device_id?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_on_time?: boolean | null
+          member_id?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["attendance_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_logs_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      biometric_devices: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          last_sync: string | null
+          location: string | null
+          metadata: Json | null
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          last_sync?: string | null
+          location?: string | null
+          metadata?: Json | null
+          name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          last_sync?: string | null
+          location?: string | null
+          metadata?: Json | null
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       body_measurements: {
         Row: {
           biceps_cm: number | null
@@ -191,6 +277,42 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_members: {
+        Row: {
+          batch: string | null
+          created_at: string
+          id: string
+          joined_at: string
+          member_code: string
+          status: Database["public"]["Enums"]["member_status"]
+          trainer_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          batch?: string | null
+          created_at?: string
+          id?: string
+          joined_at?: string
+          member_code: string
+          status?: Database["public"]["Enums"]["member_status"]
+          trainer_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          batch?: string | null
+          created_at?: string
+          id?: string
+          joined_at?: string
+          member_code?: string
+          status?: Database["public"]["Enums"]["member_status"]
+          trainer_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       meal_plans: {
         Row: {
           created_at: string
@@ -220,6 +342,129 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      member_badges: {
+        Row: {
+          badge_name: string
+          badge_type: string
+          earned_at: string
+          id: string
+          member_id: string
+          metadata: Json | null
+        }
+        Insert: {
+          badge_name: string
+          badge_type: string
+          earned_at?: string
+          id?: string
+          member_id: string
+          metadata?: Json | null
+        }
+        Update: {
+          badge_name?: string
+          badge_type?: string
+          earned_at?: string
+          id?: string
+          member_id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_badges_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      member_rankings: {
+        Row: {
+          all_time_rank: number | null
+          consistency_score: number
+          created_at: string
+          daily_rank: number | null
+          id: string
+          member_id: string
+          monthly_rank: number | null
+          on_time_percentage: number
+          rank_date: string
+          total_attendance_days: number
+          weekly_rank: number | null
+        }
+        Insert: {
+          all_time_rank?: number | null
+          consistency_score?: number
+          created_at?: string
+          daily_rank?: number | null
+          id?: string
+          member_id: string
+          monthly_rank?: number | null
+          on_time_percentage?: number
+          rank_date?: string
+          total_attendance_days?: number
+          weekly_rank?: number | null
+        }
+        Update: {
+          all_time_rank?: number | null
+          consistency_score?: number
+          created_at?: string
+          daily_rank?: number | null
+          id?: string
+          member_id?: string
+          monthly_rank?: number | null
+          on_time_percentage?: number
+          rank_date?: string
+          total_attendance_days?: number
+          weekly_rank?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_rankings_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      member_streaks: {
+        Row: {
+          current_streak: number
+          id: string
+          last_attendance_date: string | null
+          longest_streak: number
+          member_id: string
+          streak_start_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          current_streak?: number
+          id?: string
+          last_attendance_date?: string | null
+          longest_streak?: number
+          member_id: string
+          streak_start_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          current_streak?: number
+          id?: string
+          last_attendance_date?: string | null
+          longest_streak?: number
+          member_id?: string
+          streak_start_date?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_streaks_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       messages: {
         Row: {
@@ -311,6 +556,79 @@ export type Database = {
         }
         Relationships: []
       }
+      points_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          reference_id: string | null
+          transaction_type: string
+          wallet_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          transaction_type: string
+          wallet_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          transaction_type?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "points_transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "points_wallet"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      points_wallet: {
+        Row: {
+          balance: number
+          id: string
+          member_id: string
+          total_earned: number
+          total_spent: number
+          updated_at: string
+        }
+        Insert: {
+          balance?: number
+          id?: string
+          member_id: string
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string
+        }
+        Update: {
+          balance?: number
+          id?: string
+          member_id?: string
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "points_wallet_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           activity_level: string | null
@@ -374,6 +692,93 @@ export type Database = {
         }
         Relationships: []
       }
+      reward_redemptions: {
+        Row: {
+          admin_notes: string | null
+          fulfilled_at: string | null
+          id: string
+          member_id: string
+          points_spent: number
+          redeemed_at: string
+          reward_id: string
+          status: Database["public"]["Enums"]["reward_redemption_status"]
+        }
+        Insert: {
+          admin_notes?: string | null
+          fulfilled_at?: string | null
+          id?: string
+          member_id: string
+          points_spent: number
+          redeemed_at?: string
+          reward_id: string
+          status?: Database["public"]["Enums"]["reward_redemption_status"]
+        }
+        Update: {
+          admin_notes?: string | null
+          fulfilled_at?: string | null
+          id?: string
+          member_id?: string
+          points_spent?: number
+          redeemed_at?: string
+          reward_id?: string
+          status?: Database["public"]["Enums"]["reward_redemption_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_redemptions_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reward_redemptions_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rewards_catalog: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          points_cost: number
+          stock: number | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          points_cost: number
+          stock?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          points_cost?: number
+          stock?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_badges: {
         Row: {
           badge_id: string
@@ -432,6 +837,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       water_entries: {
         Row: {
@@ -718,9 +1147,27 @@ export type Database = {
     }
     Functions: {
       get_user_id_by_friend_code: { Args: { code: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "trainer" | "member"
+      attendance_status:
+        | "checked_in"
+        | "checked_out"
+        | "auto_checkout"
+        | "missed"
+      member_status: "active" | "inactive" | "suspended" | "banned"
+      reward_redemption_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "fulfilled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -847,6 +1294,21 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "trainer", "member"],
+      attendance_status: [
+        "checked_in",
+        "checked_out",
+        "auto_checkout",
+        "missed",
+      ],
+      member_status: ["active", "inactive", "suspended", "banned"],
+      reward_redemption_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "fulfilled",
+      ],
+    },
   },
 } as const
