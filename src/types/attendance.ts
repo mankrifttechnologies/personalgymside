@@ -103,7 +103,6 @@ export interface MemberBadge {
   badge_name: string;
   earned_at: string;
   metadata: Record<string, any> | null;
-  metadata: Record<string, any>;
 }
 
 export interface BiometricDevice {
