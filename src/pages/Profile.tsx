@@ -158,6 +158,39 @@ export default function Profile() {
 
         {/* Quick Links */}
         <div className="grid grid-cols-2 gap-3 animate-slide-up">
+          <Link to="/attendance" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-green-500/20">
+              <CalendarDays className="w-5 h-5 text-green-500" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Attendance</p>
+              <p className="text-xs text-muted-foreground">Check-in tracking</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </Link>
+
+          <Link to="/leaderboard" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-yellow-500/20">
+              <Users className="w-5 h-5 text-yellow-500" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Leaderboard</p>
+              <p className="text-xs text-muted-foreground">Rankings</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </Link>
+
+          <Link to="/rewards" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-purple-500/20">
+              <Target className="w-5 h-5 text-purple-500" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Rewards</p>
+              <p className="text-xs text-muted-foreground">Redeem points</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </Link>
+          
           <Link to="/measurements" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
             <div className="p-2 rounded-lg bg-accent/20">
               <Ruler className="w-5 h-5 text-accent" />
@@ -176,17 +209,6 @@ export default function Profile() {
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate">Reminders</p>
               <p className="text-xs text-muted-foreground">Set schedule</p>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-          </Link>
-
-          <Link to="/schedule" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
-            <div className="p-2 rounded-lg bg-warning/20">
-              <CalendarDays className="w-5 h-5 text-warning" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">Weekly Plan</p>
-              <p className="text-xs text-muted-foreground">Schedule workouts</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </Link>

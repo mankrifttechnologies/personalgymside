@@ -20,6 +20,9 @@ import Reminders from "./pages/Reminders";
 import Schedule from "./pages/Schedule";
 import Friends from "./pages/Friends";
 import History from "./pages/History";
+import Attendance from "./pages/Attendance";
+import Leaderboard from "./pages/Leaderboard";
+import Rewards from "./pages/Rewards";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +65,9 @@ const App = () => {
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/friends" element={<Friends />} />
                 <Route path="/history" element={<History />} />
+                <Route path="/attendance" element={<Attendance />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/rewards" element={<Rewards />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
