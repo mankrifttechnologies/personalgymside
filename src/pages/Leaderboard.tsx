@@ -12,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { MemberSearchCard } from '@/components/MemberSearchCard';
 import BottomNav from '@/components/BottomNav';
 import { 
   ChevronLeft, 
@@ -195,59 +196,37 @@ export default function Leaderboard() {
         </div>
 
         {showSearch ? (
-          /* Search Results */
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base flex items-center gap-2">
-                <User className="w-4 h-4" />
-                Search Results
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {searchLoading ? (
-                <div className="flex justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          /* Search Results with Full Member Cards */
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-medium">
+                {searchLoading ? 'Searching...' : `${searchResults?.length || 0} members found`}
+              </span>
+            </div>
+            
+            {searchLoading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : searchResults && searchResults.length > 0 ? (
+              <ScrollArea className="h-[500px]">
+                <div className="space-y-3 pr-2">
+                  {searchResults.map(member => (
+                    <MemberSearchCard key={member.member_id} member={member} />
+                  ))}
                 </div>
-              ) : searchResults && searchResults.length > 0 ? (
-                <ScrollArea className="h-[400px]">
-                  <div className="space-y-2">
-                    {searchResults.map(member => (
-                      <div 
-                        key={member.member_id} 
-                        onClick={() => navigate(`/member/${member.member_id}`)}
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors"
-                      >
-                        <Avatar className="w-10 h-10">
-                          <AvatarImage src={member.avatar_url || undefined} />
-                          <AvatarFallback>
-                            {member.name?.[0]?.toUpperCase() || member.member_code[0]}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <p className="font-medium">{member.name || member.member_code}</p>
-                          <p className="text-xs text-muted-foreground">{member.member_code}</p>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm">
-                          <div className="flex items-center gap-1 text-orange-500">
-                            <Flame className="w-3 h-3" />
-                            <span>{member.current_streak}</span>
-                          </div>
-                          <div className="flex items-center gap-1 text-primary">
-                            <Dumbbell className="w-3 h-3" />
-                            <span>{member.total_workouts}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              ) : (
-                <p className="text-center text-muted-foreground py-8">
-                  No members found
+              </ScrollArea>
+            ) : (
+              <Card className="py-12 text-center">
+                <User className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground">No members found</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Try searching with a different name
                 </p>
-              )}
-            </CardContent>
-          </Card>
+              </Card>
+            )}
+          </div>
         ) : (
           /* Leaderboard Tabs */
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as LeaderboardType)}>
