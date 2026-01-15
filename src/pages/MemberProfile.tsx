@@ -1,5 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMemberProfile } from '@/hooks/useMemberSearch';
+import { useFollows } from '@/hooks/useFollows';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +18,10 @@ import {
   Award,
   Target,
   Clock,
-  TrendingUp
+  TrendingUp,
+  UserPlus,
+  UserMinus,
+  Users
 } from 'lucide-react';
 import { format } from 'date-fns';
 import BottomNav from '@/components/BottomNav';
@@ -24,7 +29,11 @@ import BottomNav from '@/components/BottomNav';
 export default function MemberProfile() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { data: member, isLoading, error } = useMemberProfile(id || null);
+  const { isFollowing, toggleFollow, isLoading: followLoading } = useFollows();
+
+  const isOwnProfile = user?.id === member?.user_id;
 
   if (isLoading) {
     return (
@@ -103,6 +112,30 @@ export default function MemberProfile() {
                 )}
               </div>
             </div>
+            
+            {/* Follow Button */}
+            {user && !isOwnProfile && (
+              <div className="mt-4">
+                <Button
+                  onClick={() => toggleFollow(member.user_id)}
+                  disabled={followLoading}
+                  variant={isFollowing(member.user_id) ? "outline" : "default"}
+                  className="w-full"
+                >
+                  {isFollowing(member.user_id) ? (
+                    <>
+                      <UserMinus className="h-4 w-4 mr-2" />
+                      Unfollow
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Follow
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
           
           {/* Rating Section */}
