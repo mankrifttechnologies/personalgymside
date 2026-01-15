@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLeaderboard, LeaderboardType } from '@/hooks/useLeaderboard';
 import { useGymMember } from '@/hooks/useAttendance';
 import { useMemberSearch, SearchableMember } from '@/hooks/useMemberSearch';
@@ -132,6 +132,7 @@ function MemberProfileDialog({ member, children }: MemberProfileDialogProps) {
 export default function Leaderboard() {
   const [activeTab, setActiveTab] = useState<LeaderboardType>('streak');
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
   const { data: currentMember } = useGymMember();
   const { data: leaderboard, isLoading } = useLeaderboard(activeTab, 50);
   const { data: searchResults, isLoading: searchLoading } = useMemberSearch(searchQuery);
@@ -211,30 +212,32 @@ export default function Leaderboard() {
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-2">
                     {searchResults.map(member => (
-                      <MemberProfileDialog key={member.member_id} member={member}>
-                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors">
-                          <Avatar className="w-10 h-10">
-                            <AvatarImage src={member.avatar_url || undefined} />
-                            <AvatarFallback>
-                              {member.name?.[0]?.toUpperCase() || member.member_code[0]}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <p className="font-medium">{member.name || member.member_code}</p>
-                            <p className="text-xs text-muted-foreground">{member.member_code}</p>
+                      <div 
+                        key={member.member_id} 
+                        onClick={() => navigate(`/member/${member.member_id}`)}
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors"
+                      >
+                        <Avatar className="w-10 h-10">
+                          <AvatarImage src={member.avatar_url || undefined} />
+                          <AvatarFallback>
+                            {member.name?.[0]?.toUpperCase() || member.member_code[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <p className="font-medium">{member.name || member.member_code}</p>
+                          <p className="text-xs text-muted-foreground">{member.member_code}</p>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center gap-1 text-orange-500">
+                            <Flame className="w-3 h-3" />
+                            <span>{member.current_streak}</span>
                           </div>
-                          <div className="flex items-center gap-4 text-sm">
-                            <div className="flex items-center gap-1 text-orange-500">
-                              <Flame className="w-3 h-3" />
-                              <span>{member.current_streak}</span>
-                            </div>
-                            <div className="flex items-center gap-1 text-primary">
-                              <Dumbbell className="w-3 h-3" />
-                              <span>{member.total_workouts}</span>
-                            </div>
+                          <div className="flex items-center gap-1 text-primary">
+                            <Dumbbell className="w-3 h-3" />
+                            <span>{member.total_workouts}</span>
                           </div>
                         </div>
-                      </MemberProfileDialog>
+                      </div>
                     ))}
                   </div>
                 </ScrollArea>
@@ -339,7 +342,8 @@ export default function Leaderboard() {
                         return (
                           <div
                             key={entry.member_id}
-                            className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
+                            onClick={() => navigate(`/member/${entry.member_id}`)}
+                            className={`flex items-center gap-3 p-3 rounded-lg border transition-colors cursor-pointer ${
                               isCurrentUser 
                                 ? 'bg-primary/10 border-primary/50' 
                                 : getRankGradient(entry.rank) || 'hover:bg-secondary/50 border-transparent'

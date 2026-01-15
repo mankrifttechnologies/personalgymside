@@ -23,6 +23,7 @@ import History from "./pages/History";
 import Attendance from "./pages/Attendance";
 import Leaderboard from "./pages/Leaderboard";
 import Rewards from "./pages/Rewards";
+import MemberProfile from "./pages/MemberProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => {
                 <Route path="/attendance" element={<Attendance />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/rewards" element={<Rewards />} />
+                <Route path="/member/:id" element={<MemberProfile />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
