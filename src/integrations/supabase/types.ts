@@ -663,6 +663,7 @@ export type Database = {
           gender: string | null
           height_cm: number | null
           id: string
+          is_approved: boolean | null
           is_public: boolean | null
           level: number | null
           name: string | null
@@ -683,6 +684,7 @@ export type Database = {
           gender?: string | null
           height_cm?: number | null
           id?: string
+          is_approved?: boolean | null
           is_public?: boolean | null
           level?: number | null
           name?: string | null
@@ -703,6 +705,7 @@ export type Database = {
           gender?: string | null
           height_cm?: number | null
           id?: string
+          is_approved?: boolean | null
           is_public?: boolean | null
           level?: number | null
           name?: string | null
@@ -858,6 +861,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          photo_url: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          photo_url: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          photo_url?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

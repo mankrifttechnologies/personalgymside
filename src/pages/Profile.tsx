@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
+import { useFollows } from '@/hooks/useFollows';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FitnessGoal, ActivityLevel, DietPreference } from '@/types/fitness';
@@ -39,6 +40,7 @@ const DIET_PREFERENCES: { value: DietPreference; label: string; icon: string }[]
 export default function Profile() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { profile, isLoading, updateProfile } = useProfile();
+  const { followersCount, followingCount } = useFollows();
   const queryClient = useQueryClient();
   
   const [name, setName] = useState('');
@@ -154,6 +156,19 @@ export default function Profile() {
           />
           <h2 className="mt-3 text-lg font-semibold">{profile?.name || 'Your Name'}</h2>
           <p className="text-sm text-muted-foreground">{profile?.fitness_goal?.replace('_', ' ') || 'Set your goal'}</p>
+          
+          {/* Followers/Following Stats */}
+          <div className="flex items-center gap-6 mt-3">
+            <div className="text-center">
+              <p className="text-lg font-bold">{followersCount}</p>
+              <p className="text-xs text-muted-foreground">Followers</p>
+            </div>
+            <div className="w-px h-8 bg-border" />
+            <div className="text-center">
+              <p className="text-lg font-bold">{followingCount}</p>
+              <p className="text-xs text-muted-foreground">Following</p>
+            </div>
+          </div>
         </div>
 
         {/* Quick Links */}

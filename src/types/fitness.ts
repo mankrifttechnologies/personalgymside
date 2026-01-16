@@ -23,6 +23,7 @@ export interface Profile {
   avatar_url: string | null;
   xp: number | null;
   level: number | null;
+  is_approved: boolean | null;
   created_at: string;
   updated_at: string;
 }

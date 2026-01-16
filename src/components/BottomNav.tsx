@@ -1,10 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Activity, Dumbbell, Utensils, User, Plus, TrendingUp } from 'lucide-react';
+import { Activity, Compass, Utensils, User, Plus, TrendingUp } from 'lucide-react';
 
 const NAV_ITEMS = [
   { path: '/', icon: Activity, label: 'Home' },
-  { path: '/workout', icon: Dumbbell, label: 'Workout' },
+  { path: '/explorer', icon: Compass, label: 'Explore' },
   { path: '/progress', icon: TrendingUp, label: 'Progress' },
   { path: '/nutrition', icon: Utensils, label: 'Food' },
   { path: '/profile', icon: User, label: 'Profile' },
@@ -20,15 +20,16 @@ export default function BottomNav() {
           const isActive = location.pathname === item.path;
           const Icon = item.icon;
           
-          // Center button (Plus button)
+          // Center button (Plus button) - now opens Workout
           if (index === 2) {
             return (
-              <div key={item.path} className="flex flex-col items-center">
+              <div key="workout-plus" className="flex flex-col items-center">
                 <Link to="/workout" className="relative -top-4">
                   <Button variant="energy" size="icon" className="w-14 h-14 rounded-full shadow-lg">
                     <Plus className="w-7 h-7" />
                   </Button>
                 </Link>
+                <span className="text-xs mt-1 text-muted-foreground">Workout</span>
               </div>
             );
           }
