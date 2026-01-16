@@ -4,12 +4,25 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useMemberSearch } from '@/hooks/useMemberSearch';
 import { useFollows } from '@/hooks/useFollows';
+import { usePhotos } from '@/hooks/usePhotos';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BottomNav from '@/components/BottomNav';
 import { MemberSearchCard } from '@/components/MemberSearchCard';
-import { Search, Lock, ImageIcon, Camera, Loader2, Users, Grid3X3 } from 'lucide-react';
+import { PhotoCard } from '@/components/feed/PhotoCard';
+import { PhotoUpload } from '@/components/feed/PhotoUpload';
+import { Search, Lock, ImageIcon, Loader2, Users, Grid3X3, Trash2 } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export default function Explorer() {
   const { user, loading: authLoading } = useAuth();
@@ -121,44 +134,152 @@ export default function Explorer() {
 }
 
 function FeedContent() {
-  // This would show photos from users the current user follows
-  // For now, showing a placeholder
-  return (
-    <div className="space-y-4">
-      <div className="text-center py-8 text-muted-foreground">
-        <Grid3X3 className="w-12 h-12 mx-auto mb-3 opacity-50" />
-        <p>Follow members to see their photos here</p>
-        <Link to="/leaderboard">
-          <Button variant="outline" size="sm" className="mt-3">
-            Find Members
-          </Button>
-        </Link>
+  const { feedPhotos, feedLoading, deletePhoto } = usePhotos();
+  const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
+
+  if (feedLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
       </div>
-    </div>
+    );
+  }
+
+  if (feedPhotos.length === 0) {
+    return (
+      <div className="space-y-4">
+        <div className="text-center py-8 text-muted-foreground">
+          <Grid3X3 className="w-12 h-12 mx-auto mb-3 opacity-50" />
+          <p>Follow members to see their photos here</p>
+          <p className="text-sm mt-1">Or upload your first photo!</p>
+          <div className="mt-4 flex justify-center gap-2">
+            <Link to="/leaderboard">
+              <Button variant="outline" size="sm">
+                Find Members
+              </Button>
+            </Link>
+            <PhotoUpload />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="space-y-4">
+        {feedPhotos.map((photo) => (
+          <PhotoCard 
+            key={photo.id} 
+            photo={photo} 
+            onDelete={() => setPhotoToDelete(photo.id)}
+          />
+        ))}
+      </div>
+
+      <AlertDialog open={!!photoToDelete} onOpenChange={() => setPhotoToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Photo</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this photo? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (photoToDelete) {
+                  deletePhoto.mutate(photoToDelete);
+                  setPhotoToDelete(null);
+                }
+              }}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
 
 function MyPhotosContent() {
-  // User's own photo gallery
+  const { myPhotos, myPhotosLoading, deletePhoto } = usePhotos();
+  const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-semibold">My Photos</h3>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Camera className="w-4 h-4" />
-          Upload
-        </Button>
-      </div>
-      
-      <div className="grid grid-cols-3 gap-1">
-        {/* Placeholder for no photos */}
-        <div className="aspect-square bg-muted rounded-lg flex items-center justify-center col-span-3">
-          <div className="text-center py-8">
-            <ImageIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">No photos yet</p>
-          </div>
+    <>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold">My Photos</h3>
+          <PhotoUpload />
         </div>
+        
+        {myPhotosLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          </div>
+        ) : myPhotos.length === 0 ? (
+          <div className="aspect-square bg-muted rounded-lg flex items-center justify-center">
+            <div className="text-center py-8">
+              <ImageIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">No photos yet</p>
+              <p className="text-xs text-muted-foreground mt-1">Upload your first photo to get started!</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-1">
+            {myPhotos.map((photo) => (
+              <div 
+                key={photo.id} 
+                className="aspect-square relative group cursor-pointer"
+                onClick={() => setPhotoToDelete(photo.id)}
+              >
+                <img
+                  src={photo.photo_url}
+                  alt={photo.caption || 'Photo'}
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                  <div className="flex items-center gap-3 text-white text-sm">
+                    <span>❤️ {photo.likes_count}</span>
+                    <span>💬 {photo.comments_count}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+
+      <AlertDialog open={!!photoToDelete} onOpenChange={() => setPhotoToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Photo</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this photo? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => {
+                if (photoToDelete) {
+                  deletePhoto.mutate(photoToDelete);
+                  setPhotoToDelete(null);
+                }
+              }}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
