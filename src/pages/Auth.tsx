@@ -5,14 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Dumbbell, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Dumbbell, Mail, Lock, ArrowRight, Info } from 'lucide-react';
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, user } = useAuth();
   const navigate = useNavigate();
 
   if (user) {
@@ -24,9 +23,7 @@ export default function Auth() {
     setLoading(true);
 
     try {
-      const { error } = isLogin 
-        ? await signIn(email, password)
-        : await signUp(email, password);
+      const { error } = await signIn(email, password);
 
       if (error) {
         toast({
@@ -35,12 +32,6 @@ export default function Auth() {
           variant: 'destructive',
         });
       } else {
-        if (!isLogin) {
-          toast({
-            title: 'Success!',
-            description: 'Account created successfully. You are now logged in.',
-          });
-        }
         navigate('/');
       }
     } catch (err) {
@@ -74,7 +65,7 @@ export default function Auth() {
           </div>
 
           <h2 className="text-xl font-semibold text-center mb-6">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
+            Welcome Back
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -118,20 +109,20 @@ export default function Auth() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Create Account')}
+              {loading ? 'Signing in...' : 'Sign In'}
               <ArrowRight className="w-5 h-5" />
             </Button>
           </form>
 
-          <p className="text-center mt-6 text-muted-foreground">
-            {isLogin ? "Don't have an account?" : 'Already have an account?'}
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 text-primary hover:underline font-medium"
-            >
-              {isLogin ? 'Sign Up' : 'Sign In'}
-            </button>
-          </p>
+          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+            <div className="flex items-start gap-3">
+              <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div className="text-sm text-muted-foreground">
+                <p className="font-medium text-foreground mb-1">Need an account?</p>
+                <p>Accounts are created by administrators only. Contact your gym admin or staff to get access.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
