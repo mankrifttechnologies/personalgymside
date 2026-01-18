@@ -29,8 +29,26 @@ export function useMemberSearch(searchQuery: string = '') {
   return useQuery({
     queryKey: ['member-search', debouncedQuery],
     queryFn: async (): Promise<SearchableMember[]> => {
-      // Get all active members
-      const { data: members, error: membersError } = await supabase
+      // First get all profiles - this ensures we find ALL users, not just gym_members
+      let profilesQuery = supabase
+        .from('profiles')
+        .select('user_id, name, avatar_url, fitness_goal');
+      
+      // Apply server-side search if query exists
+      if (debouncedQuery.trim()) {
+        profilesQuery = profilesQuery.ilike('name', `%${debouncedQuery}%`);
+      }
+
+      const { data: profiles, error: profilesError } = await profilesQuery;
+      if (profilesError) throw profilesError;
+
+      if (!profiles || profiles.length === 0) {
+        return [];
+      }
+
+      // Get gym_members data for matched profiles
+      const userIds = profiles.map(p => p.user_id);
+      const { data: members } = await supabase
         .from('gym_members')
         .select(`
           id,
@@ -39,71 +57,57 @@ export function useMemberSearch(searchQuery: string = '') {
           member_streaks(current_streak),
           points_wallet(balance)
         `)
+        .in('user_id', userIds)
         .eq('status', 'active');
 
-      if (membersError) throw membersError;
-
-      // Get profiles
-      const userIds = members?.map(m => m.user_id) || [];
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('user_id, name, avatar_url, fitness_goal')
-        .in('user_id', userIds);
-
-      // Get attendance counts
+      // Get attendance counts for these members
+      const memberIds = members?.map(m => m.id) || [];
       const { data: attendanceCounts } = await supabase
         .from('attendance_logs')
-        .select('member_id');
+        .select('member_id')
+        .in('member_id', memberIds);
 
       const attendanceByMember: Record<string, number> = {};
       attendanceCounts?.forEach(log => {
         attendanceByMember[log.member_id] = (attendanceByMember[log.member_id] || 0) + 1;
       });
 
-      // Get workout counts
+      // Get workout counts for these users
       const { data: workoutCounts } = await supabase
         .from('workouts')
-        .select('user_id');
+        .select('user_id')
+        .in('user_id', userIds);
 
       const workoutsByUser: Record<string, number> = {};
       workoutCounts?.forEach(w => {
         workoutsByUser[w.user_id] = (workoutsByUser[w.user_id] || 0) + 1;
       });
 
-      const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+      const memberMap = new Map(members?.map(m => [m.user_id, m]) || []);
 
-      // Build searchable members
-      let results: SearchableMember[] = (members || []).map(member => {
-        const profile = profileMap.get(member.user_id);
-        const streakData = Array.isArray(member.member_streaks) 
+      // Build searchable members from profiles (primary) with gym_member data (secondary)
+      const results: SearchableMember[] = profiles.map(profile => {
+        const member = memberMap.get(profile.user_id);
+        const streakData = member ? (Array.isArray(member.member_streaks) 
           ? member.member_streaks[0] 
-          : member.member_streaks;
-        const walletData = Array.isArray(member.points_wallet)
+          : member.member_streaks) : null;
+        const walletData = member ? (Array.isArray(member.points_wallet)
           ? member.points_wallet[0]
-          : member.points_wallet;
+          : member.points_wallet) : null;
 
         return {
-          member_id: member.id,
-          user_id: member.user_id,
-          member_code: member.member_code,
-          name: profile?.name || null,
-          avatar_url: profile?.avatar_url || null,
+          member_id: member?.id || '',
+          user_id: profile.user_id,
+          member_code: member?.member_code || 'N/A',
+          name: profile.name || null,
+          avatar_url: profile.avatar_url || null,
           current_streak: streakData?.current_streak || 0,
-          total_attendance_days: attendanceByMember[member.id] || 0,
-          total_workouts: workoutsByUser[member.user_id] || 0,
+          total_attendance_days: member ? (attendanceByMember[member.id] || 0) : 0,
+          total_workouts: workoutsByUser[profile.user_id] || 0,
           points_balance: walletData?.balance || 0,
-          fitness_goal: profile?.fitness_goal || null,
+          fitness_goal: profile.fitness_goal || null,
         };
       });
-
-      // Filter by search query
-      if (debouncedQuery.trim()) {
-        const query = debouncedQuery.toLowerCase();
-        results = results.filter(member => 
-          member.name?.toLowerCase().includes(query) ||
-          member.member_code.toLowerCase().includes(query)
-        );
-      }
 
       // Sort by name
       return results.sort((a, b) => {

@@ -11,10 +11,11 @@ import AvatarUpload from '@/components/AvatarUpload';
 import { 
   User, ChevronLeft, Save, LogOut, 
   Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale,
-  Bell, Ruler, ChevronRight, Users, CalendarDays
+  Bell, Ruler, ChevronRight, Users, CalendarDays, Shield, MessageSquare
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useIsAdmin, useIsTrainer } from '@/hooks/useUserRole';
 
 const FITNESS_GOALS: { value: FitnessGoal; label: string; description: string }[] = [
   { value: 'muscle_gain', label: 'Muscle Gain', description: 'Build lean muscle mass' },
@@ -41,6 +42,8 @@ export default function Profile() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { profile, isLoading, updateProfile } = useProfile();
   const { followersCount, followingCount } = useFollows();
+  const { isAdmin } = useIsAdmin();
+  const { isTrainer } = useIsTrainer();
   const queryClient = useQueryClient();
   
   const [name, setName] = useState('');
@@ -238,6 +241,30 @@ export default function Profile() {
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </Link>
+
+          <Link to="/support" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform">
+            <div className="p-2 rounded-lg bg-blue-500/20">
+              <MessageSquare className="w-5 h-5 text-blue-500" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-sm truncate">Support</p>
+              <p className="text-xs text-muted-foreground">Get help</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </Link>
+
+          {(isAdmin || isTrainer) && (
+            <Link to="/admin" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform col-span-2 border border-primary/30">
+              <div className="p-2 rounded-lg bg-primary/20">
+                <Shield className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm truncate">Admin Dashboard</p>
+                <p className="text-xs text-muted-foreground">Manage users & support</p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+            </Link>
+          )}
         </div>
 
         {/* Basic Info */}

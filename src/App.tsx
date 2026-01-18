@@ -25,6 +25,8 @@ import Leaderboard from "./pages/Leaderboard";
 import Rewards from "./pages/Rewards";
 import MemberProfile from "./pages/MemberProfile";
 import Explorer from "./pages/Explorer";
+import AdminDashboard from "./pages/AdminDashboard";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -72,6 +74,8 @@ const App = () => {
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/member/:id" element={<MemberProfile />} />
                 <Route path="/explorer" element={<Explorer />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/support" element={<Support />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
