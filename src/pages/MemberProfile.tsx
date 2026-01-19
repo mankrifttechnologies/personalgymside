@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useMemberProfile } from '@/hooks/useMemberSearch';
 import { useFollows } from '@/hooks/useFollows';
+import { useUserFollowCounts } from '@/hooks/useUserFollowCounts';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,6 +33,7 @@ export default function MemberProfile() {
   const { user } = useAuth();
   const { data: member, isLoading, error } = useMemberProfile(id || null);
   const { isFollowing, toggleFollow, isLoading: followLoading } = useFollows();
+  const { followersCount, followingCount } = useUserFollowCounts(member?.user_id || null);
 
   const isOwnProfile = user?.id === member?.user_id;
 
@@ -110,6 +112,18 @@ export default function MemberProfile() {
                     <span className="capitalize">{member.profile.fitness_goal.replace('_', ' ')}</span>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Follower/Following Counts */}
+            <div className="flex justify-center gap-8 mt-4 pt-4 border-t border-border/50">
+              <div className="text-center">
+                <p className="text-2xl font-bold">{followersCount}</p>
+                <p className="text-xs text-muted-foreground">Followers</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold">{followingCount}</p>
+                <p className="text-xs text-muted-foreground">Following</p>
               </div>
             </div>
             
