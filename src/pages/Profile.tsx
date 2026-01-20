@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useFollows } from '@/hooks/useFollows';
@@ -39,6 +39,7 @@ const DIET_PREFERENCES: { value: DietPreference; label: string; icon: string }[]
 ];
 
 export default function Profile() {
+  const navigate = useNavigate();
   const { user, loading: authLoading, signOut } = useAuth();
   const { profile, isLoading, updateProfile } = useProfile();
   const { followersCount, followingCount } = useFollows();
@@ -162,15 +163,21 @@ export default function Profile() {
           
           {/* Followers/Following Stats */}
           <div className="flex items-center gap-6 mt-3">
-            <div className="text-center">
+            <button 
+              onClick={() => navigate(`/follow/${user?.id}/followers`)}
+              className="text-center hover:opacity-80 transition-opacity"
+            >
               <p className="text-lg font-bold">{followersCount}</p>
               <p className="text-xs text-muted-foreground">Followers</p>
-            </div>
+            </button>
             <div className="w-px h-8 bg-border" />
-            <div className="text-center">
+            <button 
+              onClick={() => navigate(`/follow/${user?.id}/following`)}
+              className="text-center hover:opacity-80 transition-opacity"
+            >
               <p className="text-lg font-bold">{followingCount}</p>
               <p className="text-xs text-muted-foreground">Following</p>
-            </div>
+            </button>
           </div>
         </div>
 

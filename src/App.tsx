@@ -24,6 +24,7 @@ import Attendance from "./pages/Attendance";
 import Leaderboard from "./pages/Leaderboard";
 import Rewards from "./pages/Rewards";
 import MemberProfile from "./pages/MemberProfile";
+import FollowList from "./pages/FollowList";
 import Explorer from "./pages/Explorer";
 import AdminDashboard from "./pages/AdminDashboard";
 import Support from "./pages/Support";
@@ -73,6 +74,7 @@ const App = () => {
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/member/:id" element={<MemberProfile />} />
+                <Route path="/follow/:userId/:tab" element={<FollowList />} />
                 <Route path="/explorer" element={<Explorer />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/support" element={<Support />} />
