@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useMemberProfile } from '@/hooks/useMemberSearch';
 import { useFollows } from '@/hooks/useFollows';
 import { useUserFollowCounts } from '@/hooks/useUserFollowCounts';
@@ -117,14 +117,14 @@ export default function MemberProfile() {
 
             {/* Follower/Following Counts */}
             <div className="flex justify-center gap-8 mt-4 pt-4 border-t border-border/50">
-              <div className="text-center">
+              <Link to={`/follow/${member.user_id}/followers`} className="text-center hover:opacity-80 transition-opacity">
                 <p className="text-2xl font-bold">{followersCount}</p>
                 <p className="text-xs text-muted-foreground">Followers</p>
-              </div>
-              <div className="text-center">
+              </Link>
+              <Link to={`/follow/${member.user_id}/following`} className="text-center hover:opacity-80 transition-opacity">
                 <p className="text-2xl font-bold">{followingCount}</p>
                 <p className="text-xs text-muted-foreground">Following</p>
-              </div>
+              </Link>
             </div>
             
             {/* Follow Button */}
