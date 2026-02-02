@@ -22,6 +22,7 @@ import {
   TrendingUp,
   UserPlus,
   UserMinus,
+  UserCheck,
   Users
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -32,10 +33,13 @@ export default function MemberProfile() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data: member, isLoading, error } = useMemberProfile(id || null);
-  const { isFollowing, toggleFollow, isLoading: followLoading } = useFollows();
+  const { isFollowing, toggleFollow, isLoading: followLoading, followers } = useFollows();
   const { followersCount, followingCount } = useUserFollowCounts(member?.user_id || null);
 
   const isOwnProfile = user?.id === member?.user_id;
+  
+  // Check if this member follows the current user (mutual follow)
+  const isMutualFollow = member?.user_id ? followers.some(f => f.follower_id === member.user_id) : false;
 
   if (isLoading) {
     return (
@@ -129,7 +133,20 @@ export default function MemberProfile() {
             
             {/* Follow Button */}
             {user && !isOwnProfile && (
-              <div className="mt-4">
+              <div className="mt-4 space-y-2">
+                {/* Mutual Follow Indicator */}
+                {isFollowing(member.user_id) && isMutualFollow && (
+                  <div className="flex items-center justify-center gap-1.5 text-sm text-primary bg-primary/10 rounded-lg py-1.5">
+                    <UserCheck className="h-4 w-4" />
+                    <span>You follow each other</span>
+                  </div>
+                )}
+                {!isFollowing(member.user_id) && isMutualFollow && (
+                  <div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground bg-muted rounded-lg py-1.5">
+                    <UserCheck className="h-4 w-4" />
+                    <span>Follows you</span>
+                  </div>
+                )}
                 <Button
                   onClick={() => toggleFollow(member.user_id)}
                   disabled={followLoading}
@@ -144,7 +161,7 @@ export default function MemberProfile() {
                   ) : (
                     <>
                       <UserPlus className="h-4 w-4 mr-2" />
-                      Follow
+                      {isMutualFollow ? 'Follow Back' : 'Follow'}
                     </>
                   )}
                 </Button>
