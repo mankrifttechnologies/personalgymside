@@ -12,6 +12,7 @@ import BottomNav from '@/components/BottomNav';
 import { MemberSearchCard } from '@/components/MemberSearchCard';
 import { PhotoCard } from '@/components/feed/PhotoCard';
 import { PhotoUpload } from '@/components/feed/PhotoUpload';
+import { FollowSuggestions } from '@/components/FollowSuggestions';
 import { Search, Lock, ImageIcon, Loader2, Users, Grid3X3, Trash2 } from 'lucide-react';
 import {
   AlertDialog,
@@ -50,20 +51,20 @@ export default function Explorer() {
   return (
     <div className="min-h-screen pb-24">
       {/* Header */}
-      <header className="p-4">
-        <h1 className="text-xl font-bold">Explore</h1>
-        <p className="text-sm text-muted-foreground">Discover members & content</p>
+      <header className="p-3 sm:p-4">
+        <h1 className="text-lg sm:text-xl font-bold">Explore</h1>
+        <p className="text-xs sm:text-sm text-muted-foreground">Discover members & content</p>
       </header>
 
-      <main className="px-4 space-y-6">
+      <main className="px-3 sm:px-4 space-y-4 sm:space-y-6">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
           <Input
             placeholder="Search members by name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="pl-9 sm:pl-10 h-10 text-sm"
           />
         </div>
 
@@ -88,43 +89,48 @@ export default function Explorer() {
 
         {/* Content Tabs */}
         {searchQuery.length < 2 && (
-          <Tabs defaultValue="feed" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="feed" className="gap-2">
-                <Grid3X3 className="w-4 h-4" />
-                Feed
-              </TabsTrigger>
-              <TabsTrigger value="photos" className="gap-2">
-                <ImageIcon className="w-4 h-4" />
-                My Photos
-              </TabsTrigger>
-            </TabsList>
+          <>
+            {/* Follow Suggestions */}
+            <FollowSuggestions />
+            
+            <Tabs defaultValue="feed" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="feed" className="gap-1 sm:gap-2 text-xs sm:text-sm">
+                  <Grid3X3 className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Feed
+                </TabsTrigger>
+                <TabsTrigger value="photos" className="gap-1 sm:gap-2 text-xs sm:text-sm">
+                  <ImageIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  My Photos
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="feed" className="mt-4">
-              {isApproved ? (
-                <FeedContent />
-              ) : (
-                <div className="glass rounded-xl p-8 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-muted mx-auto flex items-center justify-center">
-                    <Lock className="w-8 h-8 text-muted-foreground" />
+              <TabsContent value="feed" className="mt-4">
+                {isApproved ? (
+                  <FeedContent />
+                ) : (
+                  <div className="glass rounded-xl p-6 sm:p-8 text-center space-y-3 sm:space-y-4">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-muted mx-auto flex items-center justify-center">
+                      <Lock className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
+                    </div>
+                    <h3 className="font-semibold text-base sm:text-lg">Feed Locked</h3>
+                    <p className="text-muted-foreground text-xs sm:text-sm">
+                      Your account needs admin approval to view the community feed. 
+                      Until then, you can view and upload your own photos.
+                    </p>
+                    <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-primary">
+                      <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span>{followersCount} followers · {followingCount} following</span>
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-lg">Feed Locked</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Your account needs admin approval to view the community feed. 
-                    Until then, you can view and upload your own photos.
-                  </p>
-                  <div className="flex items-center justify-center gap-2 text-sm text-primary">
-                    <Users className="w-4 h-4" />
-                    <span>{followersCount} followers · {followingCount} following</span>
-                  </div>
-                </div>
-              )}
-            </TabsContent>
+                )}
+              </TabsContent>
 
-            <TabsContent value="photos" className="mt-4">
-              <MyPhotosContent />
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="photos" className="mt-4">
+                <MyPhotosContent />
+              </TabsContent>
+            </Tabs>
+          </>
         )}
       </main>
 

@@ -269,3 +269,27 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(220 15% 35%);
 }
+
+/* Safe area for mobile devices (iOS notch, home indicator) */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* Extra small screen support */
+@media (max-width: 359px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Touch-friendly targets for mobile */
+@media (max-width: 640px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
