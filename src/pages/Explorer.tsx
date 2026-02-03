@@ -49,39 +49,48 @@ export default function Explorer() {
   const isApproved = profile?.is_approved || false;
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       {/* Header */}
       <header className="p-3 sm:p-4">
         <h1 className="text-lg sm:text-xl font-bold">Explore</h1>
         <p className="text-xs sm:text-sm text-muted-foreground">Discover members & content</p>
       </header>
 
-      <main className="px-3 sm:px-4 space-y-4 sm:space-y-6">
+      <main className="px-3 sm:px-4 space-y-4 sm:space-y-5">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search members by name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 sm:pl-10 h-10 text-sm"
+            className="pl-9 h-10 text-sm"
           />
+          {searchQuery && (
+            <p className="text-[10px] text-muted-foreground mt-1">
+              {searchQuery.length < 2 ? 'Type at least 2 characters to search' : `Searching for "${searchQuery}"`}
+            </p>
+          )}
         </div>
 
         {/* Search Results */}
         {searchQuery.length >= 2 && (
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {isSearching ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="w-6 h-6 animate-spin text-primary" />
               </div>
             ) : results.length > 0 ? (
-              results.map((member) => (
-                <MemberSearchCard key={member.user_id} member={member} />
-              ))
+              <>
+                <p className="text-xs text-muted-foreground">{results.length} members found</p>
+                {results.map((member) => (
+                  <MemberSearchCard key={member.user_id} member={member} />
+                ))}
+              </>
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                No members found
+                <Users className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No members found matching "{searchQuery}"</p>
               </div>
             )}
           </div>

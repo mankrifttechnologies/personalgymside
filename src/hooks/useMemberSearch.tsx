@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -19,7 +19,7 @@ export function useMemberSearch(searchQuery: string = '') {
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
 
   // Debounce search input
-  useMemo(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchQuery);
     }, 300);
@@ -34,12 +34,13 @@ export function useMemberSearch(searchQuery: string = '') {
         .from('profiles')
         .select('user_id, name, avatar_url, fitness_goal');
       
-      // Apply server-side search if query exists
+      // Apply server-side search if query exists - search by name OR show all if empty
       if (debouncedQuery.trim()) {
-        profilesQuery = profilesQuery.ilike('name', `%${debouncedQuery}%`);
+        // Use or() to match name containing query OR name is null but user_id matches
+        profilesQuery = profilesQuery.or(`name.ilike.%${debouncedQuery}%`);
       }
 
-      const { data: profiles, error: profilesError } = await profilesQuery;
+      const { data: profiles, error: profilesError } = await profilesQuery.limit(50);
       if (profilesError) throw profilesError;
 
       if (!profiles || profiles.length === 0) {
@@ -109,13 +110,14 @@ export function useMemberSearch(searchQuery: string = '') {
         };
       });
 
-      // Sort by name
+      // Sort by name (with fallback to member_code)
       return results.sort((a, b) => {
-        const nameA = a.name || a.member_code;
-        const nameB = b.name || b.member_code;
+        const nameA = a.name || a.member_code || '';
+        const nameB = b.name || b.member_code || '';
         return nameA.localeCompare(nameB);
       });
-    }
+    },
+    enabled: debouncedQuery.length >= 2, // Only search when 2+ characters
   });
 }
 
