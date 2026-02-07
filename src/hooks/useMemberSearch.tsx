@@ -120,14 +120,14 @@ export function useMemberSearch(searchQuery: string = '') {
   });
 }
 
-export function useMemberProfile(memberId: string | null) {
+export function useMemberProfile(idOrUserId: string | null) {
   return useQuery({
-    queryKey: ['member-profile', memberId],
+    queryKey: ['member-profile', idOrUserId],
     queryFn: async () => {
-      if (!memberId) return null;
+      if (!idOrUserId) return null;
 
-      // Get member details
-      const { data: member, error } = await supabase
+      // First try to find by gym_member id
+      let { data: member, error } = await supabase
         .from('gym_members')
         .select(`
           id,
@@ -139,10 +139,65 @@ export function useMemberProfile(memberId: string | null) {
           points_wallet(balance, total_earned),
           member_badges(badge_name, badge_type, earned_at)
         `)
-        .eq('id', memberId)
-        .single();
+        .eq('id', idOrUserId)
+        .maybeSingle();
 
-      if (error) throw error;
+      // If not found by id, try by user_id
+      if (!member) {
+        const { data: memberByUserId, error: userIdError } = await supabase
+          .from('gym_members')
+          .select(`
+            id,
+            member_code,
+            user_id,
+            joined_at,
+            batch,
+            member_streaks(current_streak, longest_streak, last_attendance_date),
+            points_wallet(balance, total_earned),
+            member_badges(badge_name, badge_type, earned_at)
+          `)
+          .eq('user_id', idOrUserId)
+          .maybeSingle();
+        
+        member = memberByUserId;
+      }
+
+      // If still no gym_member, get profile directly for users without gym membership
+      if (!member) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', idOrUserId)
+          .maybeSingle();
+
+        if (!profile) {
+          throw new Error('Member not found');
+        }
+
+        // Get workout count
+        const { data: workouts } = await supabase
+          .from('workouts')
+          .select('id')
+          .eq('user_id', idOrUserId);
+
+        return {
+          member_id: '',
+          member_code: 'N/A',
+          user_id: idOrUserId,
+          joined_at: profile.created_at || new Date().toISOString(),
+          batch: null,
+          profile: profile,
+          current_streak: 0,
+          longest_streak: 0,
+          last_attendance_date: null,
+          points_balance: 0,
+          total_points_earned: 0,
+          badges: [],
+          attendance_logs: [],
+          total_workouts: workouts?.length || 0,
+          total_attendance_days: 0,
+        };
+      }
 
       // Get profile
       const { data: profile } = await supabase
@@ -155,7 +210,7 @@ export function useMemberProfile(memberId: string | null) {
       const { data: attendanceLogs } = await supabase
         .from('attendance_logs')
         .select('*')
-        .eq('member_id', memberId)
+        .eq('member_id', member.id)
         .order('check_in_time', { ascending: false })
         .limit(30);
 
@@ -191,6 +246,6 @@ export function useMemberProfile(memberId: string | null) {
         total_attendance_days: attendanceLogs?.length || 0,
       };
     },
-    enabled: !!memberId
+    enabled: !!idOrUserId
   });
 }

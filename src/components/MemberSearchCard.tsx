@@ -36,7 +36,9 @@ export function MemberSearchCard({ member }: MemberSearchCardProps) {
   ));
 
   const handleViewProfile = () => {
-    navigate(`/member/${member.member_id}`);
+    // Use member_id if available, otherwise fallback to user_id
+    const profileId = member.member_id || member.user_id;
+    navigate(`/member/${profileId}`);
   };
 
   const handleFollow = (e: React.MouseEvent) => {
