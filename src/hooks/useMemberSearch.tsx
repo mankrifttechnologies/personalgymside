@@ -34,9 +34,8 @@ export function useMemberSearch(searchQuery: string = '') {
         .from('profiles')
         .select('user_id, name, avatar_url, fitness_goal');
       
-      // Apply server-side search if query exists - search by name OR show all if empty
-      if (debouncedQuery.trim()) {
-        // Use or() to match name containing query OR name is null but user_id matches
+      // Apply server-side search if query has 2+ characters
+      if (debouncedQuery.trim().length >= 2) {
         profilesQuery = profilesQuery.or(`name.ilike.%${debouncedQuery}%`);
       }
 
@@ -117,7 +116,7 @@ export function useMemberSearch(searchQuery: string = '') {
         return nameA.localeCompare(nameB);
       });
     },
-    enabled: debouncedQuery.length >= 2, // Only search when 2+ characters
+    enabled: true, // Always enable - show all profiles by default, filter when searching
   });
 }
 
