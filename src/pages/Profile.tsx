@@ -13,6 +13,7 @@ import {
   Activity, Dumbbell, Utensils, Plus, Loader2, Target, Scale,
   Bell, Ruler, ChevronRight, Users, CalendarDays, Shield, MessageSquare
 } from 'lucide-react';
+import ChangePassword from '@/components/ChangePassword';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { useIsAdmin, useIsTrainer } from '@/hooks/useUserRole';
@@ -259,6 +260,9 @@ export default function Profile() {
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </Link>
+
+          {/* Change Password */}
+          <ChangePassword />
 
           {(isAdmin || isTrainer) && (
             <Link to="/admin" className="glass rounded-xl p-4 flex items-center gap-3 hover:scale-[1.02] transition-transform col-span-2 border border-primary/30">
