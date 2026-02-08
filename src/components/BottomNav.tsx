@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Activity, Compass, Utensils, User, Plus } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Activity, Compass, MessageCircle, User, Plus } from 'lucide-react';
+import { useUnreadMessages } from '@/hooks/useMessages';
 
 const NAV_ITEMS = [
   { path: '/', icon: Activity, label: 'Home' },
   { path: '/explorer', icon: Compass, label: 'Explore' },
-  { path: '/nutrition', icon: Utensils, label: 'Food' },
+  { path: '/messages', icon: MessageCircle, label: 'Chat' },
   { path: '/profile', icon: User, label: 'Profile' },
 ];
 
@@ -13,6 +15,7 @@ export default function BottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
   const isWorkoutActive = currentPath === '/workout';
+  const { unreadCount } = useUnreadMessages();
   
   return (
     <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-1 sm:px-4 py-2 z-50 safe-area-bottom">
@@ -26,7 +29,7 @@ export default function BottomNav() {
             <Link 
               key={item.path}
               to={item.path} 
-              className={`flex flex-col items-center transition-colors min-w-[44px] sm:min-w-[48px] py-1 ${
+              className={`flex flex-col items-center transition-colors min-w-[44px] sm:min-w-[48px] py-1 relative ${
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -58,16 +61,24 @@ export default function BottomNav() {
         {NAV_ITEMS.slice(2).map((item) => {
           const isActive = currentPath === item.path;
           const Icon = item.icon;
+          const showBadge = item.path === '/messages' && unreadCount > 0;
           
           return (
             <Link 
               key={item.path}
               to={item.path} 
-              className={`flex flex-col items-center transition-colors min-w-[44px] sm:min-w-[48px] py-1 ${
+              className={`flex flex-col items-center transition-colors min-w-[44px] sm:min-w-[48px] py-1 relative ${
                 isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="relative">
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                {showBadge && (
+                  <span className="absolute -top-1 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center font-medium">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </div>
               <span className="text-[10px] sm:text-xs mt-0.5">{item.label}</span>
             </Link>
           );
