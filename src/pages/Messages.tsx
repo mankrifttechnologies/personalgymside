@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConversations } from '@/hooks/useConversations';
 import { useAuth } from '@/hooks/useAuth';
+import { useMemberSearch } from '@/hooks/useMemberSearch';
 import BottomNav from '@/components/BottomNav';
 import FriendChat from '@/components/FriendChat';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { ArrowLeft, MessageCircle, Search, Loader2, Users } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ArrowLeft, MessageCircle, Search, Loader2, Users, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -18,6 +20,9 @@ export default function Messages() {
   const { conversations, isLoading } = useConversations();
   const [selectedChat, setSelectedChat] = useState<{ id: string; name: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [newChatOpen, setNewChatOpen] = useState(false);
+  const [memberSearchQuery, setMemberSearchQuery] = useState('');
+  const { data: members, isLoading: membersLoading } = useMemberSearch(memberSearchQuery);
 
   if (!user) {
     navigate('/auth');
@@ -57,6 +62,14 @@ export default function Messages() {
                 {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
               </p>
             </div>
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={() => { setNewChatOpen(true); setMemberSearchQuery(''); }}
+              className="shrink-0"
+            >
+              <Plus className="w-5 h-5" />
+            </Button>
           </div>
 
           {/* Search */}
@@ -164,6 +177,60 @@ export default function Messages() {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* New Conversation Dialog */}
+      <Dialog open={newChatOpen} onOpenChange={setNewChatOpen}>
+        <DialogContent className="max-w-md max-h-[80vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>New Conversation</DialogTitle>
+          </DialogHeader>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search members..."
+              value={memberSearchQuery}
+              onChange={(e) => setMemberSearchQuery(e.target.value)}
+              className="pl-10"
+              autoFocus
+            />
+          </div>
+          <div className="flex-1 overflow-y-auto space-y-1 min-h-0 max-h-[50vh]">
+            {membersLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              </div>
+            ) : !members?.length ? (
+              <p className="text-center text-muted-foreground text-sm py-8">No members found</p>
+            ) : (
+              members
+                .filter(m => m.user_id !== user.id)
+                .map((member) => (
+                  <button
+                    key={member.user_id}
+                    onClick={() => {
+                      setNewChatOpen(false);
+                      setSelectedChat({ id: member.user_id, name: member.name || 'Unknown' });
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                  >
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage src={member.avatar_url || undefined} />
+                      <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                        {(member.name || '?').slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="text-left">
+                      <p className="font-medium text-sm">{member.name || 'Unknown User'}</p>
+                      {member.fitness_goal && (
+                        <p className="text-xs text-muted-foreground capitalize">{member.fitness_goal}</p>
+                      )}
+                    </div>
+                  </button>
+                ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <BottomNav />
     </div>
