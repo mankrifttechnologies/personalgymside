@@ -219,6 +219,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          image_url: string | null
           instructions: string | null
           is_system: boolean
           muscle_group: string
@@ -230,6 +231,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          image_url?: string | null
           instructions?: string | null
           is_system?: boolean
           muscle_group: string
@@ -241,6 +243,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          image_url?: string | null
           instructions?: string | null
           is_system?: boolean
           muscle_group?: string
@@ -728,6 +731,8 @@ export type Database = {
           is_public: boolean | null
           level: number | null
           name: string | null
+          onboarding_completed: boolean | null
+          tier: string | null
           updated_at: string | null
           user_id: string
           weight_kg: number | null
@@ -749,6 +754,8 @@ export type Database = {
           is_public?: boolean | null
           level?: number | null
           name?: string | null
+          onboarding_completed?: boolean | null
+          tier?: string | null
           updated_at?: string | null
           user_id: string
           weight_kg?: number | null
@@ -770,6 +777,8 @@ export type Database = {
           is_public?: boolean | null
           level?: number | null
           name?: string | null
+          onboarding_completed?: boolean | null
+          tier?: string | null
           updated_at?: string | null
           user_id?: string
           weight_kg?: number | null

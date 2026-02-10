@@ -24,6 +24,8 @@ export interface Profile {
   xp: number | null;
   level: number | null;
   is_approved: boolean | null;
+  onboarding_completed: boolean | null;
+  tier: string | null;
   created_at: string;
   updated_at: string;
 }

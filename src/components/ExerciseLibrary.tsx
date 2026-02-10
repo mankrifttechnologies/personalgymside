@@ -6,8 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Search, Plus, Info, Dumbbell, Loader2 } from 'lucide-react';
+import { Search, Plus, Info, Dumbbell, Loader2, Video, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
+
+// Static exercise image mapping with descriptive placeholders
+const EXERCISE_IMAGES: Record<string, string> = {};
+
+const getExerciseYouTubeUrl = (name: string): string => {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(name + ' exercise tutorial')}`;
+};
 
 interface ExerciseLibraryProps {
   onSelectExercise?: (exercise: Exercise) => void;
@@ -131,7 +138,7 @@ export default function ExerciseLibrary({ onSelectExercise }: ExerciseLibraryPro
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
-                      <DialogHeader>
+                       <DialogHeader>
                         <DialogTitle className="flex items-center gap-2">
                           <Dumbbell className="w-5 h-5 text-primary" />
                           {exercise.name}
@@ -154,6 +161,26 @@ export default function ExerciseLibrary({ onSelectExercise }: ExerciseLibraryPro
                             <p className="text-sm">{exercise.instructions}</p>
                           </div>
                         )}
+                        
+                        {/* Video Tutorial Link */}
+                        <div className="flex gap-2">
+                          {exercise.video_url ? (
+                            <a href={exercise.video_url} target="_blank" rel="noopener noreferrer" className="flex-1">
+                              <Button variant="outline" className="w-full gap-2">
+                                <Video className="w-4 h-4 text-primary" />
+                                Watch Tutorial
+                              </Button>
+                            </a>
+                          ) : (
+                            <a href={getExerciseYouTubeUrl(exercise.name)} target="_blank" rel="noopener noreferrer" className="flex-1">
+                              <Button variant="outline" className="w-full gap-2">
+                                <ExternalLink className="w-4 h-4 text-primary" />
+                                Search Tutorial
+                              </Button>
+                            </a>
+                          )}
+                        </div>
+
                         {onSelectExercise && (
                           <Button
                             variant="energy"
