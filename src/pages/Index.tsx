@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
@@ -13,6 +14,9 @@ import LevelProgress from '@/components/LevelProgress';
 import BadgeDisplay from '@/components/BadgeDisplay';
 import WaterTracker from '@/components/WaterTracker';
 import { WeeklyChallenges } from '@/components/WeeklyChallenges';
+import { TierCard } from '@/components/TierBadge';
+import MuscleHeatmap from '@/components/MuscleHeatmap';
+import OnboardingWizard from '@/components/OnboardingWizard';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays
@@ -20,11 +24,12 @@ import {
 
 export default function Index() {
   const { user, loading: authLoading, signOut } = useAuth();
-  const { profile } = useProfile();
+  const { profile, updateProfile } = useProfile();
   const { todayWorkout } = useWorkouts();
   const { getRecoveryStatus } = useMuscleRecovery();
   const { totals } = useCalories();
   const { getTodaySchedule } = useWeeklySchedule();
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   if (authLoading) {
     return (
@@ -38,6 +43,16 @@ export default function Index() {
 
   if (!user) {
     return <Navigate to="/auth" replace />;
+  }
+
+  // Show onboarding for new users
+  const needsOnboarding = profile && !(profile as any).onboarding_completed && !profile.fitness_goal;
+  if (needsOnboarding && !showOnboarding) {
+    // Auto-show onboarding
+    return <OnboardingWizard onComplete={() => setShowOnboarding(false)} />;
+  }
+  if (showOnboarding) {
+    return <OnboardingWizard onComplete={() => setShowOnboarding(false)} />;
   }
 
   const exerciseCount = todayWorkout?.workout_exercises?.length || 0;
@@ -85,6 +100,9 @@ export default function Index() {
 
         {/* Level Progress */}
         <LevelProgress />
+
+        {/* Tier Rank */}
+        <TierCard />
 
         {/* Workout Streak */}
         <WorkoutStreakCard />
@@ -197,6 +215,9 @@ export default function Index() {
             These muscle groups are recovered and ready for training!
           </p>
         </div>
+
+        {/* Muscle Heatmap */}
+        <MuscleHeatmap />
 
         {/* Muscle Status Grid */}
         <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>

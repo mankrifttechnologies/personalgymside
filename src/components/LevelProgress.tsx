@@ -1,6 +1,7 @@
 import { useXP, XP_PER_LEVEL } from '@/hooks/useXP';
 import { Star, Zap } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { TierBadge } from '@/components/TierBadge';
 
 export default function LevelProgress() {
   const { xp, level, progress, xpToNext, isLoading } = useXP();
@@ -27,6 +28,7 @@ export default function LevelProgress() {
           <div>
             <p className="font-semibold">Level {level}</p>
             <p className="text-xs text-muted-foreground">{xp.toLocaleString()} XP total</p>
+            <TierBadge size="sm" />
           </div>
         </div>
         <div className="text-right">
