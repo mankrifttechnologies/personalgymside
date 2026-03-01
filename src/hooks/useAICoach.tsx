@@ -3,6 +3,7 @@ import { useProfile } from './useProfile';
 import { useMuscleRecovery, useWorkouts } from './useWorkouts';
 import { useCalories } from './useCalories';
 import { MuscleGroup } from '@/types/fitness';
+import { supabase } from '@/integrations/supabase/client';
 
 const AI_COACH_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-coach`;
 
@@ -16,12 +17,25 @@ export function useAICoach() {
   const { workouts } = useWorkouts();
   const { totals } = useCalories();
 
+  const getAuthHeaders = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      throw new Error('You must be logged in to use AI Coach');
+    }
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+    };
+  };
+
   const getWorkoutRecommendation = async () => {
     setIsLoading(true);
     setResponse('');
     setError(null);
 
     try {
+      const headers = await getAuthHeaders();
+
       const recoveryData = muscleRecovery?.map((r) => {
         const lastTrained = new Date(r.last_trained_date);
         const today = new Date();
@@ -36,10 +50,7 @@ export function useAICoach() {
 
       const resp = await fetch(AI_COACH_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers,
         body: JSON.stringify({
           type: 'workout_recommendation',
           profile,
@@ -68,12 +79,11 @@ export function useAICoach() {
     setError(null);
 
     try {
+      const headers = await getAuthHeaders();
+
       const resp = await fetch(AI_COACH_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers,
         body: JSON.stringify({
           type: 'diet_recommendation',
           profile,
