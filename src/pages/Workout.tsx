@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { MUSCLE_GROUPS, EXERCISE_SUGGESTIONS, MuscleGroup } from '@/types/fitness';
 import RestTimer from '@/components/RestTimer';
 import ExerciseLibrary from '@/components/ExerciseLibrary';
+import WorkoutSuggestions from '@/components/WorkoutSuggestions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Dumbbell, Plus, Check, ChevronLeft, Sparkles, 
@@ -229,6 +230,15 @@ export default function Workout() {
             )}
           </div>
         )}
+
+        {/* Smart Workout Suggestions */}
+        <WorkoutSuggestions
+          onSelectExercise={(muscle, exercise) => {
+            setSelectedMuscle(muscle);
+            setSelectedExercise(exercise);
+            setCustomExercise('');
+          }}
+        />
 
         {/* Muscle Group Selection */}
         <div className="glass rounded-xl p-4 animate-slide-up">
