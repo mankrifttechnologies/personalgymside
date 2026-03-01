@@ -11,11 +11,11 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   useEffect(() => {
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 2000);
+    }, 800);
 
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 2500);
+    }, 1200);
 
     return () => {
       clearTimeout(exitTimer);
