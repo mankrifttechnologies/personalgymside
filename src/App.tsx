@@ -83,6 +83,7 @@ const App = () => {
                 <Route path="/support" element={<Support />} />
                 <Route path="/messages" element={<Messages />} />
                 <Route path="/membership" element={<Membership />} />
+                <Route path="/install" element={<Install />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
