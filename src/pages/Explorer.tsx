@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import StoriesBar from '@/components/StoriesBar';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
