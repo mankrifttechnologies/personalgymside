@@ -101,7 +101,7 @@ export default function StoriesBar() {
     setUploading(true);
     try {
       const ext = file.name.split('.').pop();
-      const path = `stories/${user.id}/${Date.now()}.${ext}`;
+      const path = `${user.id}/stories/${Date.now()}.${ext}`;
       const { error: uploadError } = await supabase.storage.from('photos').upload(path, file);
       if (uploadError) throw uploadError;
       
