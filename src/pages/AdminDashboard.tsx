@@ -17,9 +17,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import BottomNav from '@/components/BottomNav';
 import AdminChallengeManager from '@/components/AdminChallengeManager';
+import AdminClassManager from '@/components/AdminClassManager';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
-  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords
+  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
