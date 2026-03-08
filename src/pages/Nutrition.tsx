@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
+import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useCalories } from '@/hooks/useCalories';
@@ -423,32 +424,7 @@ export default function Nutrition() {
         </Tabs>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-4 py-3">
-        <div className="flex justify-around items-center max-w-lg mx-auto">
-          <Link to="/" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-            <Activity className="w-6 h-6" />
-            <span className="text-xs mt-1">Home</span>
-          </Link>
-          <Link to="/workout" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-            <Dumbbell className="w-6 h-6" />
-            <span className="text-xs mt-1">Workout</span>
-          </Link>
-          <Link to="/workout" className="relative -top-4">
-            <Button variant="energy" size="icon" className="w-14 h-14 rounded-full shadow-lg">
-              <Plus className="w-7 h-7" />
-            </Button>
-          </Link>
-          <Link to="/nutrition" className="flex flex-col items-center text-primary">
-            <Utensils className="w-6 h-6" />
-            <span className="text-xs mt-1">Food</span>
-          </Link>
-          <Link to="/profile" className="flex flex-col items-center text-muted-foreground hover:text-foreground transition-colors">
-            <User className="w-6 h-6" />
-            <span className="text-xs mt-1">Profile</span>
-          </Link>
-        </div>
-      </nav>
+      <BottomNav />
     </div>
   );
 }
