@@ -95,6 +95,12 @@ export default function AdminDashboard() {
           )}
 
           {isAdmin && (
+            <TabsContent value="classes" className="mt-4">
+              <AdminClassManager />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
             <TabsContent value="challenges" className="mt-4">
               <AdminChallengeManager />
             </TabsContent>
