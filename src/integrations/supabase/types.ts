@@ -214,6 +214,73 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_team_members: {
+        Row: {
+          contribution: number
+          id: string
+          joined_at: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          contribution?: number
+          id?: string
+          joined_at?: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          contribution?: number
+          id?: string
+          joined_at?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "challenge_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      challenge_teams: {
+        Row: {
+          challenge_id: string
+          color: string
+          created_at: string
+          id: string
+          name: string
+          total_score: number
+        }
+        Insert: {
+          challenge_id: string
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+          total_score?: number
+        }
+        Update: {
+          challenge_id?: string
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+          total_score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_teams_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "group_challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_library: {
         Row: {
           created_at: string
@@ -277,6 +344,48 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      group_challenges: {
+        Row: {
+          challenge_type: string
+          created_at: string
+          created_by: string
+          description: string | null
+          end_date: string
+          id: string
+          is_active: boolean
+          start_date: string
+          target_value: number
+          title: string
+          xp_reward: number
+        }
+        Insert: {
+          challenge_type?: string
+          created_at?: string
+          created_by: string
+          description?: string | null
+          end_date: string
+          id?: string
+          is_active?: boolean
+          start_date: string
+          target_value?: number
+          title: string
+          xp_reward?: number
+        }
+        Update: {
+          challenge_type?: string
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          end_date?: string
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          target_value?: number
+          title?: string
+          xp_reward?: number
         }
         Relationships: []
       }
