@@ -29,6 +29,7 @@ import Explorer from "./pages/Explorer";
 import AdminDashboard from "./pages/AdminDashboard";
 import Support from "./pages/Support";
 import Messages from "./pages/Messages";
+import Membership from "./pages/Membership";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
