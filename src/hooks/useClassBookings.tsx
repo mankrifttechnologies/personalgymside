@@ -19,6 +19,25 @@ export function useGymClasses() {
   });
 }
 
+export function useBookingCounts(bookingDate: string) {
+  return useQuery({
+    queryKey: ['booking-counts', bookingDate],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('class_bookings')
+        .select('class_id')
+        .eq('booking_date', bookingDate)
+        .eq('status', 'confirmed');
+      if (error) throw error;
+      const counts: Record<string, number> = {};
+      (data || []).forEach(b => {
+        counts[b.class_id] = (counts[b.class_id] || 0) + 1;
+      });
+      return counts;
+    },
+  });
+}
+
 export function useClassBookings() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
