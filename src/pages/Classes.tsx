@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGymClasses, useClassBookings } from '@/hooks/useClassBookings';
+import { useGymClasses, useClassBookings, useBookingCounts } from '@/hooks/useClassBookings';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,13 +24,16 @@ export default function Classes() {
   const { bookings, bookClass, cancelBooking } = useClassBookings();
   const [selectedDay, setSelectedDay] = useState(new Date().getDay());
 
-  const todayClasses = (classes || []).filter(c => c.day_of_week === selectedDay);
   const bookingDate = (() => {
     const today = new Date();
     const diff = selectedDay - today.getDay();
     const target = addDays(today, diff >= 0 ? diff : diff + 7);
     return format(target, 'yyyy-MM-dd');
   })();
+
+  const { data: bookingCounts = {} } = useBookingCounts(bookingDate);
+
+  const todayClasses = (classes || []).filter(c => c.day_of_week === selectedDay);
 
   const isBooked = (classId: string) => {
     return bookings.some((b: any) => b.class_id === classId && b.booking_date === bookingDate);
@@ -83,12 +86,22 @@ export default function Classes() {
                 No classes scheduled for {DAYS[selectedDay]}
               </div>
             ) : (
-              todayClasses.map((cls: any) => (
-                <Card key={cls.id} className="glass border-border">
+              todayClasses.map((cls: any) => {
+                const booked = bookingCounts[cls.id] || 0;
+                const isFull = booked >= cls.capacity;
+                const spotsLeft = cls.capacity - booked;
+
+                return (
+                <Card key={cls.id} className={`glass border-border ${isFull ? 'opacity-75' : ''}`}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h3 className="font-bold text-lg">{cls.title}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-lg">{cls.title}</h3>
+                          {isFull && (
+                            <Badge variant="destructive" className="text-[10px] px-1.5 py-0">FULL</Badge>
+                          )}
+                        </div>
                         <Badge className={CLASS_COLORS[cls.class_type] || CLASS_COLORS.group}>
                           {cls.class_type}
                         </Badge>
@@ -109,9 +122,9 @@ export default function Classes() {
                           variant="energy" 
                           size="sm"
                           onClick={() => bookClass.mutate({ classId: cls.id, bookingDate })}
-                          disabled={bookClass.isPending}
+                          disabled={bookClass.isPending || isFull}
                         >
-                          Book Spot
+                          {isFull ? 'Full' : 'Book Spot'}
                         </Button>
                       )}
                     </div>
@@ -123,9 +136,10 @@ export default function Classes() {
                         <Clock className="w-4 h-4" />
                         {cls.start_time?.slice(0, 5)} - {cls.end_time?.slice(0, 5)}
                       </span>
-                      <span className="flex items-center gap-1">
+                      <span className={`flex items-center gap-1 ${isFull ? 'text-destructive font-medium' : spotsLeft <= 3 ? 'text-warning font-medium' : ''}`}>
                         <Users className="w-4 h-4" />
-                        {cls.capacity} spots
+                        {booked}/{cls.capacity} booked
+                        {!isFull && spotsLeft <= 3 && ` · ${spotsLeft} left!`}
                       </span>
                       {cls.location && (
                         <span className="flex items-center gap-1">
@@ -134,12 +148,20 @@ export default function Classes() {
                         </span>
                       )}
                     </div>
+                    {/* Capacity bar */}
+                    <div className="mt-2 h-1.5 bg-secondary rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full transition-all ${isFull ? 'bg-destructive' : spotsLeft <= 3 ? 'bg-warning' : 'bg-accent'}`}
+                        style={{ width: `${Math.min((booked / cls.capacity) * 100, 100)}%` }}
+                      />
+                    </div>
                     {cls.instructor_name && (
                       <p className="text-sm mt-2">Instructor: <span className="font-medium">{cls.instructor_name}</span></p>
                     )}
                   </CardContent>
                 </Card>
-              ))
+                );
+              })
             )}
           </TabsContent>
 
