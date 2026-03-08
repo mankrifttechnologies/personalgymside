@@ -34,12 +34,6 @@ export default function Classes() {
   const { data: bookingCounts = {} } = useBookingCounts(bookingDate);
 
   const todayClasses = (classes || []).filter(c => c.day_of_week === selectedDay);
-  const bookingDate = (() => {
-    const today = new Date();
-    const diff = selectedDay - today.getDay();
-    const target = addDays(today, diff >= 0 ? diff : diff + 7);
-    return format(target, 'yyyy-MM-dd');
-  })();
 
   const isBooked = (classId: string) => {
     return bookings.some((b: any) => b.class_id === classId && b.booking_date === bookingDate);
