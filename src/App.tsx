@@ -87,6 +87,9 @@ const App = () => {
                 <Route path="/messages" element={<Messages />} />
                 <Route path="/membership" element={<Membership />} />
                 <Route path="/install" element={<Install />} />
+                <Route path="/classes" element={<Classes />} />
+                <Route path="/duels" element={<Duels />} />
+                <Route path="/mobility" element={<Mobility />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
