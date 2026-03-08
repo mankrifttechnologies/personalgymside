@@ -115,6 +115,9 @@ export default function Index() {
         {/* Workout Streak */}
         <WorkoutStreakCard />
 
+        {/* Live Gym Occupancy */}
+        <GymOccupancyMeter />
+
         {/* Today's Scheduled Workout Widget */}
         <div className="glass rounded-xl p-4 animate-slide-up border-l-4 border-primary">
           <div className="flex items-center justify-between mb-3">
