@@ -258,6 +258,28 @@ export default function Index() {
         {/* Progressive Overload */}
         <ProgressiveOverloadCard />
 
+        {/* Quick Feature Links */}
+        <div className="grid grid-cols-3 gap-3">
+          <Link to="/classes">
+            <div className="glass rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <Calendar className="w-6 h-6 mx-auto mb-2 text-primary" />
+              <span className="text-xs font-medium">Book Class</span>
+            </div>
+          </Link>
+          <Link to="/duels">
+            <div className="glass rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <Swords className="w-6 h-6 mx-auto mb-2 text-accent" />
+              <span className="text-xs font-medium">Duels</span>
+            </div>
+          </Link>
+          <Link to="/mobility">
+            <div className="glass rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
+              <Activity className="w-6 h-6 mx-auto mb-2 text-warning" />
+              <span className="text-xs font-medium">Mobility</span>
+            </div>
+          </Link>
+        </div>
+
         {/* Weekly Challenges */}
         <WeeklyChallenges />
 
