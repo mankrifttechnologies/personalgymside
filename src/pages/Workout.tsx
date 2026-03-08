@@ -232,6 +232,18 @@ export default function Workout() {
           </div>
         )}
 
+        {/* Smart Workout Builder */}
+        <SmartWorkoutBuilder
+          onAddExercise={(muscle, exercise, sets, reps, weight) => {
+            setSelectedMuscle(muscle as any);
+            setSelectedExercise(exercise);
+            setCustomExercise('');
+            setSets(sets);
+            setReps(reps);
+            setWeight(weight || '');
+          }}
+        />
+
         {/* Smart Workout Suggestions */}
         <WorkoutSuggestions
           onSelectExercise={(muscle, exercise) => {
