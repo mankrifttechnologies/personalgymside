@@ -17,9 +17,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import BottomNav from '@/components/BottomNav';
 import AdminChallengeManager from '@/components/AdminChallengeManager';
+import AdminClassManager from '@/components/AdminClassManager';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
-  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords
+  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
@@ -62,20 +63,26 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-3' : 'grid-cols-2'}`}>
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
             {isAdmin && (
-              <TabsTrigger value="users" className="gap-2">
+              <TabsTrigger value="users" className="gap-1 text-xs">
                 <Users className="w-4 h-4" />
                 Users
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="challenges" className="gap-2">
+              <TabsTrigger value="classes" className="gap-1 text-xs">
+                <Calendar className="w-4 h-4" />
+                Classes
+              </TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="challenges" className="gap-1 text-xs">
                 <Swords className="w-4 h-4" />
                 Challenges
               </TabsTrigger>
             )}
-            <TabsTrigger value="support" className="gap-2">
+            <TabsTrigger value="support" className="gap-1 text-xs">
               <MessageSquare className="w-4 h-4" />
               Support
             </TabsTrigger>
@@ -84,6 +91,12 @@ export default function AdminDashboard() {
           {isAdmin && (
             <TabsContent value="users" className="mt-4">
               <UsersManagement />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
+            <TabsContent value="classes" className="mt-4">
+              <AdminClassManager />
             </TabsContent>
           )}
 
