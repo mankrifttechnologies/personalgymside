@@ -24,6 +24,15 @@ export default function Classes() {
   const { bookings, bookClass, cancelBooking } = useClassBookings();
   const [selectedDay, setSelectedDay] = useState(new Date().getDay());
 
+  const bookingDate = (() => {
+    const today = new Date();
+    const diff = selectedDay - today.getDay();
+    const target = addDays(today, diff >= 0 ? diff : diff + 7);
+    return format(target, 'yyyy-MM-dd');
+  })();
+
+  const { data: bookingCounts = {} } = useBookingCounts(bookingDate);
+
   const todayClasses = (classes || []).filter(c => c.day_of_week === selectedDay);
   const bookingDate = (() => {
     const today = new Date();
