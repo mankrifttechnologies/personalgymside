@@ -69,6 +69,24 @@ export default function Workout() {
     }
 
     try {
+      // If offline, save locally
+      if (!isOnline) {
+        saveExerciseOffline({
+          muscle_group: selectedMuscle,
+          exercise_name: exerciseName,
+          sets,
+          reps,
+          weight_kg: weight || null,
+        });
+        setShowRestTimer(true);
+        setSelectedExercise('');
+        setCustomExercise('');
+        setSets(3);
+        setReps(10);
+        setWeight('');
+        return;
+      }
+
       let workoutId = todayWorkout?.id;
       
       if (!workoutId) {
