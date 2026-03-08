@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import StoriesBar from '@/components/StoriesBar';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
@@ -57,6 +58,9 @@ export default function Explorer() {
       </header>
 
       <main className="px-3 sm:px-4 space-y-4 sm:space-y-5">
+        {/* Stories */}
+        <StoriesBar />
+
         {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

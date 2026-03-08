@@ -31,6 +31,9 @@ import Support from "./pages/Support";
 import Messages from "./pages/Messages";
 import Membership from "./pages/Membership";
 import Install from "./pages/Install";
+import Classes from "./pages/Classes";
+import Duels from "./pages/Duels";
+import Mobility from "./pages/Mobility";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -84,6 +87,9 @@ const App = () => {
                 <Route path="/messages" element={<Messages />} />
                 <Route path="/membership" element={<Membership />} />
                 <Route path="/install" element={<Install />} />
+                <Route path="/classes" element={<Classes />} />
+                <Route path="/duels" element={<Duels />} />
+                <Route path="/mobility" element={<Mobility />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

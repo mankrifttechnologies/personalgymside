@@ -281,6 +281,41 @@ export type Database = {
           },
         ]
       }
+      class_bookings: {
+        Row: {
+          booking_date: string
+          class_id: string
+          created_at: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          class_id: string
+          created_at?: string
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          class_id?: string
+          created_at?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_bookings_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "gym_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_library: {
         Row: {
           created_at: string
@@ -389,6 +424,57 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_classes: {
+        Row: {
+          capacity: number
+          class_type: string
+          created_at: string
+          day_of_week: number
+          description: string | null
+          end_time: string
+          id: string
+          instructor_id: string | null
+          instructor_name: string | null
+          is_active: boolean
+          location: string | null
+          start_time: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number
+          class_type?: string
+          created_at?: string
+          day_of_week: number
+          description?: string | null
+          end_time: string
+          id?: string
+          instructor_id?: string | null
+          instructor_name?: string | null
+          is_active?: boolean
+          location?: string | null
+          start_time: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number
+          class_type?: string
+          created_at?: string
+          day_of_week?: number
+          description?: string | null
+          end_time?: string
+          id?: string
+          instructor_id?: string | null
+          instructor_name?: string | null
+          is_active?: boolean
+          location?: string | null
+          start_time?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gym_members: {
         Row: {
           batch: string | null
@@ -421,6 +507,36 @@ export type Database = {
           status?: Database["public"]["Enums"]["member_status"]
           trainer_id?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      gym_stories: {
+        Row: {
+          caption: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          image_url: string
+          story_type: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          image_url: string
+          story_type?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          image_url?: string
+          story_type?: string
           user_id?: string
         }
         Relationships: []
@@ -623,6 +739,45 @@ export type Database = {
           is_read?: boolean
           receiver_id?: string
           sender_id?: string
+        }
+        Relationships: []
+      }
+      mobility_routines: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          exercises: Json
+          id: string
+          is_system: boolean
+          routine_type: string
+          target_area: string
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          exercises?: Json
+          id?: string
+          is_system?: boolean
+          routine_type?: string
+          target_area?: string
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          exercises?: Json
+          id?: string
+          is_system?: boolean
+          routine_type?: string
+          target_area?: string
+          title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -982,6 +1137,35 @@ export type Database = {
         }
         Relationships: []
       }
+      story_views: {
+        Row: {
+          id: string
+          story_id: string
+          viewed_at: string
+          viewer_id: string
+        }
+        Insert: {
+          id?: string
+          story_id: string
+          viewed_at?: string
+          viewer_id: string
+        }
+        Update: {
+          id?: string
+          story_id?: string
+          viewed_at?: string
+          viewer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "story_views_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "gym_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_responses: {
         Row: {
           created_at: string
@@ -1254,6 +1438,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      workout_duels: {
+        Row: {
+          challenger_id: string
+          challenger_score: number
+          created_at: string
+          duel_type: string
+          end_time: string
+          id: string
+          opponent_id: string
+          opponent_score: number
+          start_time: string
+          status: string
+          target_value: number
+          winner_id: string | null
+        }
+        Insert: {
+          challenger_id: string
+          challenger_score?: number
+          created_at?: string
+          duel_type?: string
+          end_time?: string
+          id?: string
+          opponent_id: string
+          opponent_score?: number
+          start_time?: string
+          status?: string
+          target_value?: number
+          winner_id?: string | null
+        }
+        Update: {
+          challenger_id?: string
+          challenger_score?: number
+          created_at?: string
+          duel_type?: string
+          end_time?: string
+          id?: string
+          opponent_id?: string
+          opponent_score?: number
+          start_time?: string
+          status?: string
+          target_value?: number
+          winner_id?: string | null
+        }
+        Relationships: []
       }
       workout_exercises: {
         Row: {
