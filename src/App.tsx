@@ -30,6 +30,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Support from "./pages/Support";
 import Messages from "./pages/Messages";
 import Membership from "./pages/Membership";
+import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
