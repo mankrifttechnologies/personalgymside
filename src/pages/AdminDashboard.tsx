@@ -16,9 +16,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import BottomNav from '@/components/BottomNav';
+import AdminChallengeManager from '@/components/AdminChallengeManager';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
-  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle
+  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
@@ -61,11 +62,17 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-3' : 'grid-cols-2'}`}>
             {isAdmin && (
               <TabsTrigger value="users" className="gap-2">
                 <Users className="w-4 h-4" />
                 Users
+              </TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="challenges" className="gap-2">
+                <Swords className="w-4 h-4" />
+                Challenges
               </TabsTrigger>
             )}
             <TabsTrigger value="support" className="gap-2">
@@ -77,6 +84,12 @@ export default function AdminDashboard() {
           {isAdmin && (
             <TabsContent value="users" className="mt-4">
               <UsersManagement />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
+            <TabsContent value="challenges" className="mt-4">
+              <AdminChallengeManager />
             </TabsContent>
           )}
 

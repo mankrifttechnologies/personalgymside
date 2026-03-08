@@ -6,6 +6,7 @@ import { useAICoach } from '@/hooks/useAICoach';
 import { usePersonalRecords } from '@/hooks/usePersonalRecords';
 import { useXP } from '@/hooks/useXP';
 import { useBadges } from '@/hooks/useBadges';
+import { useOfflineWorkouts } from '@/hooks/useOfflineWorkouts';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MUSCLE_GROUPS, EXERCISE_SUGGESTIONS, MuscleGroup } from '@/types/fitness';
@@ -13,6 +14,7 @@ import RestTimer from '@/components/RestTimer';
 import ExerciseLibrary from '@/components/ExerciseLibrary';
 import WorkoutSuggestions from '@/components/WorkoutSuggestions';
 import SmartWorkoutBuilder from '@/components/SmartWorkoutBuilder';
+import OfflineIndicator from '@/components/OfflineIndicator';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Dumbbell, Plus, Check, ChevronLeft, Sparkles, 
@@ -28,6 +30,7 @@ export default function Workout() {
   const { checkAndUpdatePR, getPRForExercise } = usePersonalRecords();
   const { addXP } = useXP();
   const { awardBadge, hasBadge, earnedBadges } = useBadges();
+  const { isOnline, saveExerciseOffline } = useOfflineWorkouts();
   
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<string>('');
@@ -66,6 +69,24 @@ export default function Workout() {
     }
 
     try {
+      // If offline, save locally
+      if (!isOnline) {
+        saveExerciseOffline({
+          muscle_group: selectedMuscle,
+          exercise_name: exerciseName,
+          sets,
+          reps,
+          weight_kg: weight || null,
+        });
+        setShowRestTimer(true);
+        setSelectedExercise('');
+        setCustomExercise('');
+        setSets(3);
+        setReps(10);
+        setWeight('');
+        return;
+      }
+
       let workoutId = todayWorkout?.id;
       
       if (!workoutId) {
@@ -190,6 +211,9 @@ export default function Workout() {
       </header>
 
       <main className="px-4 space-y-6">
+        {/* Offline Indicator */}
+        <OfflineIndicator />
+
         {/* AI Panel */}
         {showAIPanel && (
           <div className="glass rounded-xl p-4 animate-slide-up">
