@@ -30,6 +30,7 @@ export default function Workout() {
   const { checkAndUpdatePR, getPRForExercise } = usePersonalRecords();
   const { addXP } = useXP();
   const { awardBadge, hasBadge, earnedBadges } = useBadges();
+  const { isOnline, saveExerciseOffline } = useOfflineWorkouts();
   
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<string>('');
