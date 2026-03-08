@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
+import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useWorkoutTemplates, TEMPLATE_CATEGORIES, TemplateWithExercises } from '@/hooks/useWorkoutTemplates';
 import { useWorkouts } from '@/hooks/useWorkouts';
