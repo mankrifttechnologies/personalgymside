@@ -129,9 +129,14 @@ export default function ExerciseDemoSheet({ exerciseName, open, onOpenChange }: 
                 >
                   <ChevronLeft className="w-4 h-4 mr-1" /> Previous
                 </Button>
-                <span className="text-xs text-muted-foreground">
-                  {currentStep + 1} / {steps.length}
-                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => { setHasGenerated(null); generateDemo(); }}
+                  disabled={isLoading}
+                >
+                  <RefreshCw className="w-4 h-4 mr-1" /> Regenerate
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
