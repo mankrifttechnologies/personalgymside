@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
+import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useMeasurements } from '@/hooks/useMeasurements';
 import { Button } from '@/components/ui/button';
