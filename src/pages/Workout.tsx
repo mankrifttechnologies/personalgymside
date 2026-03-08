@@ -12,6 +12,7 @@ import { MUSCLE_GROUPS, EXERCISE_SUGGESTIONS, MuscleGroup } from '@/types/fitnes
 import RestTimer from '@/components/RestTimer';
 import ExerciseLibrary from '@/components/ExerciseLibrary';
 import WorkoutSuggestions from '@/components/WorkoutSuggestions';
+import SmartWorkoutBuilder from '@/components/SmartWorkoutBuilder';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Dumbbell, Plus, Check, ChevronLeft, Sparkles, 
