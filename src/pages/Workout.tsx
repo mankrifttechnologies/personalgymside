@@ -211,6 +211,9 @@ export default function Workout() {
       </header>
 
       <main className="px-4 space-y-6">
+        {/* Offline Indicator */}
+        <OfflineIndicator />
+
         {/* AI Panel */}
         {showAIPanel && (
           <div className="glass rounded-xl p-4 animate-slide-up">
