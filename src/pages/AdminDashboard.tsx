@@ -62,11 +62,17 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-3' : 'grid-cols-2'}`}>
             {isAdmin && (
               <TabsTrigger value="users" className="gap-2">
                 <Users className="w-4 h-4" />
                 Users
+              </TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="challenges" className="gap-2">
+                <Swords className="w-4 h-4" />
+                Challenges
               </TabsTrigger>
             )}
             <TabsTrigger value="support" className="gap-2">
@@ -78,6 +84,12 @@ export default function AdminDashboard() {
           {isAdmin && (
             <TabsContent value="users" className="mt-4">
               <UsersManagement />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
+            <TabsContent value="challenges" className="mt-4">
+              <AdminChallengeManager />
             </TabsContent>
           )}
 
