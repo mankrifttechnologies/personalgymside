@@ -1,4 +1,5 @@
 import { Navigate, Link } from 'react-router-dom';
+import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { usePersonalRecords } from '@/hooks/usePersonalRecords';
 import { Button } from '@/components/ui/button';
