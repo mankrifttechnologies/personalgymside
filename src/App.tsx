@@ -29,6 +29,7 @@ import Explorer from "./pages/Explorer";
 import AdminDashboard from "./pages/AdminDashboard";
 import Support from "./pages/Support";
 import Messages from "./pages/Messages";
+import Membership from "./pages/Membership";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -80,6 +81,7 @@ const App = () => {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/messages" element={<Messages />} />
+                <Route path="/membership" element={<Membership />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

@@ -17,9 +17,12 @@ import { WeeklyChallenges } from '@/components/WeeklyChallenges';
 import { TierCard } from '@/components/TierBadge';
 import MuscleHeatmap from '@/components/MuscleHeatmap';
 import OnboardingWizard from '@/components/OnboardingWizard';
+import GymOccupancyMeter from '@/components/GymOccupancyMeter';
+import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
+import GroupChallengesSection from '@/components/GroupChallenges';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
-  LogOut, User, Activity, Play, CalendarDays
+  LogOut, User, Activity, Play, CalendarDays, CreditCard
 } from 'lucide-react';
 
 export default function Index() {
@@ -88,6 +91,11 @@ export default function Index() {
               <User className="w-5 h-5" />
             </Button>
           </Link>
+          <Link to="/membership">
+            <Button variant="ghost" size="icon">
+              <CreditCard className="w-5 h-5" />
+            </Button>
+          </Link>
           <Button variant="ghost" size="icon" onClick={signOut}>
             <LogOut className="w-5 h-5" />
           </Button>
@@ -106,6 +114,9 @@ export default function Index() {
 
         {/* Workout Streak */}
         <WorkoutStreakCard />
+
+        {/* Live Gym Occupancy */}
+        <GymOccupancyMeter />
 
         {/* Today's Scheduled Workout Widget */}
         <div className="glass rounded-xl p-4 animate-slide-up border-l-4 border-primary">
@@ -243,8 +254,14 @@ export default function Index() {
           </div>
         </div>
 
+        {/* Progressive Overload */}
+        <ProgressiveOverloadCard />
+
         {/* Weekly Challenges */}
         <WeeklyChallenges />
+
+        {/* Team Challenges */}
+        <GroupChallengesSection />
 
         {/* Water Tracker */}
         <WaterTracker />
