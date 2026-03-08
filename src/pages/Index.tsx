@@ -91,6 +91,11 @@ export default function Index() {
               <User className="w-5 h-5" />
             </Button>
           </Link>
+          <Link to="/membership">
+            <Button variant="ghost" size="icon">
+              <CreditCard className="w-5 h-5" />
+            </Button>
+          </Link>
           <Button variant="ghost" size="icon" onClick={signOut}>
             <LogOut className="w-5 h-5" />
           </Button>
