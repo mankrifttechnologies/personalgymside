@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
+import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import { useFollows } from '@/hooks/useFollows';
