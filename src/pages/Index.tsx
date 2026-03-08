@@ -254,8 +254,14 @@ export default function Index() {
           </div>
         </div>
 
+        {/* Progressive Overload */}
+        <ProgressiveOverloadCard />
+
         {/* Weekly Challenges */}
         <WeeklyChallenges />
+
+        {/* Team Challenges */}
+        <GroupChallengesSection />
 
         {/* Water Tracker */}
         <WaterTracker />
