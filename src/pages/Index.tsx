@@ -17,9 +17,12 @@ import { WeeklyChallenges } from '@/components/WeeklyChallenges';
 import { TierCard } from '@/components/TierBadge';
 import MuscleHeatmap from '@/components/MuscleHeatmap';
 import OnboardingWizard from '@/components/OnboardingWizard';
+import GymOccupancyMeter from '@/components/GymOccupancyMeter';
+import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
+import GroupChallengesSection from '@/components/GroupChallenges';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
-  LogOut, User, Activity, Play, CalendarDays
+  LogOut, User, Activity, Play, CalendarDays, CreditCard
 } from 'lucide-react';
 
 export default function Index() {
