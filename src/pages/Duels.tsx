@@ -19,7 +19,7 @@ import { formatDistanceToNow } from 'date-fns';
 export default function Duels() {
   const { user } = useAuth();
   const { activeDuels, pendingDuels, completedDuels, createDuel, respondDuel, updateScore, isLoading } = useWorkoutDuels();
-  const { friends } = useFriends();
+  const { acceptedFriends } = useFriends();
   const [showCreate, setShowCreate] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState('');
   const [duelType, setDuelType] = useState('volume');
