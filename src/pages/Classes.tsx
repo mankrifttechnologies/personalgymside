@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useGymClasses, useClassBookings } from '@/hooks/useClassBookings';
+import { useGymClasses, useClassBookings, useBookingCounts } from '@/hooks/useClassBookings';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
