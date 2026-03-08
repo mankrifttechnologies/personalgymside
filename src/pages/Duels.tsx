@@ -77,9 +77,9 @@ export default function Duels() {
                 <Select value={selectedFriend} onValueChange={setSelectedFriend}>
                   <SelectTrigger><SelectValue placeholder="Choose a friend" /></SelectTrigger>
                   <SelectContent>
-                    {(friends || []).map((f: any) => (
-                      <SelectItem key={f.friend_id} value={f.friend_id}>
-                        {f.friend_name || 'Friend'}
+                    {(acceptedFriends || []).map((f: any) => (
+                      <SelectItem key={f.friendUserId} value={f.friendUserId}>
+                        {f.profile?.name || 'Friend'}
                       </SelectItem>
                     ))}
                   </SelectContent>
