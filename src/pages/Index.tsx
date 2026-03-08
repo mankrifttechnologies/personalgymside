@@ -23,7 +23,6 @@ import GroupChallengesSection from '@/components/GroupChallenges';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays, CreditCard,
-  Swords, Calendar, Stretch
 } from 'lucide-react';
 
 export default function Index() {
