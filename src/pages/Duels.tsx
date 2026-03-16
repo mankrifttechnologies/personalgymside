@@ -51,21 +51,21 @@ export default function Duels() {
 
   return (
     <div className="min-h-screen pb-24">
-      <header className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="p-3 sm:p-4 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <Link to="/">
-            <Button variant="ghost" size="icon"><ArrowLeft className="w-5 h-5" /></Button>
+            <Button variant="ghost" size="icon" className="w-9 h-9 shrink-0"><ArrowLeft className="w-5 h-5" /></Button>
           </Link>
-          <div>
-            <h1 className="text-xl font-bold flex items-center gap-2">
-              <Swords className="w-6 h-6 text-primary" /> Workout Duels
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-xl font-bold flex items-center gap-2">
+              <Swords className="w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0" /> <span className="truncate">Workout Duels</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Challenge friends to beat your workout</p>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">Challenge friends</p>
           </div>
         </div>
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
           <DialogTrigger asChild>
-            <Button variant="energy" size="sm">⚔️ Challenge</Button>
+            <Button variant="energy" size="sm" className="shrink-0 text-xs sm:text-sm">⚔️ Challenge</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -111,9 +111,9 @@ export default function Duels() {
       <main className="px-4">
         <Tabs defaultValue="active">
           <TabsList className="w-full">
-            <TabsTrigger value="active" className="flex-1">Active ({activeDuels.length})</TabsTrigger>
-            <TabsTrigger value="pending" className="flex-1">Pending ({pendingDuels.length})</TabsTrigger>
-            <TabsTrigger value="completed" className="flex-1">History</TabsTrigger>
+            <TabsTrigger value="active" className="flex-1 text-xs sm:text-sm">Active ({activeDuels.length})</TabsTrigger>
+            <TabsTrigger value="pending" className="flex-1 text-xs sm:text-sm">Pending ({pendingDuels.length})</TabsTrigger>
+            <TabsTrigger value="completed" className="flex-1 text-xs sm:text-sm">History</TabsTrigger>
           </TabsList>
 
           <TabsContent value="active" className="space-y-3 mt-4">

@@ -65,26 +65,27 @@ export default function AdminDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
             {isAdmin && (
-              <TabsTrigger value="users" className="gap-1 text-xs">
-                <Users className="w-4 h-4" />
-                Users
+              <TabsTrigger value="users" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="truncate">Users</span>
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="classes" className="gap-1 text-xs">
-                <Calendar className="w-4 h-4" />
-                Classes
+              <TabsTrigger value="classes" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="truncate">Classes</span>
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="challenges" className="gap-1 text-xs">
-                <Swords className="w-4 h-4" />
-                Challenges
+              <TabsTrigger value="challenges" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+                <Swords className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="hidden sm:inline truncate">Challenges</span>
+                <span className="sm:hidden truncate">Tasks</span>
               </TabsTrigger>
             )}
-            <TabsTrigger value="support" className="gap-1 text-xs">
-              <MessageSquare className="w-4 h-4" />
-              Support
+            <TabsTrigger value="support" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span className="truncate">Support</span>
             </TabsTrigger>
           </TabsList>
 
@@ -217,31 +218,30 @@ function UsersManagement() {
       <div className="space-y-3">
         {users?.map((user) => (
           <Card key={user.user_id}>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <Avatar>
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Avatar className="w-9 h-9 sm:w-10 sm:h-10 shrink-0">
                   <AvatarImage src={user.avatar_url || ''} />
-                  <AvatarFallback>{user.name?.[0] || 'U'}</AvatarFallback>
+                  <AvatarFallback className="text-xs">{user.name?.[0] || 'U'}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{user.name || 'No Name'}</p>
-                  <p className="text-xs text-muted-foreground truncate">{user.user_id.slice(0, 8)}...</p>
-                </div>
-                <div className="flex flex-col gap-2 items-end">
-                  <div className="flex gap-2">
+                  <p className="font-medium text-sm truncate">{user.name || 'No Name'}</p>
+                  <p className="text-[10px] text-muted-foreground truncate">{user.user_id.slice(0, 8)}...</p>
+                  <div className="flex gap-1.5 mt-1.5 flex-wrap">
                     {user.role && (
-                      <Badge variant={user.role === 'admin' ? 'default' : user.role === 'trainer' ? 'secondary' : 'outline'}>
+                      <Badge variant={user.role === 'admin' ? 'default' : user.role === 'trainer' ? 'secondary' : 'outline'} className="text-[10px] px-1.5">
                         {user.role}
                       </Badge>
                     )}
-                    <Badge variant={user.is_approved ? 'default' : 'destructive'}>
+                    <Badge variant={user.is_approved ? 'default' : 'destructive'} className="text-[10px] px-1.5">
                       {user.is_approved ? 'Approved' : 'Pending'}
                     </Badge>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5 mt-2">
                     <Button
                       size="sm"
                       variant={user.is_approved ? 'destructive' : 'default'}
+                      className="h-7 text-xs px-2"
                       onClick={() => approveUser.mutate({ userId: user.user_id, approved: !user.is_approved })}
                       disabled={approveUser.isPending}
                     >
@@ -251,7 +251,7 @@ function UsersManagement() {
                       value={user.role || 'member'}
                       onValueChange={(value) => assignRole.mutate({ userId: user.user_id, role: value as AppRole })}
                     >
-                      <SelectTrigger className="w-24 h-8 text-xs">
+                      <SelectTrigger className="w-20 sm:w-24 h-7 text-[10px] sm:text-xs">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>

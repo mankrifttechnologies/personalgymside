@@ -41,7 +41,7 @@ export default function RestTimer({ defaultSeconds = 90, onComplete }: RestTimer
   }, [isMuted]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     
     if (isRunning && seconds > 0) {
       interval = setInterval(() => {

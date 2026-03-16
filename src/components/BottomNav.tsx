@@ -18,7 +18,7 @@ export default function BottomNav() {
   const { unreadCount } = useUnreadMessages();
   
   return (
-    <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-1 sm:px-4 py-2 z-50 safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-1 sm:px-4 py-1.5 sm:py-2 z-50 safe-area-bottom">
       <div className="flex justify-around items-center max-w-lg mx-auto">
         {/* First two nav items */}
         {NAV_ITEMS.slice(0, 2).map((item) => {
@@ -40,19 +40,19 @@ export default function BottomNav() {
         })}
 
         {/* Center Workout Button */}
-        <div className="flex flex-col items-center min-w-[48px]">
-          <Link to="/workout" className="relative -top-3">
+        <div className="flex flex-col items-center min-w-[44px] sm:min-w-[48px]">
+          <Link to="/workout" className="relative -top-2.5 sm:-top-3">
             <Button 
               variant="energy" 
               size="icon" 
-              className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full shadow-lg transition-all ${
+              className={`w-10 h-10 sm:w-14 sm:h-14 rounded-full shadow-lg transition-all ${
                 isWorkoutActive ? 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-105' : ''
               }`}
             >
               <Plus className="w-5 h-5 sm:w-7 sm:h-7" />
             </Button>
           </Link>
-          <span className={`text-[10px] sm:text-xs -mt-2 ${
+          <span className={`text-[10px] sm:text-xs -mt-1.5 sm:-mt-2 ${
             isWorkoutActive ? 'text-primary font-medium' : 'text-muted-foreground'
           }`}>Workout</span>
         </div>

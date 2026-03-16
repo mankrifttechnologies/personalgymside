@@ -74,36 +74,36 @@ export default function Index() {
   return (
     <div className="min-h-screen pb-24">
       {/* Header */}
-      <header className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-primary/20">
-            <Dumbbell className="w-6 h-6 text-primary" />
+      <header className="p-3 sm:p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="p-2 rounded-xl bg-primary/20 shrink-0">
+            <Dumbbell className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold">FitAI Coach</h1>
-            <p className="text-sm text-muted-foreground">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-xl font-bold truncate">FitAI Coach</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
               Hey, {profile?.name || 'Athlete'}! 💪
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2 shrink-0">
           <Link to="/profile">
-            <Button variant="ghost" size="icon">
-              <User className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10">
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </Link>
           <Link to="/membership">
-            <Button variant="ghost" size="icon">
-              <CreditCard className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10">
+              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </Link>
-          <Button variant="ghost" size="icon" onClick={signOut}>
-            <LogOut className="w-5 h-5" />
+          <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10" onClick={signOut}>
+            <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
       </header>
 
-      <main className="px-4 space-y-6">
+      <main className="px-3 sm:px-4 space-y-4 sm:space-y-6">
         {/* Notification Banner */}
         <NotificationBanner />
 
@@ -234,13 +234,13 @@ export default function Index() {
         {/* Muscle Status Grid */}
         <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <h3 className="font-semibold mb-3">Recovery Status</h3>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {MUSCLE_GROUPS.map((muscle) => {
               const status = getRecoveryStatus(muscle.value);
               return (
                 <div 
                   key={muscle.value} 
-                  className="text-center p-2 rounded-lg bg-secondary/50"
+                  className="text-center p-1.5 sm:p-2 rounded-lg bg-secondary/50"
                 >
                   <div 
                     className={`w-3 h-3 rounded-full mx-auto mb-1 ${
@@ -248,7 +248,7 @@ export default function Index() {
                       status.status === 'recovering' ? 'bg-warning' : 'bg-muted-foreground'
                     }`}
                   />
-                  <p className="text-xs font-medium truncate">{muscle.label}</p>
+                  <p className="text-[10px] sm:text-xs font-medium truncate">{muscle.label}</p>
                 </div>
               );
             })}

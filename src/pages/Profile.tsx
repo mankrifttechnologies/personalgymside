@@ -307,12 +307,12 @@ export default function Profile() {
               </div>
               <div>
                 <label className="text-sm text-muted-foreground mb-1 block">Gender</label>
-                <div className="flex gap-2">
+                <div className="flex gap-1.5 sm:gap-2">
                   {['male', 'female', 'other'].map((g) => (
                     <button
                       key={g}
                       onClick={() => setGender(g as 'male' | 'female' | 'other')}
-                      className={`flex-1 py-2 rounded-lg text-sm capitalize transition-all ${
+                      className={`flex-1 py-2 rounded-lg text-xs sm:text-sm capitalize transition-all ${
                         gender === g
                           ? 'bg-primary text-primary-foreground'
                           : 'bg-secondary hover:bg-secondary/80'

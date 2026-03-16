@@ -169,20 +169,20 @@ export default function Workout() {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2 shrink-0">
           <Link to="/templates">
-            <Button variant="glass" size="sm" className="gap-1">
+            <Button variant="glass" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
               <Layers className="w-4 h-4" />
             </Button>
           </Link>
           <Link to="/records">
-            <Button variant="glass" size="sm" className="gap-1">
+            <Button variant="glass" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
               <Trophy className="w-4 h-4" />
             </Button>
           </Link>
           <Dialog open={showExerciseLibrary} onOpenChange={setShowExerciseLibrary}>
             <DialogTrigger asChild>
-              <Button variant="glass" size="sm" className="gap-1">
+              <Button variant="glass" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
                 <BookOpen className="w-4 h-4" />
               </Button>
             </DialogTrigger>
@@ -202,9 +202,9 @@ export default function Workout() {
           </Dialog>
           <Button 
             variant="glass" 
-            size="sm" 
+            size="icon"
+            className="w-8 h-8 sm:w-9 sm:h-9"
             onClick={() => setShowAIPanel(!showAIPanel)}
-            className="gap-2"
           >
             <Sparkles className="w-4 h-4" />
           </Button>
@@ -281,7 +281,7 @@ export default function Workout() {
         {/* Muscle Group Selection */}
         <div className="glass rounded-xl p-4 animate-slide-up">
           <h3 className="font-semibold mb-3">Select Muscle Group</h3>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {MUSCLE_GROUPS.map((muscle) => {
               const status = getRecoveryStatus(muscle.value);
               const isRecovered = status.status === 'recovered' || status.status === 'fresh';
@@ -290,13 +290,13 @@ export default function Workout() {
                 <button
                   key={muscle.value}
                   onClick={() => setSelectedMuscle(muscle.value)}
-                  className={`relative p-3 rounded-xl text-center transition-all ${
+                  className={`relative p-2.5 sm:p-3 rounded-xl text-center transition-all ${
                     selectedMuscle === muscle.value
                       ? `${muscle.color} text-white scale-105`
                       : 'bg-secondary hover:bg-secondary/80'
                   }`}
                 >
-                  <p className="text-xs font-medium">{muscle.label}</p>
+                  <p className="text-[11px] sm:text-xs font-medium">{muscle.label}</p>
                   <div className={`absolute top-1 right-1 w-2 h-2 rounded-full ${
                     isRecovered ? 'bg-accent' : 'bg-warning'
                   }`} />
@@ -345,21 +345,23 @@ export default function Workout() {
         {(selectedExercise || customExercise) && (
           <div className="glass rounded-xl p-4 animate-slide-up">
             <h3 className="font-semibold mb-3">Exercise Details</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Sets</label>
-                <div className="flex items-center gap-2">
+                <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Sets</label>
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setSets(Math.max(1, sets - 1))}
                   >
                     -
                   </Button>
-                  <span className="text-xl font-bold w-8 text-center">{sets}</span>
+                  <span className="text-lg sm:text-xl font-bold w-6 sm:w-8 text-center">{sets}</span>
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setSets(sets + 1)}
                   >
                     +
@@ -368,19 +370,21 @@ export default function Workout() {
               </div>
               
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Reps</label>
-                <div className="flex items-center gap-2">
+                <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Reps</label>
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setReps(Math.max(1, reps - 1))}
                   >
                     -
                   </Button>
-                  <span className="text-xl font-bold w-8 text-center">{reps}</span>
+                  <span className="text-lg sm:text-xl font-bold w-6 sm:w-8 text-center">{reps}</span>
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setReps(reps + 1)}
                   >
                     +
@@ -389,13 +393,13 @@ export default function Workout() {
               </div>
               
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Weight (kg)</label>
+                <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Weight</label>
                 <Input
                   type="number"
-                  placeholder="0"
+                  placeholder="kg"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value ? Number(e.target.value) : '')}
-                  className="text-center"
+                  className="text-center h-8 sm:h-10 text-sm"
                 />
               </div>
             </div>

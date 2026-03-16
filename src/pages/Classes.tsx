@@ -58,13 +58,13 @@ export default function Classes() {
 
       <main className="px-4 space-y-4">
         {/* Day selector */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
           {DAYS.map((day, i) => (
             <Button
               key={day}
               variant={selectedDay === i ? 'default' : 'outline'}
               size="sm"
-              className="shrink-0"
+              className="shrink-0 text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9"
               onClick={() => setSelectedDay(i)}
             >
               {day.slice(0, 3)}
@@ -94,56 +94,60 @@ export default function Classes() {
                 return (
                 <Card key={cls.id} className={`glass border-border ${isFull ? 'opacity-75' : ''}`}>
                   <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-bold text-lg">{cls.title}</h3>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-bold text-base sm:text-lg">{cls.title}</h3>
                           {isFull && (
                             <Badge variant="destructive" className="text-[10px] px-1.5 py-0">FULL</Badge>
                           )}
                         </div>
-                        <Badge className={CLASS_COLORS[cls.class_type] || CLASS_COLORS.group}>
+                        <Badge className={`${CLASS_COLORS[cls.class_type] || CLASS_COLORS.group} text-xs`}>
                           {cls.class_type}
                         </Badge>
                       </div>
-                      {isBooked(cls.id) ? (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => {
-                            const id = getBookingId(cls.id);
-                            if (id) cancelBooking.mutate(id);
-                          }}
-                        >
-                          <X className="w-4 h-4 mr-1" /> Cancel
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="energy" 
-                          size="sm"
-                          onClick={() => bookClass.mutate({ classId: cls.id, bookingDate })}
-                          disabled={bookClass.isPending || isFull}
-                        >
-                          {isFull ? 'Full' : 'Book Spot'}
-                        </Button>
-                      )}
+                      <div className="shrink-0">
+                        {isBooked(cls.id) ? (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              const id = getBookingId(cls.id);
+                              if (id) cancelBooking.mutate(id);
+                            }}
+                          >
+                            <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Cancel
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="energy" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => bookClass.mutate({ classId: cls.id, bookingDate })}
+                            disabled={bookClass.isPending || isFull}
+                          >
+                            {isFull ? 'Full' : 'Book'}
+                          </Button>
+                        )}
+                      </div>
                     </div>
                     {cls.description && (
                       <p className="text-sm text-muted-foreground mb-2">{cls.description}</p>
                     )}
-                    <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
+                        <Clock className="w-3.5 h-3.5" />
                         {cls.start_time?.slice(0, 5)} - {cls.end_time?.slice(0, 5)}
                       </span>
                       <span className={`flex items-center gap-1 ${isFull ? 'text-destructive font-medium' : spotsLeft <= 3 ? 'text-warning font-medium' : ''}`}>
-                        <Users className="w-4 h-4" />
-                        {booked}/{cls.capacity} booked
-                        {!isFull && spotsLeft <= 3 && ` · ${spotsLeft} left!`}
+                        <Users className="w-3.5 h-3.5" />
+                        {booked}/{cls.capacity}
+                        {!isFull && spotsLeft <= 3 && ` · ${spotsLeft} left`}
                       </span>
                       {cls.location && (
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
+                          <MapPin className="w-3.5 h-3.5" />
                           {cls.location}
                         </span>
                       )}

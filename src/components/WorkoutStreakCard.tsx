@@ -26,29 +26,29 @@ export default function WorkoutStreakCard() {
         )}
       </div>
       
-      <div className="grid grid-cols-3 gap-4 text-center">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
         <div>
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Flame className={`w-6 h-6 ${streak > 0 ? 'text-primary' : 'text-muted-foreground'}`} />
-            <span className="text-3xl font-bold">{streak}</span>
+            <Flame className={`w-5 h-5 sm:w-6 sm:h-6 ${streak > 0 ? 'text-primary' : 'text-muted-foreground'}`} />
+            <span className="text-2xl sm:text-3xl font-bold">{streak}</span>
           </div>
-          <p className="text-xs text-muted-foreground">Current Streak</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">Current</p>
         </div>
         
         <div>
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Trophy className="w-6 h-6 text-warning" />
-            <span className="text-3xl font-bold">{longestStreak}</span>
+            <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-warning" />
+            <span className="text-2xl sm:text-3xl font-bold">{longestStreak}</span>
           </div>
-          <p className="text-xs text-muted-foreground">Best Streak</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">Best</p>
         </div>
         
         <div>
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Calendar className="w-6 h-6 text-accent" />
-            <span className="text-3xl font-bold">{totalWorkouts}</span>
+            <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
+            <span className="text-2xl sm:text-3xl font-bold">{totalWorkouts}</span>
           </div>
-          <p className="text-xs text-muted-foreground">Total Workouts</p>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">Total</p>
         </div>
       </div>
       
