@@ -18,7 +18,7 @@ export default function BottomNav() {
   const { unreadCount } = useUnreadMessages();
   
   return (
-    <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-1 sm:px-4 py-2 z-50 safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border px-1 sm:px-4 py-1.5 sm:py-2 z-50 safe-area-bottom">
       <div className="flex justify-around items-center max-w-lg mx-auto">
         {/* First two nav items */}
         {NAV_ITEMS.slice(0, 2).map((item) => {
