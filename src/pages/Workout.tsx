@@ -281,7 +281,7 @@ export default function Workout() {
         {/* Muscle Group Selection */}
         <div className="glass rounded-xl p-4 animate-slide-up">
           <h3 className="font-semibold mb-3">Select Muscle Group</h3>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {MUSCLE_GROUPS.map((muscle) => {
               const status = getRecoveryStatus(muscle.value);
               const isRecovered = status.status === 'recovered' || status.status === 'fresh';
@@ -290,13 +290,13 @@ export default function Workout() {
                 <button
                   key={muscle.value}
                   onClick={() => setSelectedMuscle(muscle.value)}
-                  className={`relative p-3 rounded-xl text-center transition-all ${
+                  className={`relative p-2.5 sm:p-3 rounded-xl text-center transition-all ${
                     selectedMuscle === muscle.value
                       ? `${muscle.color} text-white scale-105`
                       : 'bg-secondary hover:bg-secondary/80'
                   }`}
                 >
-                  <p className="text-xs font-medium">{muscle.label}</p>
+                  <p className="text-[11px] sm:text-xs font-medium">{muscle.label}</p>
                   <div className={`absolute top-1 right-1 w-2 h-2 rounded-full ${
                     isRecovered ? 'bg-accent' : 'bg-warning'
                   }`} />
