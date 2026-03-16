@@ -58,13 +58,13 @@ export default function Classes() {
 
       <main className="px-4 space-y-4">
         {/* Day selector */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
           {DAYS.map((day, i) => (
             <Button
               key={day}
               variant={selectedDay === i ? 'default' : 'outline'}
               size="sm"
-              className="shrink-0"
+              className="shrink-0 text-xs sm:text-sm px-2.5 sm:px-3 h-8 sm:h-9"
               onClick={() => setSelectedDay(i)}
             >
               {day.slice(0, 3)}
