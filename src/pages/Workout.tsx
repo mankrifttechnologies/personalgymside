@@ -169,20 +169,20 @@ export default function Workout() {
             {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2 shrink-0">
           <Link to="/templates">
-            <Button variant="glass" size="sm" className="gap-1">
+            <Button variant="glass" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
               <Layers className="w-4 h-4" />
             </Button>
           </Link>
           <Link to="/records">
-            <Button variant="glass" size="sm" className="gap-1">
+            <Button variant="glass" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
               <Trophy className="w-4 h-4" />
             </Button>
           </Link>
           <Dialog open={showExerciseLibrary} onOpenChange={setShowExerciseLibrary}>
             <DialogTrigger asChild>
-              <Button variant="glass" size="sm" className="gap-1">
+              <Button variant="glass" size="icon" className="w-8 h-8 sm:w-9 sm:h-9">
                 <BookOpen className="w-4 h-4" />
               </Button>
             </DialogTrigger>
@@ -202,9 +202,9 @@ export default function Workout() {
           </Dialog>
           <Button 
             variant="glass" 
-            size="sm" 
+            size="icon"
+            className="w-8 h-8 sm:w-9 sm:h-9"
             onClick={() => setShowAIPanel(!showAIPanel)}
-            className="gap-2"
           >
             <Sparkles className="w-4 h-4" />
           </Button>
