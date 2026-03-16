@@ -94,39 +94,43 @@ export default function Classes() {
                 return (
                 <Card key={cls.id} className={`glass border-border ${isFull ? 'opacity-75' : ''}`}>
                   <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-bold text-lg">{cls.title}</h3>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-bold text-base sm:text-lg">{cls.title}</h3>
                           {isFull && (
                             <Badge variant="destructive" className="text-[10px] px-1.5 py-0">FULL</Badge>
                           )}
                         </div>
-                        <Badge className={CLASS_COLORS[cls.class_type] || CLASS_COLORS.group}>
+                        <Badge className={`${CLASS_COLORS[cls.class_type] || CLASS_COLORS.group} text-xs`}>
                           {cls.class_type}
                         </Badge>
                       </div>
-                      {isBooked(cls.id) ? (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => {
-                            const id = getBookingId(cls.id);
-                            if (id) cancelBooking.mutate(id);
-                          }}
-                        >
-                          <X className="w-4 h-4 mr-1" /> Cancel
-                        </Button>
-                      ) : (
-                        <Button 
-                          variant="energy" 
-                          size="sm"
-                          onClick={() => bookClass.mutate({ classId: cls.id, bookingDate })}
-                          disabled={bookClass.isPending || isFull}
-                        >
-                          {isFull ? 'Full' : 'Book Spot'}
-                        </Button>
-                      )}
+                      <div className="shrink-0">
+                        {isBooked(cls.id) ? (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              const id = getBookingId(cls.id);
+                              if (id) cancelBooking.mutate(id);
+                            }}
+                          >
+                            <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Cancel
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="energy" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => bookClass.mutate({ classId: cls.id, bookingDate })}
+                            disabled={bookClass.isPending || isFull}
+                          >
+                            {isFull ? 'Full' : 'Book'}
+                          </Button>
+                        )}
+                      </div>
                     </div>
                     {cls.description && (
                       <p className="text-sm text-muted-foreground mb-2">{cls.description}</p>
