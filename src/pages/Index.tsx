@@ -74,31 +74,31 @@ export default function Index() {
   return (
     <div className="min-h-screen pb-24">
       {/* Header */}
-      <header className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-primary/20">
-            <Dumbbell className="w-6 h-6 text-primary" />
+      <header className="p-3 sm:p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="p-2 rounded-xl bg-primary/20 shrink-0">
+            <Dumbbell className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold">FitAI Coach</h1>
-            <p className="text-sm text-muted-foreground">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-xl font-bold truncate">FitAI Coach</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
               Hey, {profile?.name || 'Athlete'}! 💪
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2 shrink-0">
           <Link to="/profile">
-            <Button variant="ghost" size="icon">
-              <User className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10">
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </Link>
           <Link to="/membership">
-            <Button variant="ghost" size="icon">
-              <CreditCard className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10">
+              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </Link>
-          <Button variant="ghost" size="icon" onClick={signOut}>
-            <LogOut className="w-5 h-5" />
+          <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10" onClick={signOut}>
+            <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
       </header>
