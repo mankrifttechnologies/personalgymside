@@ -234,13 +234,13 @@ export default function Index() {
         {/* Muscle Status Grid */}
         <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <h3 className="font-semibold mb-3">Recovery Status</h3>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {MUSCLE_GROUPS.map((muscle) => {
               const status = getRecoveryStatus(muscle.value);
               return (
                 <div 
                   key={muscle.value} 
-                  className="text-center p-2 rounded-lg bg-secondary/50"
+                  className="text-center p-1.5 sm:p-2 rounded-lg bg-secondary/50"
                 >
                   <div 
                     className={`w-3 h-3 rounded-full mx-auto mb-1 ${
@@ -248,7 +248,7 @@ export default function Index() {
                       status.status === 'recovering' ? 'bg-warning' : 'bg-muted-foreground'
                     }`}
                   />
-                  <p className="text-xs font-medium truncate">{muscle.label}</p>
+                  <p className="text-[10px] sm:text-xs font-medium truncate">{muscle.label}</p>
                 </div>
               );
             })}

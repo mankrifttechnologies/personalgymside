@@ -345,21 +345,23 @@ export default function Workout() {
         {(selectedExercise || customExercise) && (
           <div className="glass rounded-xl p-4 animate-slide-up">
             <h3 className="font-semibold mb-3">Exercise Details</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Sets</label>
-                <div className="flex items-center gap-2">
+                <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Sets</label>
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setSets(Math.max(1, sets - 1))}
                   >
                     -
                   </Button>
-                  <span className="text-xl font-bold w-8 text-center">{sets}</span>
+                  <span className="text-lg sm:text-xl font-bold w-6 sm:w-8 text-center">{sets}</span>
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setSets(sets + 1)}
                   >
                     +
@@ -368,19 +370,21 @@ export default function Workout() {
               </div>
               
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Reps</label>
-                <div className="flex items-center gap-2">
+                <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Reps</label>
+                <div className="flex items-center gap-1 sm:gap-2">
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setReps(Math.max(1, reps - 1))}
                   >
                     -
                   </Button>
-                  <span className="text-xl font-bold w-8 text-center">{reps}</span>
+                  <span className="text-lg sm:text-xl font-bold w-6 sm:w-8 text-center">{reps}</span>
                   <Button 
                     variant="secondary" 
                     size="icon"
+                    className="w-8 h-8 sm:w-10 sm:h-10"
                     onClick={() => setReps(reps + 1)}
                   >
                     +
@@ -389,13 +393,13 @@ export default function Workout() {
               </div>
               
               <div>
-                <label className="text-sm text-muted-foreground mb-1 block">Weight (kg)</label>
+                <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Weight</label>
                 <Input
                   type="number"
-                  placeholder="0"
+                  placeholder="kg"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value ? Number(e.target.value) : '')}
-                  className="text-center"
+                  className="text-center h-8 sm:h-10 text-sm"
                 />
               </div>
             </div>

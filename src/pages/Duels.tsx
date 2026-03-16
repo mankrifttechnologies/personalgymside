@@ -111,9 +111,9 @@ export default function Duels() {
       <main className="px-4">
         <Tabs defaultValue="active">
           <TabsList className="w-full">
-            <TabsTrigger value="active" className="flex-1">Active ({activeDuels.length})</TabsTrigger>
-            <TabsTrigger value="pending" className="flex-1">Pending ({pendingDuels.length})</TabsTrigger>
-            <TabsTrigger value="completed" className="flex-1">History</TabsTrigger>
+            <TabsTrigger value="active" className="flex-1 text-xs sm:text-sm">Active ({activeDuels.length})</TabsTrigger>
+            <TabsTrigger value="pending" className="flex-1 text-xs sm:text-sm">Pending ({pendingDuels.length})</TabsTrigger>
+            <TabsTrigger value="completed" className="flex-1 text-xs sm:text-sm">History</TabsTrigger>
           </TabsList>
 
           <TabsContent value="active" className="space-y-3 mt-4">

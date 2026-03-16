@@ -65,26 +65,27 @@ export default function AdminDashboard() {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
             {isAdmin && (
-              <TabsTrigger value="users" className="gap-1 text-xs">
-                <Users className="w-4 h-4" />
-                Users
+              <TabsTrigger value="users" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="truncate">Users</span>
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="classes" className="gap-1 text-xs">
-                <Calendar className="w-4 h-4" />
-                Classes
+              <TabsTrigger value="classes" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="truncate">Classes</span>
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="challenges" className="gap-1 text-xs">
-                <Swords className="w-4 h-4" />
-                Challenges
+              <TabsTrigger value="challenges" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+                <Swords className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="hidden sm:inline truncate">Challenges</span>
+                <span className="sm:hidden truncate">Tasks</span>
               </TabsTrigger>
             )}
-            <TabsTrigger value="support" className="gap-1 text-xs">
-              <MessageSquare className="w-4 h-4" />
-              Support
+            <TabsTrigger value="support" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span className="truncate">Support</span>
             </TabsTrigger>
           </TabsList>
 

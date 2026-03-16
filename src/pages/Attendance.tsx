@@ -193,10 +193,10 @@ export default function Attendance() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
-            <TabsTrigger value="points">Points</TabsTrigger>
-            <TabsTrigger value="badges">Badges</TabsTrigger>
+            <TabsTrigger value="overview" className="text-[11px] sm:text-sm px-1 sm:px-3">Overview</TabsTrigger>
+            <TabsTrigger value="history" className="text-[11px] sm:text-sm px-1 sm:px-3">History</TabsTrigger>
+            <TabsTrigger value="points" className="text-[11px] sm:text-sm px-1 sm:px-3">Points</TabsTrigger>
+            <TabsTrigger value="badges" className="text-[11px] sm:text-sm px-1 sm:px-3">Badges</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4 mt-4">

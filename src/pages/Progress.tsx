@@ -92,12 +92,12 @@ export default function Progress() {
             <Calendar className="w-5 h-5 text-primary" />
             This Week
           </h3>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 gap-1">
             {last7Days.map((day, idx) => (
-              <div key={idx} className="text-center">
-                <p className="text-xs text-muted-foreground mb-1">{day.day}</p>
+              <div key={idx} className="text-center flex-1">
+                <p className="text-[10px] sm:text-xs text-muted-foreground mb-1">{day.day}</p>
                 <div 
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium ${
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium mx-auto ${
                     day.hasWorkout 
                       ? 'bg-primary text-primary-foreground' 
                       : 'bg-secondary text-muted-foreground'
