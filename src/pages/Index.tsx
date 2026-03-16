@@ -103,7 +103,7 @@ export default function Index() {
         </div>
       </header>
 
-      <main className="px-4 space-y-6">
+      <main className="px-3 sm:px-4 space-y-4 sm:space-y-6">
         {/* Notification Banner */}
         <NotificationBanner />
 
