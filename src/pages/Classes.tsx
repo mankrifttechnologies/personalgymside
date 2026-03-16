@@ -135,19 +135,19 @@ export default function Classes() {
                     {cls.description && (
                       <p className="text-sm text-muted-foreground mb-2">{cls.description}</p>
                     )}
-                    <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
+                        <Clock className="w-3.5 h-3.5" />
                         {cls.start_time?.slice(0, 5)} - {cls.end_time?.slice(0, 5)}
                       </span>
                       <span className={`flex items-center gap-1 ${isFull ? 'text-destructive font-medium' : spotsLeft <= 3 ? 'text-warning font-medium' : ''}`}>
-                        <Users className="w-4 h-4" />
-                        {booked}/{cls.capacity} booked
-                        {!isFull && spotsLeft <= 3 && ` · ${spotsLeft} left!`}
+                        <Users className="w-3.5 h-3.5" />
+                        {booked}/{cls.capacity}
+                        {!isFull && spotsLeft <= 3 && ` · ${spotsLeft} left`}
                       </span>
                       {cls.location && (
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
+                          <MapPin className="w-3.5 h-3.5" />
                           {cls.location}
                         </span>
                       )}

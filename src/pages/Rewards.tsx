@@ -173,17 +173,17 @@ export default function Rewards() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="catalog" className="gap-1">
-              <ShoppingBag className="w-4 h-4" />
-              Catalog
+            <TabsTrigger value="catalog" className="gap-1 text-xs sm:text-sm px-1 sm:px-3">
+              <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span className="truncate">Catalog</span>
             </TabsTrigger>
-            <TabsTrigger value="history" className="gap-1">
-              <Clock className="w-4 h-4" />
-              My Rewards
+            <TabsTrigger value="history" className="gap-1 text-xs sm:text-sm px-1 sm:px-3">
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span className="truncate">Rewards</span>
             </TabsTrigger>
-            <TabsTrigger value="transactions" className="gap-1">
-              <Coins className="w-4 h-4" />
-              Points
+            <TabsTrigger value="transactions" className="gap-1 text-xs sm:text-sm px-1 sm:px-3">
+              <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+              <span className="truncate">Points</span>
             </TabsTrigger>
           </TabsList>
 
