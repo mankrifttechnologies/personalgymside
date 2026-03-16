@@ -10,7 +10,7 @@ interface TypingStatus {
 export function useTypingIndicator(friendId: string) {
   const { user } = useAuth();
   const [friendIsTyping, setFriendIsTyping] = useState(false);
-  const [typingTimeout, setTypingTimeoutState] = useState<NodeJS.Timeout | null>(null);
+  const [typingTimeout, setTypingTimeoutState] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   // Subscribe to typing indicator channel
   useEffect(() => {
