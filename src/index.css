@@ -34,7 +34,7 @@
     --input: 220 15% 20%;
     --ring: 24 100% 55%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
     /* Custom fitness colors */
     --energy: 24 100% 55%;
@@ -57,8 +57,10 @@
 
     /* Shadows */
     --shadow-glow: 0 0 40px hsl(24 100% 55% / 0.3);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.25), 0 1px 4px hsl(0 0% 0% / 0.15);
+    --shadow-card-hover: 0 8px 32px hsl(0 0% 0% / 0.35), 0 2px 8px hsl(0 0% 0% / 0.2);
     --shadow-button: 0 4px 20px hsl(24 100% 55% / 0.4);
+    --shadow-nav: 0 -8px 32px hsl(0 0% 0% / 0.3);
 
     --sidebar-background: 220 15% 10%;
     --sidebar-foreground: 0 0% 98%;
@@ -105,8 +107,10 @@
 
     /* Shadows for light mode */
     --shadow-glow: 0 0 40px hsl(24 100% 50% / 0.2);
-    --shadow-card: 0 8px 32px hsl(220 10% 0% / 0.1);
+    --shadow-card: 0 4px 24px hsl(220 10% 0% / 0.06), 0 1px 4px hsl(220 10% 0% / 0.04);
+    --shadow-card-hover: 0 8px 32px hsl(220 10% 0% / 0.1), 0 2px 8px hsl(220 10% 0% / 0.06);
     --shadow-button: 0 4px 20px hsl(24 100% 50% / 0.3);
+    --shadow-nav: 0 -4px 24px hsl(220 10% 0% / 0.08);
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 15% 15%;
@@ -148,12 +152,17 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
     @apply bg-background text-foreground font-outfit antialiased;
     background: var(--gradient-dark);
     min-height: 100vh;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -186,7 +195,22 @@
   }
 
   .glass {
-    @apply backdrop-blur-xl bg-card/80 border border-border/50;
+    @apply backdrop-blur-xl border border-border/50;
+    background: hsl(var(--card) / 0.75);
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-card {
+    @apply backdrop-blur-xl border border-border/30;
+    background: hsl(var(--card) / 0.85);
+    box-shadow: var(--shadow-card);
+    border-radius: var(--radius);
+  }
+
+  .glass-nav {
+    @apply backdrop-blur-2xl border-t border-border/30;
+    background: hsl(var(--background) / 0.85);
+    box-shadow: var(--shadow-nav);
   }
 
   .muscle-chest { background: hsl(var(--chest)); }
@@ -206,11 +230,28 @@
   }
 
   .animate-slide-up {
-    animation: slide-up 0.5s ease-out;
+    animation: slide-up 0.5s ease-out both;
   }
 
   .animate-fade-in {
     animation: fade-in 0.3s ease-out;
+  }
+
+  /* Native-feel section headers */
+  .section-header {
+    @apply text-xs font-semibold uppercase tracking-widest text-muted-foreground px-1 mb-3;
+  }
+
+  /* Touch-friendly interactive elements */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Native app content area */
+  .app-content {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -235,7 +276,7 @@
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -252,31 +293,40 @@
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Custom scrollbar — hidden on mobile for native feel */
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: hsl(220 15% 10%);
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(220 15% 25%);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(220 15% 35%);
+@media (min-width: 641px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(220 15% 10%);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(220 15% 25%);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(220 15% 35%);
+  }
 }
 
 /* Safe area for mobile devices (iOS notch, home indicator) */
 .safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .safe-area-top {
-  padding-top: env(safe-area-inset-top, 0);
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 /* Extra small screen support */
@@ -288,8 +338,14 @@
 
 /* Touch-friendly targets for mobile */
 @media (max-width: 640px) {
-  .touch-target {
-    min-height: 44px;
-    min-width: 44px;
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Capacitor / native app viewport fixes */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .native-header {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
   }
 }

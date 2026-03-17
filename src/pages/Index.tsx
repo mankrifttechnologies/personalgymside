@@ -23,7 +23,7 @@ import GroupChallengesSection from '@/components/GroupChallenges';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays, CreditCard,
-  Swords, Calendar
+  Swords, Calendar, ChevronRight
 } from 'lucide-react';
 
 export default function Index() {
@@ -49,10 +49,8 @@ export default function Index() {
     return <Navigate to="/auth" replace />;
   }
 
-  // Show onboarding for new users
   const needsOnboarding = profile && !(profile as any).onboarding_completed && !profile.fitness_goal;
   if (needsOnboarding && !showOnboarding) {
-    // Auto-show onboarding
     return <OnboardingWizard onComplete={() => setShowOnboarding(false)} />;
   }
   if (showOnboarding) {
@@ -70,185 +68,190 @@ export default function Index() {
   }).slice(0, 3);
 
   const dayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const greeting = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good Morning';
+    if (h < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  })();
 
   return (
-    <div className="min-h-screen pb-24">
-      {/* Header */}
-      <header className="p-3 sm:p-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div className="p-2 rounded-xl bg-primary/20 shrink-0">
-            <Dumbbell className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-bold truncate">FitAI Coach</h1>
-            <p className="text-xs sm:text-sm text-muted-foreground truncate">
-              Hey, {profile?.name || 'Athlete'}! 💪
-            </p>
-          </div>
+    <div className="min-h-screen min-h-dvh app-content">
+      {/* Native-style Header with safe area */}
+      <header className="native-header px-4 pb-3 flex items-end justify-between">
+        <div className="min-w-0">
+          <p className="text-sm text-muted-foreground font-medium">{greeting} 👋</p>
+          <h1 className="text-2xl font-extrabold tracking-tight truncate">
+            {profile?.name || 'Athlete'}
+          </h1>
         </div>
-        <div className="flex gap-1 sm:gap-2 shrink-0">
-          <Link to="/profile">
-            <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10">
-              <User className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Button>
-          </Link>
+        <div className="flex items-center gap-1 shrink-0">
           <Link to="/membership">
-            <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10">
-              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
+            <Button variant="ghost" size="icon" className="w-10 h-10 rounded-xl">
+              <CreditCard className="w-5 h-5" />
             </Button>
           </Link>
-          <Button variant="ghost" size="icon" className="w-9 h-9 sm:w-10 sm:h-10" onClick={signOut}>
-            <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
-          </Button>
+          <Link to="/profile">
+            <Button variant="ghost" size="icon" className="w-10 h-10 rounded-xl">
+              <User className="w-5 h-5" />
+            </Button>
+          </Link>
         </div>
       </header>
 
-      <main className="px-3 sm:px-4 space-y-4 sm:space-y-6">
+      <main className="px-4 space-y-4 pb-4">
         {/* Notification Banner */}
         <NotificationBanner />
 
-        {/* Level Progress */}
-        <LevelProgress />
-
-        {/* Tier Rank */}
-        <TierCard />
-
-        {/* Workout Streak */}
-        <WorkoutStreakCard />
-
-        {/* Live Gym Occupancy */}
-        <GymOccupancyMeter />
-
-        {/* Today's Scheduled Workout Widget */}
-        <div className="glass rounded-xl p-4 animate-slide-up border-l-4 border-primary">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="w-5 h-5 text-primary" />
-              <span className="text-sm text-muted-foreground">{dayName}'s Plan</span>
+        {/* Today's Scheduled Workout — Hero Card */}
+        <div
+          className="glass-card p-5 animate-slide-up overflow-hidden relative"
+          style={{ animationDelay: '0s' }}
+        >
+          <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-primary/10 blur-2xl" />
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="w-5 h-5 text-primary" />
+                <span className="text-sm font-medium text-muted-foreground">{dayName}'s Plan</span>
+              </div>
+              <Link to="/schedule" className="text-xs text-primary font-semibold flex items-center gap-0.5">
+                Edit <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
-            <Link to="/schedule">
-              <Button variant="ghost" size="sm" className="text-xs">
-                Edit Schedule
-              </Button>
-            </Link>
+
+            {todaySchedule?.template ? (
+              <div>
+                <h2 className="text-xl font-bold mb-1">{todaySchedule.template.name}</h2>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {todaySchedule.template.description || 'Time to hit it!'}
+                </p>
+                <Link to="/templates">
+                  <Button variant="energy" className="w-full gap-2 h-12 text-base font-semibold rounded-xl">
+                    <Play className="w-5 h-5" />
+                    Start Workout
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="text-center py-3">
+                <p className="text-muted-foreground mb-3">No workout scheduled for today</p>
+                <Link to="/schedule">
+                  <Button variant="outline" className="h-11 rounded-xl px-6">
+                    Plan Your Week
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
-          
-          {todaySchedule?.template ? (
-            <div>
-              <h2 className="text-xl font-bold mb-1">{todaySchedule.template.name}</h2>
-              <p className="text-sm text-muted-foreground mb-3">
-                {todaySchedule.template.description || 'Time to hit it!'}
-              </p>
-              <Link to="/templates">
-                <Button variant="energy" className="w-full gap-2">
-                  <Play className="w-4 h-4" />
-                  Start Workout
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <div className="text-center py-2">
-              <p className="text-muted-foreground mb-2">No workout scheduled</p>
-              <Link to="/schedule">
-                <Button variant="outline" size="sm">
-                  Plan Your Week
-                </Button>
-              </Link>
-            </div>
-          )}
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        {/* Quick Stats — 2 col */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="glass-card p-4 animate-slide-up" style={{ animationDelay: '0.05s' }}>
             <div className="flex items-center gap-2 mb-2">
-              <Activity className="w-5 h-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Today's Workout</span>
+              <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                <Activity className="w-4 h-4 text-primary" />
+              </div>
+              <span className="text-xs font-medium text-muted-foreground">Today</span>
             </div>
-            <p className="text-2xl font-bold">{exerciseCount}</p>
-            <p className="text-sm text-muted-foreground">exercises logged</p>
+            <p className="text-3xl font-extrabold">{exerciseCount}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">exercises logged</p>
           </div>
 
-          <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+          <div className="glass-card p-4 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <div className="flex items-center gap-2 mb-2">
-              <Flame className="w-5 h-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Calories</span>
+              <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                <Flame className="w-4 h-4 text-primary" />
+              </div>
+              <span className="text-xs font-medium text-muted-foreground">Calories</span>
             </div>
-            <p className="text-2xl font-bold">{totals.calories}</p>
-            <p className="text-sm text-muted-foreground">of {calorieTarget} kcal</p>
-            <div className="mt-2 h-2 bg-secondary rounded-full overflow-hidden">
+            <p className="text-3xl font-extrabold">{totals.calories}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">of {calorieTarget} kcal</p>
+            <div className="mt-2 h-1.5 bg-secondary rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-primary to-accent transition-all duration-500"
+                className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-700"
                 style={{ width: `${calorieProgress}%` }}
               />
             </div>
           </div>
         </div>
 
-        {/* Macros */}
-        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <h3 className="font-semibold mb-3 flex items-center gap-2">
-            <Target className="w-5 h-5 text-accent" />
+        {/* Level & Rank Section */}
+        <p className="section-header" style={{ animationDelay: '0.12s' }}>Progress</p>
+        <LevelProgress />
+        <TierCard />
+
+        {/* Streak */}
+        <WorkoutStreakCard />
+
+        {/* Live Gym Occupancy */}
+        <GymOccupancyMeter />
+
+        {/* Today's Macros */}
+        <div className="glass-card p-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <h3 className="font-semibold mb-4 flex items-center gap-2 text-sm">
+            <Target className="w-4 h-4 text-accent" />
             Today's Macros
           </h3>
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold text-primary">{Math.round(totals.protein)}g</p>
-              <p className="text-xs text-muted-foreground">Protein</p>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="p-3 rounded-xl bg-primary/10">
+              <p className="text-2xl font-extrabold text-primary">{Math.round(totals.protein)}g</p>
+              <p className="text-[11px] text-muted-foreground font-medium mt-1">Protein</p>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-accent">{Math.round(totals.carbs)}g</p>
-              <p className="text-xs text-muted-foreground">Carbs</p>
+            <div className="p-3 rounded-xl bg-accent/10">
+              <p className="text-2xl font-extrabold text-accent">{Math.round(totals.carbs)}g</p>
+              <p className="text-[11px] text-muted-foreground font-medium mt-1">Carbs</p>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-warning">{Math.round(totals.fats)}g</p>
-              <p className="text-xs text-muted-foreground">Fats</p>
+            <div className="p-3 rounded-xl bg-warning/10">
+              <p className="text-2xl font-extrabold text-warning">{Math.round(totals.fats)}g</p>
+              <p className="text-[11px] text-muted-foreground font-medium mt-1">Fats</p>
             </div>
           </div>
         </div>
 
-        {/* Muscle Recovery */}
-        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-          <h3 className="font-semibold mb-3 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-primary" />
+        {/* Muscle Recovery Suggestions */}
+        <div className="glass-card p-4 animate-slide-up" style={{ animationDelay: '0.25s' }}>
+          <h3 className="font-semibold mb-3 flex items-center gap-2 text-sm">
+            <TrendingUp className="w-4 h-4 text-primary" />
             Suggested for Today
           </h3>
           <div className="flex flex-wrap gap-2">
             {suggestedMuscles.map((muscle) => (
               <span 
                 key={muscle.value}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium ${muscle.color} text-white`}
+                className={`px-3.5 py-2 rounded-xl text-sm font-semibold ${muscle.color} text-white`}
               >
                 {muscle.label}
               </span>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground mt-3">
-            These muscle groups are recovered and ready for training!
+          <p className="text-xs text-muted-foreground mt-3">
+            These muscle groups are recovered and ready for training
           </p>
         </div>
 
         {/* Muscle Heatmap */}
         <MuscleHeatmap />
 
-        {/* Muscle Status Grid */}
-        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
-          <h3 className="font-semibold mb-3">Recovery Status</h3>
+        {/* Recovery Status Grid */}
+        <div className="glass-card p-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <h3 className="font-semibold mb-3 text-sm">Recovery Status</h3>
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {MUSCLE_GROUPS.map((muscle) => {
               const status = getRecoveryStatus(muscle.value);
               return (
                 <div 
                   key={muscle.value} 
-                  className="text-center p-1.5 sm:p-2 rounded-lg bg-secondary/50"
+                  className="text-center p-2.5 rounded-xl bg-secondary/50"
                 >
                   <div 
-                    className={`w-3 h-3 rounded-full mx-auto mb-1 ${
+                    className={`w-3 h-3 rounded-full mx-auto mb-1.5 ${
                       status.status === 'recovered' ? 'bg-accent' :
                       status.status === 'recovering' ? 'bg-warning' : 'bg-muted-foreground'
                     }`}
                   />
-                  <p className="text-[10px] sm:text-xs font-medium truncate">{muscle.label}</p>
+                  <p className="text-[11px] font-medium truncate">{muscle.label}</p>
                 </div>
               );
             })}
@@ -259,23 +262,30 @@ export default function Index() {
         <ProgressiveOverloadCard />
 
         {/* Quick Feature Links */}
+        <p className="section-header">Quick Access</p>
         <div className="grid grid-cols-3 gap-3">
           <Link to="/classes">
-            <div className="glass rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
-              <Calendar className="w-6 h-6 mx-auto mb-2 text-primary" />
-              <span className="text-xs font-medium">Book Class</span>
+            <div className="glass-card p-4 text-center active:scale-95 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center mx-auto mb-2">
+                <Calendar className="w-5 h-5 text-primary" />
+              </div>
+              <span className="text-xs font-semibold">Book Class</span>
             </div>
           </Link>
           <Link to="/duels">
-            <div className="glass rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
-              <Swords className="w-6 h-6 mx-auto mb-2 text-accent" />
-              <span className="text-xs font-medium">Duels</span>
+            <div className="glass-card p-4 text-center active:scale-95 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center mx-auto mb-2">
+                <Swords className="w-5 h-5 text-accent" />
+              </div>
+              <span className="text-xs font-semibold">Duels</span>
             </div>
           </Link>
           <Link to="/mobility">
-            <div className="glass rounded-xl p-4 text-center hover:bg-secondary/50 transition-colors">
-              <Activity className="w-6 h-6 mx-auto mb-2 text-warning" />
-              <span className="text-xs font-medium">Mobility</span>
+            <div className="glass-card p-4 text-center active:scale-95 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center mx-auto mb-2">
+                <Activity className="w-5 h-5 text-warning" />
+              </div>
+              <span className="text-xs font-semibold">Mobility</span>
             </div>
           </Link>
         </div>
