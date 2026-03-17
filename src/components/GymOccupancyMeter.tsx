@@ -13,41 +13,33 @@ export default function GymOccupancyMeter() {
   const config = statusConfig[status];
 
   return (
-    <div className="glass rounded-xl p-4 animate-slide-up">
-      <div className="flex items-center justify-between mb-3">
+    <div className="glass-card p-5 animate-slide-up">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-primary" />
-          <span className="font-semibold">Live Gym Occupancy</span>
+          <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+            <Users className="w-4 h-4 text-primary" />
+          </div>
+          <span className="font-bold text-sm">Live Gym Occupancy</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <Wifi className={`w-3.5 h-3.5 ${config.color} animate-pulse`} />
-          <span className={`text-xs font-medium ${config.color}`}>{config.label}</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary">
+          <Wifi className={`w-3 h-3 ${config.color} animate-pulse`} />
+          <span className={`text-[11px] font-semibold ${config.color}`}>{config.label}</span>
         </div>
       </div>
 
       {/* Capacity Bar */}
-      <div className="relative h-4 bg-secondary rounded-full overflow-hidden mb-2">
+      <div className="relative h-3 bg-secondary rounded-full overflow-hidden mb-3">
         <div
           className={`h-full ${config.bg} transition-all duration-1000 ease-out rounded-full`}
           style={{ width: `${occupancyPercent}%` }}
         />
-        {/* Markers */}
-        <div className="absolute inset-0 flex justify-between px-0.5 items-center pointer-events-none">
-          {[25, 50, 75].map((mark) => (
-            <div
-              key={mark}
-              className="w-px h-2 bg-foreground/20"
-              style={{ marginLeft: `${mark}%`, position: 'absolute', left: 0 }}
-            />
-          ))}
-        </div>
       </div>
 
       <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">
-          {isLoading ? '...' : <><span className="text-foreground font-bold text-lg">{checkedInCount}</span> / {capacity} members</>}
+          {isLoading ? '...' : <><span className="text-foreground font-extrabold text-xl">{checkedInCount}</span> <span className="text-xs">/ {capacity}</span></>}
         </span>
-        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${config.bg}/20 ${config.color}`}>
+        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${config.bg}/20 ${config.color}`}>
           {Math.round(occupancyPercent)}% full
         </span>
       </div>

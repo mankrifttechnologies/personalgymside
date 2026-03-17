@@ -45,11 +45,13 @@ export function TierCard() {
   const nextLevel = tier === 'bronze' ? 5 : tier === 'silver' ? 10 : tier === 'gold' ? 20 : null;
 
   return (
-    <div className="glass rounded-xl p-4 space-y-3">
+    <div className="glass-card p-5 space-y-3 animate-slide-up">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Shield className={`w-5 h-5 ${config.color}`} />
-          <h3 className="font-semibold">Your Rank</h3>
+          <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+            <Shield className={`w-4 h-4 ${config.color}`} />
+          </div>
+          <h3 className="font-bold text-sm">Your Rank</h3>
         </div>
         <TierBadge size="md" />
       </div>
@@ -62,7 +64,7 @@ export function TierCard() {
         </div>
       )}
       {tier === 'diamond' && (
-        <p className="text-sm text-cyan-400">🎉 You've reached the highest rank!</p>
+        <p className="text-sm text-cyan-400 font-semibold">🎉 You've reached the highest rank!</p>
       )}
     </div>
   );
