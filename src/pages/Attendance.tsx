@@ -64,7 +64,7 @@ export default function Attendance() {
   // Check if user has gym membership
   if (!gymMember) {
     return (
-      <div className="min-h-screen pb-24">
+      <div className="min-h-screen pb-24 safe-area-top">
         <header className="p-4 flex items-center gap-3">
           <Link to="/">
             <Button variant="ghost" size="icon">
@@ -115,7 +115,7 @@ export default function Attendance() {
   }) || [];
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       {/* Header */}
       <header className="p-4 flex items-center gap-3">
         <Link to="/">

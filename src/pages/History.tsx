@@ -57,7 +57,7 @@ export default function History() {
   const totalCaloriesBurned = monthWorkouts.reduce((acc, w) => acc + (w.calories_burned || 0), 0);
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       {/* Header */}
       <header className="p-4 flex items-center gap-3">
         <Link to="/progress">

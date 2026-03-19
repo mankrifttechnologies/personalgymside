@@ -45,7 +45,7 @@ export default function Classes() {
   };
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       <header className="p-4 flex items-center gap-3">
         <Link to="/">
           <Button variant="ghost" size="icon"><ArrowLeft className="w-5 h-5" /></Button>

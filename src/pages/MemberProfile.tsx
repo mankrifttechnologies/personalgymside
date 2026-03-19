@@ -43,7 +43,7 @@ export default function MemberProfile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen bg-background pb-20 safe-area-top">
         <div className="container max-w-md mx-auto p-4 space-y-4">
           <Skeleton className="h-10 w-24" />
           <Skeleton className="h-40 w-full rounded-xl" />
@@ -57,7 +57,7 @@ export default function MemberProfile() {
 
   if (error || !member) {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen bg-background pb-20 safe-area-top">
         <div className="container max-w-md mx-auto p-4">
           <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" /> Back
@@ -83,7 +83,7 @@ export default function MemberProfile() {
   ));
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 safe-area-top">
       <div className="container max-w-md mx-auto p-4 space-y-4">
         {/* Header */}
         <Button variant="ghost" onClick={() => navigate(-1)} className="mb-2">

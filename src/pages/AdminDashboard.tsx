@@ -48,7 +48,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       <header className="p-4 border-b">
         <div className="flex items-center gap-3">
           <Shield className="w-6 h-6 text-primary" />

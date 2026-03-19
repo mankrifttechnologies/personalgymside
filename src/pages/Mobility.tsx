@@ -108,7 +108,7 @@ export default function Mobility() {
   const filtered = filter === 'all' ? routines : routines.filter(r => r.routine_type === filter);
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       <header className="p-4 flex items-center gap-3">
         <Link to="/">
           <Button variant="ghost" size="icon"><ArrowLeft className="w-5 h-5" /></Button>
