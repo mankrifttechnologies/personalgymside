@@ -36,7 +36,7 @@ export default function Messages() {
   const totalUnread = conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 safe-area-top">
       {/* Header */}
       <div className="glass sticky top-0 z-40 border-b border-border">
         <div className="px-4 py-4">

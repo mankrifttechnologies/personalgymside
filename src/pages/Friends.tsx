@@ -129,7 +129,7 @@ export default function Friends() {
   const topPRs = records?.slice(0, 3) || [];
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       {/* Header */}
       <header className="p-4 flex items-center gap-3">
         <Link to="/profile">

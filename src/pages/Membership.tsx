@@ -112,7 +112,7 @@ export default function Membership() {
   }
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 safe-area-top">
       <header className="p-4 flex items-center gap-3">
         <Link to="/profile">
           <Button variant="ghost" size="icon">

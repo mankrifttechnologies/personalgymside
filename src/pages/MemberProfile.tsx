@@ -57,7 +57,7 @@ export default function MemberProfile() {
 
   if (error || !member) {
     return (
-      <div className="min-h-screen bg-background pb-20">
+      <div className="min-h-screen bg-background pb-20 safe-area-top">
         <div className="container max-w-md mx-auto p-4">
           <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" /> Back
