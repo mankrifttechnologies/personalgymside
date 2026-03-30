@@ -313,6 +313,9 @@ export default function Index() {
 
         {/* Achievements */}
         <BadgeDisplay />
+
+        {/* Referral Program */}
+        <ReferralCard />
       </main>
 
       <BottomNav />
