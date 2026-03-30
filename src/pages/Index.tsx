@@ -22,6 +22,8 @@ import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
 import ReferralCard from '@/components/ReferralCard';
+import CheckInStatsWidget from '@/components/CheckInStatsWidget';
+import StoriesBar from '@/components/StoriesBar';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays, CreditCard,
@@ -106,6 +108,12 @@ export default function Index() {
       <main className="px-4 space-y-4 pb-4">
         {/* Notification Banner */}
         <NotificationBanner />
+
+        {/* Stories */}
+        <StoriesBar />
+
+        {/* Check-in Stats */}
+        <CheckInStatsWidget />
 
         {/* Today's Scheduled Workout — Hero Card */}
         <div
