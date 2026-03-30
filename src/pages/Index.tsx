@@ -21,6 +21,7 @@ import GymOccupancyMeter from '@/components/GymOccupancyMeter';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
+import ReferralCard from '@/components/ReferralCard';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays, CreditCard,
