@@ -18,9 +18,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import BottomNav from '@/components/BottomNav';
 import AdminChallengeManager from '@/components/AdminChallengeManager';
 import AdminClassManager from '@/components/AdminClassManager';
+import AnalyticsTab from '@/components/admin/AnalyticsTab';
+import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
-  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar
+  Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
+  BarChart3, Megaphone
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
