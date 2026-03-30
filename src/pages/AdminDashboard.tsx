@@ -32,7 +32,7 @@ export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
   const { isTrainer, isLoading: trainerLoading } = useIsTrainer();
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState('analytics');
 
   if (authLoading || adminLoading || trainerLoading) {
     return (
