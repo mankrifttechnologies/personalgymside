@@ -66,29 +66,40 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-2'}`}>
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-6' : 'grid-cols-2'} h-auto`}>
             {isAdmin && (
-              <TabsTrigger value="users" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
-                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                <span className="truncate">Users</span>
+              <TabsTrigger value="analytics" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+                <BarChart3 className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Analytics</span>
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="classes" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
-                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                <span className="truncate">Classes</span>
+              <TabsTrigger value="users" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+                <Users className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Users</span>
               </TabsTrigger>
             )}
             {isAdmin && (
-              <TabsTrigger value="challenges" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
-                <Swords className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                <span className="hidden sm:inline truncate">Challenges</span>
-                <span className="sm:hidden truncate">Tasks</span>
+              <TabsTrigger value="announcements" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+                <Megaphone className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">News</span>
               </TabsTrigger>
             )}
-            <TabsTrigger value="support" className="gap-1 text-[11px] sm:text-xs px-1 sm:px-3">
-              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-              <span className="truncate">Support</span>
+            {isAdmin && (
+              <TabsTrigger value="classes" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+                <Calendar className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Classes</span>
+              </TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="challenges" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+                <Swords className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Tasks</span>
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="support" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+              <MessageSquare className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden sm:inline truncate">Support</span>
             </TabsTrigger>
           </TabsList>
 
