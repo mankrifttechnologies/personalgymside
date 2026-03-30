@@ -122,7 +122,7 @@ export default function FriendChat({ friendId, friendName }: FriendChatProps) {
                         <span className="text-[10px]">{format(msgDate, 'HH:mm')}</span>
                         {isMe && (
                           message.is_read
-                            ? <CheckCheck className="w-3.5 h-3.5 text-sky-300" />
+                            ? <CheckCheck className="w-3.5 h-3.5 text-accent" />
                             : <Check className="w-3.5 h-3.5" />
                         )}
                       </div>
