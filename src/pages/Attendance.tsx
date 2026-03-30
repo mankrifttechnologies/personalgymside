@@ -144,6 +144,9 @@ export default function Attendance() {
       </header>
 
       <main className="px-4 space-y-4">
+        {/* Digital Membership Card */}
+        <DigitalMembershipCard />
+
         {/* Quick Stats Row */}
         <div className="grid grid-cols-3 gap-3">
           <Card className="text-center p-3">

@@ -24,7 +24,7 @@ import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone
+  BarChart3, Megaphone, Wrench
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
