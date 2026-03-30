@@ -20,10 +20,11 @@ import AdminChallengeManager from '@/components/AdminChallengeManager';
 import AdminClassManager from '@/components/AdminClassManager';
 import AnalyticsTab from '@/components/admin/AnalyticsTab';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
+import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone
+  BarChart3, Megaphone, Wrench
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
@@ -66,7 +67,7 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-6' : 'grid-cols-2'} h-auto`}>
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-7' : 'grid-cols-2'} h-auto`}>
             {isAdmin && (
               <TabsTrigger value="analytics" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <BarChart3 className="w-3.5 h-3.5 shrink-0" />
@@ -95,6 +96,12 @@ export default function AdminDashboard() {
               <TabsTrigger value="challenges" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <Swords className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Tasks</span>
+              </TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="equipment" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
+                <Wrench className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Equip</span>
               </TabsTrigger>
             )}
             <TabsTrigger value="support" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
@@ -130,6 +137,12 @@ export default function AdminDashboard() {
           {isAdmin && (
             <TabsContent value="challenges" className="mt-4">
               <AdminChallengeManager />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
+            <TabsContent value="equipment" className="mt-4">
+              <EquipmentTracker />
             </TabsContent>
           )}
 

@@ -316,6 +316,48 @@ export type Database = {
           },
         ]
       }
+      equipment: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          last_maintenance_date: string | null
+          location: string | null
+          name: string
+          next_maintenance_date: string | null
+          notes: string | null
+          purchase_date: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          last_maintenance_date?: string | null
+          location?: string | null
+          name: string
+          next_maintenance_date?: string | null
+          notes?: string | null
+          purchase_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          last_maintenance_date?: string | null
+          location?: string | null
+          name?: string
+          next_maintenance_date?: string | null
+          notes?: string | null
+          purchase_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       exercise_library: {
         Row: {
           created_at: string
