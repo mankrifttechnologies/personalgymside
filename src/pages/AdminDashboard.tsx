@@ -20,6 +20,7 @@ import AdminChallengeManager from '@/components/AdminChallengeManager';
 import AdminClassManager from '@/components/AdminClassManager';
 import AnalyticsTab from '@/components/admin/AnalyticsTab';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
+import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
