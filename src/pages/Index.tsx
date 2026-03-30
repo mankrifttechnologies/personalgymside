@@ -18,6 +18,7 @@ import { TierCard } from '@/components/TierBadge';
 import MuscleHeatmap from '@/components/MuscleHeatmap';
 import OnboardingWizard from '@/components/OnboardingWizard';
 import GymOccupancyMeter from '@/components/GymOccupancyMeter';
+import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
 import { 
