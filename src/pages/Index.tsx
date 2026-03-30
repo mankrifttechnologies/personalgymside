@@ -267,29 +267,37 @@ export default function Index() {
 
         {/* Quick Feature Links */}
         <p className="section-header">Quick Access</p>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-4 gap-3">
           <Link to="/classes">
-            <div className="glass-card p-4 text-center active:scale-95 transition-transform">
+            <div className="glass-card p-3 text-center active:scale-95 transition-transform">
               <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center mx-auto mb-2">
                 <Calendar className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-xs font-semibold">Book Class</span>
+              <span className="text-[10px] font-semibold">Classes</span>
+            </div>
+          </Link>
+          <Link to="/pt-sessions">
+            <div className="glass-card p-3 text-center active:scale-95 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center mx-auto mb-2">
+                <UserCheck className="w-5 h-5 text-accent" />
+              </div>
+              <span className="text-[10px] font-semibold">PT Book</span>
             </div>
           </Link>
           <Link to="/duels">
-            <div className="glass-card p-4 text-center active:scale-95 transition-transform">
-              <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center mx-auto mb-2">
-                <Swords className="w-5 h-5 text-accent" />
+            <div className="glass-card p-3 text-center active:scale-95 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center mx-auto mb-2">
+                <Swords className="w-5 h-5 text-warning" />
               </div>
-              <span className="text-xs font-semibold">Duels</span>
+              <span className="text-[10px] font-semibold">Duels</span>
             </div>
           </Link>
           <Link to="/mobility">
-            <div className="glass-card p-4 text-center active:scale-95 transition-transform">
-              <div className="w-10 h-10 rounded-xl bg-warning/15 flex items-center justify-center mx-auto mb-2">
-                <Activity className="w-5 h-5 text-warning" />
+            <div className="glass-card p-3 text-center active:scale-95 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center mx-auto mb-2">
+                <Activity className="w-5 h-5 text-primary" />
               </div>
-              <span className="text-xs font-semibold">Mobility</span>
+              <span className="text-[10px] font-semibold">Mobility</span>
             </div>
           </Link>
         </div>
