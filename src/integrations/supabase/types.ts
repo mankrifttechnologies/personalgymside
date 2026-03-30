@@ -424,6 +424,42 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_announcements: {
+        Row: {
+          announcement_type: string
+          created_at: string
+          created_by: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          message: string
+          priority: string
+          title: string
+        }
+        Insert: {
+          announcement_type?: string
+          created_at?: string
+          created_by: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          message: string
+          priority?: string
+          title: string
+        }
+        Update: {
+          announcement_type?: string
+          created_at?: string
+          created_by?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          message?: string
+          priority?: string
+          title?: string
+        }
+        Relationships: []
+      }
       gym_classes: {
         Row: {
           capacity: number
@@ -1047,6 +1083,72 @@ export type Database = {
           user_id?: string
           weight_kg?: number | null
           xp?: number | null
+        }
+        Relationships: []
+      }
+      pt_sessions: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          member_id: string | null
+          notes: string | null
+          session_date: string
+          start_time: string
+          status: string
+          trainer_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          member_id?: string | null
+          notes?: string | null
+          session_date: string
+          start_time: string
+          status?: string
+          trainer_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          member_id?: string | null
+          notes?: string | null
+          session_date?: string
+          start_time?: string
+          status?: string
+          trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          referred_id: string
+          referrer_id: string
+          reward_points: number
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referred_id: string
+          referrer_id: string
+          reward_points?: number
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referred_id?: string
+          referrer_id?: string
+          reward_points?: number
+          status?: string
         }
         Relationships: []
       }
