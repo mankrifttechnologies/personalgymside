@@ -25,7 +25,7 @@ import ReferralCard from '@/components/ReferralCard';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays, CreditCard,
-  Swords, Calendar, ChevronRight
+  Swords, Calendar, ChevronRight, UserCheck
 } from 'lucide-react';
 
 export default function Index() {
