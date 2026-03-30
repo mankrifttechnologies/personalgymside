@@ -18,6 +18,7 @@ import { TierCard } from '@/components/TierBadge';
 import MuscleHeatmap from '@/components/MuscleHeatmap';
 import OnboardingWizard from '@/components/OnboardingWizard';
 import GymOccupancyMeter from '@/components/GymOccupancyMeter';
+import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
 import { 
@@ -98,6 +99,8 @@ export default function Index() {
           </Link>
         </div>
       </header>
+
+      <AnnouncementBanner />
 
       <main className="px-4 space-y-4 pb-4">
         {/* Notification Banner */}
