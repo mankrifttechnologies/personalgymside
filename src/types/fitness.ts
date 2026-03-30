@@ -26,6 +26,8 @@ export interface Profile {
   is_approved: boolean | null;
   onboarding_completed: boolean | null;
   tier: string | null;
+  friend_code: string | null;
+  is_public: boolean | null;
   created_at: string;
   updated_at: string;
 }
