@@ -109,6 +109,12 @@ export default function Index() {
         {/* Notification Banner */}
         <NotificationBanner />
 
+        {/* Stories */}
+        <StoriesBar />
+
+        {/* Check-in Stats */}
+        <CheckInStatsWidget />
+
         {/* Today's Scheduled Workout — Hero Card */}
         <div
           className="glass-card p-5 animate-slide-up overflow-hidden relative"
