@@ -22,6 +22,8 @@ import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
 import ReferralCard from '@/components/ReferralCard';
+import CheckInStatsWidget from '@/components/CheckInStatsWidget';
+import StoriesBar from '@/components/StoriesBar';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
   LogOut, User, Activity, Play, CalendarDays, CreditCard,
