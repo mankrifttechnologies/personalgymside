@@ -21,6 +21,7 @@ import { AttendanceCard } from '@/components/attendance/AttendanceCard';
 import { PointsWalletCard } from '@/components/attendance/PointsWalletCard';
 import { MemberBadgesCard } from '@/components/attendance/MemberBadgesCard';
 import { AttendanceHistory } from '@/components/attendance/AttendanceHistory';
+import DigitalMembershipCard from '@/components/DigitalMembershipCard';
 import {
   ChevronLeft, 
   Fingerprint, 
