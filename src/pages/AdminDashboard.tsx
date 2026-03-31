@@ -18,7 +18,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import BottomNav from '@/components/BottomNav';
 import AdminChallengeManager from '@/components/AdminChallengeManager';
 import AdminClassManager from '@/components/AdminClassManager';
-import AnalyticsTab from '@/components/admin/AnalyticsTab';
+import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import { 
