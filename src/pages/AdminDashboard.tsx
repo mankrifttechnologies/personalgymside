@@ -124,6 +124,12 @@ export default function AdminDashboard() {
           )}
 
           {isAdmin && (
+            <TabsContent value="revenue" className="mt-4">
+              <RevenueDashboard />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
             <TabsContent value="users" className="mt-4">
               <UsersManagement />
             </TabsContent>
