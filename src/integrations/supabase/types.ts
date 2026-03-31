@@ -214,6 +214,71 @@ export type Database = {
         }
         Relationships: []
       }
+      campaigns: {
+        Row: {
+          applicable_plan_id: string | null
+          campaign_type: string
+          created_at: string
+          created_by: string
+          current_redemptions: number
+          description: string | null
+          discount_amount: number | null
+          discount_percentage: number | null
+          end_date: string | null
+          id: string
+          is_active: boolean
+          max_redemptions: number | null
+          promo_code: string | null
+          start_date: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          applicable_plan_id?: string | null
+          campaign_type?: string
+          created_at?: string
+          created_by: string
+          current_redemptions?: number
+          description?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          max_redemptions?: number | null
+          promo_code?: string | null
+          start_date?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          applicable_plan_id?: string | null
+          campaign_type?: string
+          created_at?: string
+          created_by?: string
+          current_redemptions?: number
+          description?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          max_redemptions?: number | null
+          promo_code?: string | null
+          start_date?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_applicable_plan_id_fkey"
+            columns: ["applicable_plan_id"]
+            isOneToOne: false
+            referencedRelation: "membership_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       challenge_team_members: {
         Row: {
           contribution: number
@@ -663,6 +728,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      leads: {
+        Row: {
+          assigned_to: string | null
+          converted_at: string | null
+          created_at: string
+          created_by: string
+          email: string | null
+          follow_up_date: string | null
+          id: string
+          interested_plan_id: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          converted_at?: string | null
+          created_at?: string
+          created_by: string
+          email?: string | null
+          follow_up_date?: string | null
+          id?: string
+          interested_plan_id?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          converted_at?: string | null
+          created_at?: string
+          created_by?: string
+          email?: string | null
+          follow_up_date?: string | null
+          id?: string
+          interested_plan_id?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_interested_plan_id_fkey"
+            columns: ["interested_plan_id"]
+            isOneToOne: false
+            referencedRelation: "membership_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       meal_plans: {
         Row: {
