@@ -22,10 +22,11 @@ import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard'
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
+import GrowthDashboard from '@/components/admin/GrowthDashboard';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench, IndianRupee
+  BarChart3, Megaphone, Wrench, IndianRupee, Rocket
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
