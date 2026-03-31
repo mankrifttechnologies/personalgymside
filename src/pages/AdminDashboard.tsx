@@ -21,10 +21,11 @@ import AdminClassManager from '@/components/AdminClassManager';
 import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import EquipmentTracker from '@/components/admin/EquipmentTracker';
+import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench
+  BarChart3, Megaphone, Wrench, IndianRupee
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
