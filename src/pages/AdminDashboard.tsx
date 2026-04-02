@@ -70,7 +70,7 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-9' : 'grid-cols-2'} h-auto`}>
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-10' : 'grid-cols-2'} h-auto`}>
             {isAdmin && (
               <TabsTrigger value="analytics" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <BarChart3 className="w-3.5 h-3.5 shrink-0" />
