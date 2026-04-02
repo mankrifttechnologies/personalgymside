@@ -1,37 +1,35 @@
-## Analytics & Reports Module
+## Communication Hub Module
 
 ### Scope
-Build comprehensive analytics and reporting tools for gym owners — all data aggregated from existing tables (no new DB tables needed).
+Build in-app communication tools for gym owners to reach members via the existing messaging system (no external SMS/email needed initially).
 
 ### Components to Build
 
-1. **Enhanced Analytics Tab** (`src/components/admin/AnalyticsTab.tsx` - already exists, will enhance)
-   - Member demographics (age, gender, fitness goal distribution)
-   - Membership plan distribution pie chart
-   - New vs returning members trend
-   - Active vs inactive member ratio
+1. **Bulk Notification Sender** (`src/components/admin/BulkNotifier.tsx`)
+   - Send announcements to all members or filtered groups (by tier, status, activity)
+   - Uses existing `messages` table for delivery
+   - Preview before sending
 
-2. **Attendance Heatmap** (`src/components/admin/AttendanceHeatmap.tsx`)
-   - 7-day × 24-hour grid showing peak gym hours
-   - Color-coded intensity based on check-in frequency
-   - Mobile-friendly scrollable view
+2. **Automated Greetings** (`src/components/admin/AutoGreetings.tsx`)
+   - Birthday greeting cards (based on profile age/DOB)
+   - Membership anniversary messages
+   - Welcome message for newly approved members
 
-3. **Report Generator** (`src/components/admin/ReportGenerator.tsx`)
-   - One-tap downloadable CSV reports:
-     - Revenue summary (monthly breakdown)
-     - Member list with status & plan
-     - Attendance summary
-     - Expense report
-   - Date range picker for filtering
+3. **Payment Reminder System** (`src/components/admin/PaymentReminders.tsx`)
+   - View overdue/pending payments
+   - One-tap send reminder message to member
+   - Bulk remind all overdue members
 
-4. **Tax Summary Card** (`src/components/admin/TaxSummary.tsx`)
-   - Total revenue, total expenses, net profit
-   - GST estimation (configurable %)
-   - Monthly/quarterly/yearly toggle
-   - Export-ready format
+4. **Feedback Collector** (`src/components/admin/FeedbackCollector.tsx`)
+   - Create simple feedback/survey forms
+   - Members see feedback requests in their feed
+   - Admin views aggregated responses
 
-### Hook
-- `src/hooks/useAnalyticsReports.tsx` — aggregation queries for demographics, attendance patterns, and report data generation
+### Database Changes
+- New `feedback_forms` table (id, title, questions JSON, created_by, is_active)
+- New `feedback_responses` table (id, form_id, user_id, answers JSON)
 
 ### Integration
-- Replace current basic AnalyticsTab content or add as sub-tabs within the existing Analytics tab
+- Add "Comms" tab to Admin Dashboard
+- Wire bulk messaging through existing `messages` table
+- Payment reminders query `payment_records` for overdue entries
