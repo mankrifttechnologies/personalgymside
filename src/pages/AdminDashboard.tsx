@@ -179,6 +179,12 @@ export default function AdminDashboard() {
             </TabsContent>
           )}
 
+          {isAdmin && (
+            <TabsContent value="comms" className="mt-4">
+              <CommunicationsHub />
+            </TabsContent>
+          )}
+
           <TabsContent value="support" className="mt-4">
             <SupportTicketsManagement />
           </TabsContent>
