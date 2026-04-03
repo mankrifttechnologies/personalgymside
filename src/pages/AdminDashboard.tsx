@@ -126,6 +126,12 @@ export default function AdminDashboard() {
                 <span className="hidden sm:inline truncate">Comms</span>
               </TabsTrigger>
             )}
+            {isAdmin && (
+              <TabsTrigger value="insights" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
+                <Brain className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Insights</span>
+              </TabsTrigger>
+            )}
             <TabsTrigger value="support" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
               <MessageSquare className="w-3.5 h-3.5 shrink-0" />
               <span className="hidden sm:inline truncate">Support</span>
