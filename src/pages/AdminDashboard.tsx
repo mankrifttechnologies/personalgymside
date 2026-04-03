@@ -24,6 +24,7 @@ import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import GrowthDashboard from '@/components/admin/GrowthDashboard';
 import CommunicationsHub from '@/components/admin/CommunicationsHub';
+import AdvancedInsights from '@/components/admin/AdvancedInsights';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
