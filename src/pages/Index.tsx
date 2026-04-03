@@ -19,6 +19,7 @@ import MuscleHeatmap from '@/components/MuscleHeatmap';
 import OnboardingWizard from '@/components/OnboardingWizard';
 import GymOccupancyMeter from '@/components/GymOccupancyMeter';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
+import AnnouncementPopup from '@/components/AnnouncementPopup';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
 import ReferralCard from '@/components/ReferralCard';
