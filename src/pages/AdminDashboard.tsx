@@ -24,10 +24,11 @@ import EquipmentTracker from '@/components/admin/EquipmentTracker';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import GrowthDashboard from '@/components/admin/GrowthDashboard';
 import CommunicationsHub from '@/components/admin/CommunicationsHub';
+import AdvancedInsights from '@/components/admin/AdvancedInsights';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio
+  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
@@ -70,7 +71,7 @@ export default function AdminDashboard() {
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-10' : 'grid-cols-2'} h-auto`}>
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-11' : 'grid-cols-2'} h-auto`}>
             {isAdmin && (
               <TabsTrigger value="analytics" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <BarChart3 className="w-3.5 h-3.5 shrink-0" />
@@ -123,6 +124,12 @@ export default function AdminDashboard() {
               <TabsTrigger value="comms" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <Radio className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Comms</span>
+              </TabsTrigger>
+            )}
+            {isAdmin && (
+              <TabsTrigger value="insights" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
+                <Brain className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Insights</span>
               </TabsTrigger>
             )}
             <TabsTrigger value="support" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
@@ -182,6 +189,12 @@ export default function AdminDashboard() {
           {isAdmin && (
             <TabsContent value="comms" className="mt-4">
               <CommunicationsHub />
+            </TabsContent>
+          )}
+
+          {isAdmin && (
+            <TabsContent value="insights" className="mt-4">
+              <AdvancedInsights />
             </TabsContent>
           )}
 

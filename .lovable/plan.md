@@ -1,35 +1,28 @@
-## Communication Hub Module
-
-### Scope
-Build in-app communication tools for gym owners to reach members via the existing messaging system (no external SMS/email needed initially).
+## Advanced Analytics Module
 
 ### Components to Build
 
-1. **Bulk Notification Sender** (`src/components/admin/BulkNotifier.tsx`)
-   - Send announcements to all members or filtered groups (by tier, status, activity)
-   - Uses existing `messages` table for delivery
-   - Preview before sending
+1. **Churn Predictor** (`src/components/admin/ChurnPredictor.tsx`)
+   - Identify at-risk members based on attendance drop-off, payment gaps, and inactivity
+   - Risk scoring (high/medium/low) with visual indicators
+   - One-tap action to send re-engagement message
 
-2. **Automated Greetings** (`src/components/admin/AutoGreetings.tsx`)
-   - Birthday greeting cards (based on profile age/DOB)
-   - Membership anniversary messages
-   - Welcome message for newly approved members
+2. **Revenue Forecaster** (`src/components/admin/RevenueForecaster.tsx`)
+   - Project next 3 months revenue based on active memberships and renewal patterns
+   - Visual chart showing projected vs actual revenue
+   - Factor in upcoming plan expirations
 
-3. **Payment Reminder System** (`src/components/admin/PaymentReminders.tsx`)
-   - View overdue/pending payments
-   - One-tap send reminder message to member
-   - Bulk remind all overdue members
+3. **Member Segmentation** (`src/components/admin/MemberSegmentation.tsx`)
+   - Auto-segment members by activity level, tier, goal, and tenure
+   - Visual breakdown with pie/bar charts
+   - Drill-down into each segment
 
-4. **Feedback Collector** (`src/components/admin/FeedbackCollector.tsx`)
-   - Create simple feedback/survey forms
-   - Members see feedback requests in their feed
-   - Admin views aggregated responses
-
-### Database Changes
-- New `feedback_forms` table (id, title, questions JSON, created_by, is_active)
-- New `feedback_responses` table (id, form_id, user_id, answers JSON)
+4. **Custom Report Builder** (`src/components/admin/CustomReportBuilder.tsx`)
+   - Pick data source (members, payments, attendance, workouts)
+   - Select date range and filters
+   - Generate and download CSV reports
 
 ### Integration
-- Add "Comms" tab to Admin Dashboard
-- Wire bulk messaging through existing `messages` table
-- Payment reminders query `payment_records` for overdue entries
+- Add "Insights" tab to Admin Dashboard
+- All data queries use existing tables (no new tables needed)
+- Uses `recharts` for visualizations
