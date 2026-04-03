@@ -105,6 +105,7 @@ export default function Index() {
       </header>
 
       <AnnouncementBanner />
+      <AnnouncementPopup />
 
       <main className="px-4 space-y-4 pb-4">
         {/* Notification Banner */}
