@@ -28,7 +28,7 @@ import AdvancedInsights from '@/components/admin/AdvancedInsights';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio
+  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
