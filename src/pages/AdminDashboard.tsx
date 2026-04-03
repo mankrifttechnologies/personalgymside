@@ -192,6 +192,12 @@ export default function AdminDashboard() {
             </TabsContent>
           )}
 
+          {isAdmin && (
+            <TabsContent value="insights" className="mt-4">
+              <AdvancedInsights />
+            </TabsContent>
+          )}
+
           <TabsContent value="support" className="mt-4">
             <SupportTicketsManagement />
           </TabsContent>
