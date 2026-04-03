@@ -19,6 +19,7 @@ import MuscleHeatmap from '@/components/MuscleHeatmap';
 import OnboardingWizard from '@/components/OnboardingWizard';
 import GymOccupancyMeter from '@/components/GymOccupancyMeter';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
+import AnnouncementPopup from '@/components/AnnouncementPopup';
 import ProgressiveOverloadCard from '@/components/ProgressiveOverloadCard';
 import GroupChallengesSection from '@/components/GroupChallenges';
 import ReferralCard from '@/components/ReferralCard';
@@ -104,6 +105,7 @@ export default function Index() {
       </header>
 
       <AnnouncementBanner />
+      <AnnouncementPopup />
 
       <main className="px-4 space-y-4 pb-4">
         {/* Notification Banner */}
