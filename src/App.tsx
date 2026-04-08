@@ -37,6 +37,7 @@ import Duels from "./pages/Duels";
 import Mobility from "./pages/Mobility";
 import PTSessions from "./pages/PTSessions";
 import NotFound from "./pages/NotFound";
+import Demo from "./pages/Demo";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,7 @@ const App = () => {
                 <Route path="/duels" element={<Duels />} />
                 <Route path="/mobility" element={<Mobility />} />
                 <Route path="/pt-sessions" element={<PTSessions />} />
+                <Route path="/demo" element={<Demo />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
