@@ -9,6 +9,7 @@ import {
   PieChart, UserCheck, AlertTriangle, LineChart
 } from "lucide-react";
 import { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 /* ── helpers ── */
 const Slide = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
@@ -245,6 +246,7 @@ export function Slide9() {
 }
 
 export function Slide10() {
+  const navigate = useNavigate();
   const highlights = [
     "AI-Powered Workouts & Nutrition",
     "Complete Social Platform",
@@ -273,11 +275,14 @@ export function Slide10() {
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-4 px-10 py-5 rounded-2xl bg-gradient-to-r from-primary to-[hsl(var(--primary)/0.7)] text-primary-foreground">
+      <button
+        onClick={() => navigate("/auth")}
+        className="flex items-center gap-4 px-10 py-5 rounded-2xl bg-gradient-to-r from-primary to-[hsl(var(--primary)/0.7)] text-primary-foreground cursor-pointer hover:opacity-90 transition-opacity"
+      >
         <Zap className="w-8 h-8" />
         <span className="text-[28px] font-bold">Get Started Today</span>
         <ArrowRight className="w-8 h-8" />
-      </div>
+      </button>
     </Slide>
   );
 }
