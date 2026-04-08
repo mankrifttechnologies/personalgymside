@@ -9,6 +9,7 @@ import {
   PieChart, UserCheck, AlertTriangle, LineChart
 } from "lucide-react";
 import { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 /* ── helpers ── */
 const Slide = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
