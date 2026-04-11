@@ -97,6 +97,7 @@ const App = () => {
                 <Route path="/mobility" element={<Mobility />} />
                 <Route path="/pt-sessions" element={<PTSessions />} />
                 <Route path="/demo" element={<Demo />} />
+                <Route path="/register-owner" element={<RegisterOrganization />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
