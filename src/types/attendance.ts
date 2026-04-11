@@ -1,4 +1,4 @@
-export type AppRole = 'admin' | 'trainer' | 'member';
+export type AppRole = 'admin' | 'trainer' | 'member' | 'owner';
 export type AttendanceStatus = 'checked_in' | 'checked_out' | 'auto_checkout' | 'missed';
 export type MemberStatus = 'active' | 'inactive' | 'suspended' | 'banned';
 export type RedemptionStatus = 'pending' | 'approved' | 'rejected' | 'fulfilled';
@@ -13,6 +13,7 @@ export interface GymMember {
   joined_at: string;
   created_at: string;
   updated_at: string;
+  organization_id?: string | null;
 }
 
 export interface AttendanceLog {
@@ -142,4 +143,18 @@ export interface AttendanceStats {
   averageDuration: number;
   onTimePercentage: number;
   peakHour: number;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  logo_url: string | null;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  website: string | null;
+  owner_id: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
 }
