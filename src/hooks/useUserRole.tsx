@@ -36,7 +36,12 @@ export function useIsAdmin() {
 
 export function useIsTrainer() {
   const { data: role, isLoading } = useUserRole();
-  return { isTrainer: role === 'trainer' || role === 'admin', isLoading };
+  return { isTrainer: role === 'trainer' || role === 'admin' || role === 'owner', isLoading };
+}
+
+export function useIsOwner() {
+  const { data: role, isLoading } = useUserRole();
+  return { isOwner: role === 'owner', isLoading };
 }
 
 export function useAssignRole() {
