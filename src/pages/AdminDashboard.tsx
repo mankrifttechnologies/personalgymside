@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useIsAdmin, useIsTrainer, useAssignRole } from '@/hooks/useUserRole';
+import { useIsAdmin, useIsTrainer, useIsOwner, useAssignRole } from '@/hooks/useUserRole';
 import { useAdminUsers, useApproveUser, useCreateUser } from '@/hooks/useAdminUsers';
 import { useAllTickets, useRespondToTicket, useUpdateTicketStatus } from '@/hooks/useSupportTickets';
 import { Button } from '@/components/ui/button';
@@ -51,9 +51,11 @@ export default function AdminDashboard() {
     return <Navigate to="/auth" replace />;
   }
 
-  if (!isAdmin && !isTrainer) {
+  if (!isAdmin && !isTrainer && !isOwner) {
     return <Navigate to="/" replace />;
   }
+
+  const canManage = isAdmin || isOwner;
 
   return (
     <div className="min-h-screen pb-24 safe-area-top">
