@@ -208,6 +208,12 @@ export default function AdminDashboard() {
             </TabsContent>
           )}
 
+          {(isAdmin || isOwner) && (
+            <TabsContent value="bulk-upload" className="mt-4">
+              <BulkMemberUpload />
+            </TabsContent>
+          )}
+
           <TabsContent value="support" className="mt-4">
             <SupportTicketsManagement />
           </TabsContent>
