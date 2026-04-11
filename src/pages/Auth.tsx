@@ -15,6 +15,11 @@ export default function Auth() {
   const navigate = useNavigate();
 
   if (user) {
+    const pendingOwner = localStorage.getItem('pending_owner_registration');
+    if (pendingOwner) {
+      localStorage.removeItem('pending_owner_registration');
+      return <Navigate to="/register-org" replace />;
+    }
     return <Navigate to="/" replace />;
   }
 

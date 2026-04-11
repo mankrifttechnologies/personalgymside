@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
+import { useUserRole } from '@/hooks/useUserRole';
 import { useWorkouts, useMuscleRecovery } from '@/hooks/useWorkouts';
 import { useCalories } from '@/hooks/useCalories';
 import { useWeeklySchedule } from '@/hooks/useWeeklySchedule';
@@ -34,13 +35,14 @@ import {
 export default function Index() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { profile, updateProfile } = useProfile();
+  const { data: userRole, isLoading: roleLoading } = useUserRole();
   const { todayWorkout } = useWorkouts();
   const { getRecoveryStatus } = useMuscleRecovery();
   const { totals } = useCalories();
   const { getTodaySchedule } = useWeeklySchedule();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  if (authLoading) {
+  if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse-glow p-4 rounded-full bg-primary/20">
@@ -52,6 +54,11 @@ export default function Index() {
 
   if (!user) {
     return <Navigate to="/auth" replace />;
+  }
+
+  // Redirect owners/admins/trainers to admin dashboard
+  if (userRole === 'owner' || userRole === 'admin') {
+    return <Navigate to="/admin" replace />;
   }
 
   const needsOnboarding = profile && !(profile as any).onboarding_completed && !profile.fitness_goal;
