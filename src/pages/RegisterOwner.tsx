@@ -33,6 +33,9 @@ export default function RegisterOwner() {
       if (error) {
         toast({ title: 'Error', description: error.message, variant: 'destructive' });
       } else {
+        // Store flag so after email verification + login, user is directed to register org
+        localStorage.setItem('pending_owner_registration', 'true');
+        setStep('done');
         setStep('done');
         toast({ title: 'Account created!', description: 'Please check your email to verify your account, then proceed to register your gym.' });
       }
