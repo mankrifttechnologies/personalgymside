@@ -9,7 +9,7 @@ export interface AdminUser {
   name: string | null;
   avatar_url: string | null;
   is_approved: boolean;
-  role: 'admin' | 'trainer' | 'member' | null;
+  role: 'admin' | 'trainer' | 'member' | 'owner' | null;
   created_at: string;
 }
 
@@ -41,7 +41,7 @@ export function useAdminUsers() {
         name: profile.name,
         avatar_url: profile.avatar_url,
         is_approved: profile.is_approved || false,
-        role: roleMap.get(profile.user_id) as 'admin' | 'trainer' | 'member' | null || null,
+        role: roleMap.get(profile.user_id) as 'admin' | 'trainer' | 'member' | 'owner' | null || null,
         created_at: profile.created_at || '',
       }));
     },
@@ -85,7 +85,7 @@ export function useCreateUser() {
       email: string; 
       password: string; 
       name: string;
-      role: 'admin' | 'trainer' | 'member';
+      role: 'admin' | 'trainer' | 'member' | 'owner';
     }) => {
       // Create user via edge function (admin create user)
       const { data, error } = await supabase.functions.invoke('admin-create-user', {

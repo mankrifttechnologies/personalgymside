@@ -189,7 +189,7 @@ export default function BulkMemberUpload() {
       {result && (
         <div className="space-y-3">
           {result.success.length > 0 && (
-            <Card className="border-green-500/30">
+            <Card className="border-primary/30">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base flex items-center gap-2 text-green-600">
                   <CheckCircle2 className="w-5 h-5" />

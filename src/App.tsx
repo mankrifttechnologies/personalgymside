@@ -38,6 +38,7 @@ import Mobility from "./pages/Mobility";
 import PTSessions from "./pages/PTSessions";
 import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
+import RegisterOrganization from "./pages/RegisterOrganization";
 
 const queryClient = new QueryClient();
 
