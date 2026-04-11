@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useIsAdmin, useIsTrainer, useAssignRole } from '@/hooks/useUserRole';
+import { useIsAdmin, useIsTrainer, useIsOwner, useAssignRole } from '@/hooks/useUserRole';
 import { useAdminUsers, useApproveUser, useCreateUser } from '@/hooks/useAdminUsers';
 import { useAllTickets, useRespondToTicket, useUpdateTicketStatus } from '@/hooks/useSupportTickets';
 import { Button } from '@/components/ui/button';
@@ -25,10 +25,11 @@ import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import GrowthDashboard from '@/components/admin/GrowthDashboard';
 import CommunicationsHub from '@/components/admin/CommunicationsHub';
 import AdvancedInsights from '@/components/admin/AdvancedInsights';
+import BulkMemberUpload from '@/components/BulkMemberUpload';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain
+  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain, Upload
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
@@ -37,9 +38,10 @@ export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
   const { isTrainer, isLoading: trainerLoading } = useIsTrainer();
+  const { isOwner, isLoading: ownerLoading } = useIsOwner();
   const [activeTab, setActiveTab] = useState('analytics');
 
-  if (authLoading || adminLoading || trainerLoading) {
+  if (authLoading || adminLoading || trainerLoading || ownerLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -51,9 +53,11 @@ export default function AdminDashboard() {
     return <Navigate to="/auth" replace />;
   }
 
-  if (!isAdmin && !isTrainer) {
+  if (!isAdmin && !isTrainer && !isOwner) {
     return <Navigate to="/" replace />;
   }
+
+  const canManage = isAdmin || isOwner;
 
   return (
     <div className="min-h-screen pb-24 safe-area-top">
@@ -132,6 +136,12 @@ export default function AdminDashboard() {
                 <span className="hidden sm:inline truncate">Insights</span>
               </TabsTrigger>
             )}
+            {(isAdmin || isOwner) && (
+              <TabsTrigger value="bulk-upload" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
+                <Upload className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline truncate">Upload</span>
+              </TabsTrigger>
+            )}
             <TabsTrigger value="support" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
               <MessageSquare className="w-3.5 h-3.5 shrink-0" />
               <span className="hidden sm:inline truncate">Support</span>
@@ -195,6 +205,12 @@ export default function AdminDashboard() {
           {isAdmin && (
             <TabsContent value="insights" className="mt-4">
               <AdvancedInsights />
+            </TabsContent>
+          )}
+
+          {(isAdmin || isOwner) && (
+            <TabsContent value="bulk-upload" className="mt-4">
+              <BulkMemberUpload />
             </TabsContent>
           )}
 

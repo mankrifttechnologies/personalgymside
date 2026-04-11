@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Dumbbell, Mail, Lock, ArrowRight, Info } from 'lucide-react';
+import { Dumbbell, Mail, Lock, ArrowRight, Info, Building2 } from 'lucide-react';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -114,12 +114,28 @@ export default function Auth() {
             </Button>
           </form>
 
-          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-            <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-              <div className="text-sm text-muted-foreground">
-                <p className="font-medium text-foreground mb-1">Need an account?</p>
-                <p>Accounts are created by administrators only. Contact your gym admin or staff to get access.</p>
+          <div className="mt-6 space-y-3">
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <div className="text-sm text-muted-foreground">
+                  <p className="font-medium text-foreground mb-1">Need an account?</p>
+                  <p>Accounts are created by administrators only. Contact your gym admin or staff to get access.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+              <div className="flex items-start gap-3">
+                <Building2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="font-medium text-foreground mb-1">Own a gym?</p>
+                  <p className="text-muted-foreground mb-2">Register your gym on our platform and manage your members.</p>
+                  <Button variant="outline" size="sm" onClick={() => navigate('/register-owner')} className="gap-1">
+                    <Building2 className="w-3.5 h-3.5" />
+                    Register Your Gym
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
