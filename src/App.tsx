@@ -40,6 +40,7 @@ import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
+import MemberRoute from "./components/MemberRoute";
 
 const queryClient = new QueryClient();
 
@@ -71,32 +72,32 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/workout" element={<Workout />} />
-                <Route path="/nutrition" element={<Nutrition />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/progress" element={<Progress />} />
-                <Route path="/measurements" element={<Measurements />} />
-                <Route path="/records" element={<Records />} />
-                <Route path="/templates" element={<Templates />} />
-                <Route path="/reminders" element={<Reminders />} />
-                <Route path="/schedule" element={<Schedule />} />
-                <Route path="/friends" element={<Friends />} />
-                <Route path="/history" element={<History />} />
-                <Route path="/attendance" element={<Attendance />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/rewards" element={<Rewards />} />
-                <Route path="/member/:id" element={<MemberProfile />} />
-                <Route path="/follow/:userId/:tab" element={<FollowList />} />
-                <Route path="/explorer" element={<Explorer />} />
+                <Route path="/workout" element={<MemberRoute><Workout /></MemberRoute>} />
+                <Route path="/nutrition" element={<MemberRoute><Nutrition /></MemberRoute>} />
+                <Route path="/profile" element={<MemberRoute><Profile /></MemberRoute>} />
+                <Route path="/progress" element={<MemberRoute><Progress /></MemberRoute>} />
+                <Route path="/measurements" element={<MemberRoute><Measurements /></MemberRoute>} />
+                <Route path="/records" element={<MemberRoute><Records /></MemberRoute>} />
+                <Route path="/templates" element={<MemberRoute><Templates /></MemberRoute>} />
+                <Route path="/reminders" element={<MemberRoute><Reminders /></MemberRoute>} />
+                <Route path="/schedule" element={<MemberRoute><Schedule /></MemberRoute>} />
+                <Route path="/friends" element={<MemberRoute><Friends /></MemberRoute>} />
+                <Route path="/history" element={<MemberRoute><History /></MemberRoute>} />
+                <Route path="/attendance" element={<MemberRoute><Attendance /></MemberRoute>} />
+                <Route path="/leaderboard" element={<MemberRoute><Leaderboard /></MemberRoute>} />
+                <Route path="/rewards" element={<MemberRoute><Rewards /></MemberRoute>} />
+                <Route path="/member/:id" element={<MemberRoute><MemberProfile /></MemberRoute>} />
+                <Route path="/follow/:userId/:tab" element={<MemberRoute><FollowList /></MemberRoute>} />
+                <Route path="/explorer" element={<MemberRoute><Explorer /></MemberRoute>} />
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/support" element={<Support />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/membership" element={<Membership />} />
+                <Route path="/support" element={<MemberRoute><Support /></MemberRoute>} />
+                <Route path="/messages" element={<MemberRoute><Messages /></MemberRoute>} />
+                <Route path="/membership" element={<MemberRoute><Membership /></MemberRoute>} />
                 <Route path="/install" element={<Install />} />
-                <Route path="/classes" element={<Classes />} />
-                <Route path="/duels" element={<Duels />} />
-                <Route path="/mobility" element={<Mobility />} />
-                <Route path="/pt-sessions" element={<PTSessions />} />
+                <Route path="/classes" element={<MemberRoute><Classes /></MemberRoute>} />
+                <Route path="/duels" element={<MemberRoute><Duels /></MemberRoute>} />
+                <Route path="/mobility" element={<MemberRoute><Mobility /></MemberRoute>} />
+                <Route path="/pt-sessions" element={<MemberRoute><PTSessions /></MemberRoute>} />
                 <Route path="/demo" element={<Demo />} />
                 <Route path="/register-owner" element={<RegisterOwner />} />
                 <Route path="/register-org" element={<RegisterOrganization />} />
