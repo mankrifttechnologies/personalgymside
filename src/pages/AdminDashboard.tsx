@@ -25,10 +25,11 @@ import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import GrowthDashboard from '@/components/admin/GrowthDashboard';
 import CommunicationsHub from '@/components/admin/CommunicationsHub';
 import AdvancedInsights from '@/components/admin/AdvancedInsights';
+import BulkMemberUpload from '@/components/BulkMemberUpload';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain
+  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain, Upload
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
@@ -37,9 +38,10 @@ export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
   const { isTrainer, isLoading: trainerLoading } = useIsTrainer();
+  const { isOwner, isLoading: ownerLoading } = useIsOwner();
   const [activeTab, setActiveTab] = useState('analytics');
 
-  if (authLoading || adminLoading || trainerLoading) {
+  if (authLoading || adminLoading || trainerLoading || ownerLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
