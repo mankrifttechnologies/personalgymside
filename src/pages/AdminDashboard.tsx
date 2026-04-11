@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useIsAdmin, useIsTrainer, useIsOwner, useAssignRole } from '@/hooks/useUserRole';
 import { useAdminUsers, useApproveUser, useCreateUser } from '@/hooks/useAdminUsers';
@@ -29,13 +29,14 @@ import BulkMemberUpload from '@/components/BulkMemberUpload';
 import { 
   Users, Shield, MessageSquare, Plus, Check, X, 
   Loader2, ChevronLeft, Send, Clock, CheckCircle2, AlertCircle, Swords, Calendar,
-  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain, Upload
+  BarChart3, Megaphone, Wrench, IndianRupee, Rocket, Radio, Brain, Upload,
+  Building2, LogOut, Settings
 } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AppRole } from '@/types/attendance';
 
 export default function AdminDashboard() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const { isAdmin, isLoading: adminLoading } = useIsAdmin();
   const { isTrainer, isLoading: trainerLoading } = useIsTrainer();
   const { isOwner, isLoading: ownerLoading } = useIsOwner();
@@ -59,84 +60,100 @@ export default function AdminDashboard() {
 
   const canManage = isAdmin || isOwner;
 
+  // Owner gets full management access (same tabs as admin)
+  const showAllTabs = isAdmin || isOwner;
+
   return (
     <div className="min-h-screen pb-24 safe-area-top">
       <header className="p-4 border-b">
-        <div className="flex items-center gap-3">
-          <Shield className="w-6 h-6 text-primary" />
-          <div>
-            <h1 className="text-xl font-bold">Admin Dashboard</h1>
-            <p className="text-sm text-muted-foreground">
-              {isAdmin ? 'Full Access' : 'Staff Access'}
-            </p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {isOwner ? (
+              <Building2 className="w-6 h-6 text-primary" />
+            ) : (
+              <Shield className="w-6 h-6 text-primary" />
+            )}
+            <div>
+              <h1 className="text-xl font-bold">
+                {isOwner ? 'Owner Dashboard' : 'Admin Dashboard'}
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                {isOwner ? 'Gym Management' : isAdmin ? 'Full Access' : 'Staff Access'}
+              </p>
+            </div>
           </div>
+          {isOwner && (
+            <Button variant="ghost" size="icon" onClick={() => signOut()}>
+              <LogOut className="w-5 h-5" />
+            </Button>
+          )}
         </div>
       </header>
 
       <main className="p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-11' : 'grid-cols-2'} h-auto`}>
-            {isAdmin && (
+          <TabsList className={`grid w-full ${showAllTabs ? 'grid-cols-11' : 'grid-cols-2'} h-auto`}>
+            {showAllTabs && (
               <TabsTrigger value="analytics" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <BarChart3 className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Stats</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="revenue" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <IndianRupee className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Revenue</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="growth" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <Rocket className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Growth</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="users" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <Users className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Users</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="announcements" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <Megaphone className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">News</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="classes" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <Calendar className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Classes</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="challenges" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <Swords className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Tasks</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="equipment" className="gap-1 text-[10px] sm:text-xs px-1 sm:px-2 py-2">
                 <Wrench className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Equip</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="comms" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <Radio className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Comms</span>
               </TabsTrigger>
             )}
-            {isAdmin && (
+            {showAllTabs && (
               <TabsTrigger value="insights" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <Brain className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Insights</span>
               </TabsTrigger>
             )}
-            {(isAdmin || isOwner) && (
+            {showAllTabs && (
               <TabsTrigger value="bulk-upload" className="gap-1 text-[10px] sm:text-xs px-0.5 sm:px-2 py-2">
                 <Upload className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden sm:inline truncate">Upload</span>
@@ -148,67 +165,67 @@ export default function AdminDashboard() {
             </TabsTrigger>
           </TabsList>
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="analytics" className="mt-4">
               <OwnerAnalyticsDashboard />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="revenue" className="mt-4">
               <RevenueDashboard />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="growth" className="mt-4">
               <GrowthDashboard />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="users" className="mt-4">
               <UsersManagement />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="announcements" className="mt-4">
               <AnnouncementsTab />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="classes" className="mt-4">
               <AdminClassManager />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="challenges" className="mt-4">
               <AdminChallengeManager />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="equipment" className="mt-4">
               <EquipmentTracker />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="comms" className="mt-4">
               <CommunicationsHub />
             </TabsContent>
           )}
 
-          {isAdmin && (
+          {showAllTabs && (
             <TabsContent value="insights" className="mt-4">
               <AdvancedInsights />
             </TabsContent>
           )}
 
-          {(isAdmin || isOwner) && (
+          {showAllTabs && (
             <TabsContent value="bulk-upload" className="mt-4">
               <BulkMemberUpload />
             </TabsContent>
@@ -220,7 +237,8 @@ export default function AdminDashboard() {
         </Tabs>
       </main>
 
-      <BottomNav />
+      {/* Owners get NO bottom nav - they stay in admin dashboard only */}
+      {!isOwner && <BottomNav />}
     </div>
   );
 }
