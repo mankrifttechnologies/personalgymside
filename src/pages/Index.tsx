@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
+import { useUserRole } from '@/hooks/useUserRole';
 import { useWorkouts, useMuscleRecovery } from '@/hooks/useWorkouts';
 import { useCalories } from '@/hooks/useCalories';
 import { useWeeklySchedule } from '@/hooks/useWeeklySchedule';
