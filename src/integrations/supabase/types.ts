@@ -764,6 +764,7 @@ export type Database = {
           id: string
           joined_at: string
           member_code: string
+          organization_id: string | null
           status: Database["public"]["Enums"]["member_status"]
           trainer_id: string | null
           updated_at: string
@@ -775,6 +776,7 @@ export type Database = {
           id?: string
           joined_at?: string
           member_code: string
+          organization_id?: string | null
           status?: Database["public"]["Enums"]["member_status"]
           trainer_id?: string | null
           updated_at?: string
@@ -786,12 +788,21 @@ export type Database = {
           id?: string
           joined_at?: string
           member_code?: string
+          organization_id?: string | null
           status?: Database["public"]["Enums"]["member_status"]
           trainer_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "gym_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       gym_stories: {
         Row: {
@@ -1191,6 +1202,89 @@ export type Database = {
           muscle_group?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      organization_members: {
+        Row: {
+          created_at: string
+          id: string
+          joined_at: string
+          organization_id: string
+          role: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          joined_at?: string
+          organization_id: string
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          joined_at?: string
+          organization_id?: string
+          role?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organizations: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          owner_id: string
+          phone: string | null
+          status: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          owner_id: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          owner_id?: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
@@ -2191,7 +2285,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "trainer" | "member"
+      app_role: "admin" | "trainer" | "member" | "owner"
       attendance_status:
         | "checked_in"
         | "checked_out"
@@ -2330,7 +2424,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "trainer", "member"],
+      app_role: ["admin", "trainer", "member", "owner"],
       attendance_status: [
         "checked_in",
         "checked_out",
