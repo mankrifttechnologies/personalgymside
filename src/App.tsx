@@ -40,6 +40,7 @@ import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
+import MemberRoute from "./components/MemberRoute";
 
 const queryClient = new QueryClient();
 
