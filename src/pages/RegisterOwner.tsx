@@ -5,10 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Dumbbell, Mail, Lock, ArrowRight, Info, Building2, User } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Building2, User } from 'lucide-react';
 
 export default function RegisterOwner() {
-  const [step, setStep] = useState<'signup' | 'done'>('signup');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -33,11 +32,10 @@ export default function RegisterOwner() {
       if (error) {
         toast({ title: 'Error', description: error.message, variant: 'destructive' });
       } else {
-        // Store flag so after email verification + login, user is directed to register org
+        // Auto-confirm is enabled, user is logged in immediately
         localStorage.setItem('pending_owner_registration', 'true');
-        setStep('done');
-        setStep('done');
-        toast({ title: 'Account created!', description: 'Please check your email to verify your account, then proceed to register your gym.' });
+        toast({ title: 'Account created!', description: 'Redirecting to register your gym...' });
+        navigate('/register-org');
       }
     } catch (err) {
       toast({ title: 'Error', description: 'Something went wrong', variant: 'destructive' });
@@ -45,28 +43,6 @@ export default function RegisterOwner() {
       setLoading(false);
     }
   };
-
-  if (step === 'done') {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-        </div>
-        <div className="relative w-full max-w-md glass rounded-2xl p-8 text-center space-y-4">
-          <div className="p-3 rounded-xl bg-primary/20 w-fit mx-auto">
-            <Mail className="w-8 h-8 text-primary" />
-          </div>
-          <h2 className="text-xl font-bold">Check Your Email</h2>
-          <p className="text-muted-foreground">We've sent a verification link to <span className="font-medium text-foreground">{email}</span>. Please verify your email, then sign in to register your gym.</p>
-          <Button variant="outline" onClick={() => navigate('/auth')} className="gap-2">
-            <ArrowRight className="w-4 h-4" />
-            Go to Sign In
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
