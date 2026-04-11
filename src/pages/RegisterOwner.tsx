@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Dumbbell, Mail, Lock, ArrowRight, Info, Building2, User } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Building2, User } from 'lucide-react';
 
 export default function RegisterOwner() {
   const [email, setEmail] = useState('');
