@@ -77,14 +77,25 @@ Deno.serve(async (req) => {
       .from('user_roles')
       .insert({ user_id: newUser.user.id, role });
 
-    // If role is trainer/admin, create gym_member record too
-    if (role === 'trainer' || role === 'admin') {
-      const memberCode = 'STAFF' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    // Create gym_member record
+    const memberCode = (role === 'trainer' ? 'STAFF' : 'FIT') + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    await adminClient
+      .from('gym_members')
+      .insert({
+        user_id: newUser.user.id,
+        member_code: memberCode,
+        status: 'active',
+        organization_id: organizationId || null
+      });
+
+    // Add to organization_members if organizationId provided
+    if (organizationId) {
       await adminClient
-        .from('gym_members')
+        .from('organization_members')
         .insert({
           user_id: newUser.user.id,
-          member_code: memberCode,
+          organization_id: organizationId,
+          role: role || 'member',
           status: 'active'
         });
     }
