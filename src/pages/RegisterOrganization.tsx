@@ -70,7 +70,7 @@ export default function RegisterOrganization() {
 
       if (memberError) throw memberError;
 
-      // Assign 'owner' role in user_roles
+      // Assign 'owner' role in user_roles (best-effort) so owner routing works everywhere
       const { data: existingRole } = await supabase
         .from('user_roles')
         .select('id')
