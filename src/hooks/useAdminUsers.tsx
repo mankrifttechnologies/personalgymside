@@ -99,6 +99,7 @@ export function useCreateUser() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      queryClient.invalidateQueries({ queryKey: ['org-members'] });
       toast.success('User created successfully');
     },
     onError: (error) => {
