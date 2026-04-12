@@ -17,6 +17,10 @@ export default function MemberRoute({ children }: { children: React.ReactNode })
   }
 
   if (role === 'owner') {
+    return <Navigate to="/owner" replace />;
+  }
+
+  if (role === 'admin') {
     return <Navigate to="/admin" replace />;
   }
 
