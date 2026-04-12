@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { useIsAdmin } from './useUserRole';
+import { useUserRole } from './useUserRole';
 
 export interface AdminUser {
   user_id: string;
@@ -14,7 +14,7 @@ export interface AdminUser {
 }
 
 export function useAdminUsers() {
-  const { isAdmin } = useIsAdmin();
+  const { data: role } = useUserRole();
 
   return useQuery({
     queryKey: ['admin-users'],
@@ -45,7 +45,7 @@ export function useAdminUsers() {
         created_at: profile.created_at || '',
       }));
     },
-    enabled: isAdmin
+    enabled: role === 'admin' || role === 'owner'
   });
 }
 

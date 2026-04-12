@@ -12,18 +12,49 @@ export function useUserRole() {
     queryFn: async (): Promise<AppRole | null> => {
       if (!user?.id) return null;
 
-      const { data, error } = await supabase
+      const { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error) {
-        console.error('Error fetching user role:', error);
-        return 'member'; // Default to member
+      if (roleData?.role) {
+        return roleData.role as AppRole;
+      }
+
+      if (roleError) {
+        console.error('Error fetching user role:', roleError);
+      }
+
+      const { data: membershipData, error: membershipError } = await supabase
+        .from('organization_members')
+        .select('role')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (membershipError) {
+        console.error('Error fetching organization membership role:', membershipError);
+      }
+
+      if (membershipData?.role === 'owner' || membershipData?.role === 'trainer' || membershipData?.role === 'member') {
+        return membershipData.role as AppRole;
+      }
+
+      const { data: ownedOrg, error: ownedOrgError } = await supabase
+        .from('organizations')
+        .select('id')
+        .eq('owner_id', user.id)
+        .maybeSingle();
+
+      if (ownedOrgError) {
+        console.error('Error checking owned organization:', ownedOrgError);
+      }
+
+      if (ownedOrg?.id) {
+        return 'owner';
       }
       
-      return (data?.role as AppRole) || 'member';
+      return 'member';
     },
     enabled: !!user?.id
   });

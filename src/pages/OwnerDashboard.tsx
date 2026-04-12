@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useIsOwner, useIsAdmin } from '@/hooks/useUserRole';
+import { useUserRole } from '@/hooks/useUserRole';
 import { useAdminUsers, useApproveUser, useCreateUser } from '@/hooks/useAdminUsers';
 import { useAssignRole } from '@/hooks/useUserRole';
 import { supabase } from '@/integrations/supabase/client';
@@ -27,8 +27,7 @@ import type { AppRole } from '@/types/attendance';
 
 export default function OwnerDashboard() {
   const { user, loading: authLoading, signOut } = useAuth();
-  const { isOwner, isLoading: ownerLoading } = useIsOwner();
-  const { isAdmin, isLoading: adminLoading } = useIsAdmin();
+  const { data: role, isLoading: roleLoading } = useUserRole();
   const [activeTab, setActiveTab] = useState('overview');
 
   const { data: organization } = useQuery({
@@ -44,7 +43,7 @@ export default function OwnerDashboard() {
     enabled: !!user?.id,
   });
 
-  if (authLoading || ownerLoading || adminLoading) {
+  if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -53,7 +52,7 @@ export default function OwnerDashboard() {
   }
 
   if (!user) return <Navigate to="/auth" replace />;
-  if (!isOwner && !isAdmin) return <Navigate to="/" replace />;
+  if (role !== 'owner' && role !== 'admin') return <Navigate to="/" replace />;
 
   return (
     <div className="min-h-screen safe-area-top bg-background">
