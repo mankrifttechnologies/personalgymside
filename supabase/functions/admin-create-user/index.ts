@@ -31,19 +31,19 @@ Deno.serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    // Check if user is admin
+    // Check if user is admin or owner
     const { data: roleData } = await userClient
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
       .single();
 
-    if (roleData?.role !== 'admin') {
-      throw new Error('Only admins can create users');
+    if (roleData?.role !== 'admin' && roleData?.role !== 'owner') {
+      throw new Error('Only admins and owners can create users');
     }
 
     // Parse request body
-    const { email, password, name, role } = await req.json();
+    const { email, password, name, role, organizationId } = await req.json();
 
     if (!email || !password || !name || !role) {
       throw new Error('Email, password, name, and role are required');
@@ -77,14 +77,25 @@ Deno.serve(async (req) => {
       .from('user_roles')
       .insert({ user_id: newUser.user.id, role });
 
-    // If role is trainer/admin, create gym_member record too
-    if (role === 'trainer' || role === 'admin') {
-      const memberCode = 'STAFF' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    // Create gym_member record
+    const memberCode = (role === 'trainer' ? 'STAFF' : 'FIT') + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    await adminClient
+      .from('gym_members')
+      .insert({
+        user_id: newUser.user.id,
+        member_code: memberCode,
+        status: 'active',
+        organization_id: organizationId || null
+      });
+
+    // Add to organization_members if organizationId provided
+    if (organizationId) {
       await adminClient
-        .from('gym_members')
+        .from('organization_members')
         .insert({
           user_id: newUser.user.id,
-          member_code: memberCode,
+          organization_id: organizationId,
+          role: role || 'member',
           status: 'active'
         });
     }
