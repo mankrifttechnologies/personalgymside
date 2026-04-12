@@ -56,7 +56,13 @@ export default function Index() {
     return <Navigate to="/auth" replace />;
   }
 
-  // Redirect owners/admins/trainers to admin dashboard
+  // If owner registration is pending, redirect to org setup
+  const pendingOwner = localStorage.getItem('pending_owner_registration');
+  if (pendingOwner) {
+    return <Navigate to="/register-org" replace />;
+  }
+
+  // Redirect owners/admins to admin dashboard
   if (userRole === 'owner' || userRole === 'admin') {
     return <Navigate to="/admin" replace />;
   }
