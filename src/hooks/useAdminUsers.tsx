@@ -80,16 +80,18 @@ export function useCreateUser() {
       email, 
       password, 
       name, 
-      role 
+      role,
+      organizationId
     }: { 
       email: string; 
       password: string; 
       name: string;
       role: 'admin' | 'trainer' | 'member' | 'owner';
+      organizationId?: string;
     }) => {
       // Create user via edge function (admin create user)
       const { data, error } = await supabase.functions.invoke('admin-create-user', {
-        body: { email, password, name, role }
+        body: { email, password, name, role, organizationId }
       });
 
       if (error) throw error;
