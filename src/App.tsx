@@ -28,6 +28,7 @@ import MemberProfile from "./pages/MemberProfile";
 import FollowList from "./pages/FollowList";
 import Explorer from "./pages/Explorer";
 import AdminDashboard from "./pages/AdminDashboard";
+import OwnerDashboard from "./pages/OwnerDashboard";
 import Support from "./pages/Support";
 import Messages from "./pages/Messages";
 import Membership from "./pages/Membership";
