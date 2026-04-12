@@ -31,19 +31,19 @@ Deno.serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    // Check if user is admin
+    // Check if user is admin or owner
     const { data: roleData } = await userClient
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
       .single();
 
-    if (roleData?.role !== 'admin') {
-      throw new Error('Only admins can create users');
+    if (roleData?.role !== 'admin' && roleData?.role !== 'owner') {
+      throw new Error('Only admins and owners can create users');
     }
 
     // Parse request body
-    const { email, password, name, role } = await req.json();
+    const { email, password, name, role, organizationId } = await req.json();
 
     if (!email || !password || !name || !role) {
       throw new Error('Email, password, name, and role are required');
