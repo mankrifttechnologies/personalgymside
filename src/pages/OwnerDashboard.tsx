@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { useIsOwner, useIsAdmin } from '@/hooks/useUserRole';
+import { useUserRole } from '@/hooks/useUserRole';
 import { useAdminUsers, useApproveUser, useCreateUser } from '@/hooks/useAdminUsers';
 import { useAssignRole } from '@/hooks/useUserRole';
 import { supabase } from '@/integrations/supabase/client';
