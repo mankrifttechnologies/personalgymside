@@ -91,6 +91,7 @@ const App = () => {
                 <Route path="/follow/:userId/:tab" element={<MemberRoute><FollowList /></MemberRoute>} />
                 <Route path="/explorer" element={<MemberRoute><Explorer /></MemberRoute>} />
                 <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/owner" element={<OwnerDashboard />} />
                 <Route path="/support" element={<MemberRoute><Support /></MemberRoute>} />
                 <Route path="/messages" element={<MemberRoute><Messages /></MemberRoute>} />
                 <Route path="/membership" element={<MemberRoute><Membership /></MemberRoute>} />
