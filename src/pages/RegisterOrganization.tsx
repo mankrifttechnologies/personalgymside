@@ -83,8 +83,9 @@ export default function RegisterOrganization() {
         await supabase.from('user_roles').insert({ user_id: user.id, role: 'owner' });
       }
 
+      localStorage.removeItem('pending_owner_registration');
       toast({ title: 'Success!', description: 'Your organization has been registered.' });
-      navigate('/admin');
+      navigate('/owner');
     } catch (err: any) {
       toast({ title: 'Error', description: err.message || 'Failed to register organization', variant: 'destructive' });
     } finally {

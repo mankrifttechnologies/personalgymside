@@ -62,8 +62,11 @@ export default function Index() {
     return <Navigate to="/register-org" replace />;
   }
 
-  // Redirect owners/admins to admin dashboard
-  if (userRole === 'owner' || userRole === 'admin') {
+  // Redirect owners to owner dashboard, admins to admin dashboard
+  if (userRole === 'owner') {
+    return <Navigate to="/owner" replace />;
+  }
+  if (userRole === 'admin') {
     return <Navigate to="/admin" replace />;
   }
 
