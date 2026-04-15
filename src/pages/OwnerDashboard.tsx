@@ -79,7 +79,7 @@ export default function OwnerDashboard() {
 
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7 h-auto gap-1">
+          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto gap-1">
             <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5">
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
