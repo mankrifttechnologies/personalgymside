@@ -186,6 +186,21 @@ function MembersTab({ organizationId }: { organizationId: string | undefined }) 
   const [createOpen, setCreateOpen] = useState(false);
   const [newUser, setNewUser] = useState({ email: '', password: '', name: '', role: 'member' as AppRole });
 
+  // Map user_id -> gym_member_id for payment history
+  const { data: gymMemberMap } = useQuery({
+    queryKey: ['gym-member-map-members', organizationId],
+    queryFn: async () => {
+      if (!members?.length) return new Map<string, string>();
+      const userIds = members.map(m => m.user_id);
+      const { data } = await supabase
+        .from('gym_members')
+        .select('id, user_id')
+        .in('user_id', userIds);
+      return new Map(data?.map(d => [d.user_id, d.id]) || []);
+    },
+    enabled: !!members?.length,
+  });
+
   const handleCreate = async () => {
     await createUser.mutateAsync({ ...newUser, organizationId });
     setCreateOpen(false);
@@ -258,6 +273,12 @@ function MembersTab({ organizationId }: { organizationId: string | undefined }) 
                 </div>
               </div>
               <div className="flex gap-1.5">
+                {gymMemberMap?.get(member.user_id) && (
+                  <MemberPaymentHistory
+                    gymMemberId={gymMemberMap.get(member.user_id)!}
+                    memberName={member.name || 'Member'}
+                  />
+                )}
                 <Button
                   size="sm"
                   variant="destructive"
