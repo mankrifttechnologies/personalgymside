@@ -96,6 +96,10 @@ export default function OwnerDashboard() {
               <Megaphone className="w-4 h-4" />
               <span className="hidden sm:inline">News</span>
             </TabsTrigger>
+            <TabsTrigger value="payments" className="gap-1.5 text-xs py-2.5">
+              <CreditCard className="w-4 h-4" />
+              <span className="hidden sm:inline">Payments</span>
+            </TabsTrigger>
             <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5">
               <Upload className="w-4 h-4" />
               <span className="hidden sm:inline">Bulk Add</span>
@@ -124,6 +128,10 @@ export default function OwnerDashboard() {
 
           <TabsContent value="announcements" className="mt-4">
             <OrgAnnouncements />
+          </TabsContent>
+
+          <TabsContent value="payments" className="mt-4">
+            <MemberPaymentRecording organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="bulk-upload" className="mt-4">
