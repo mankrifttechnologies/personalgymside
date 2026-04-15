@@ -46,7 +46,7 @@ export default function OwnerDashboard() {
         .select('*')
         .eq('owner_id', user!.id)
         .maybeSingle();
-      return data;
+      return data as any;
     },
     enabled: !!user?.id,
   });
@@ -75,9 +75,16 @@ export default function OwnerDashboard() {
               <p className="text-xs text-muted-foreground">Owner Dashboard</p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={() => signOut()}>
-            <LogOut className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/qr-checkin">
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                <ScanLine className="w-4 h-4" /> Check-In
+              </Button>
+            </Link>
+            <Button variant="ghost" size="icon" onClick={() => signOut()}>
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
