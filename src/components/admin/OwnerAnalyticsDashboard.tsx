@@ -95,7 +95,7 @@ export default function OwnerAnalyticsDashboard({ organizationId }: { organizati
 
   const handleSendAllAlerts = async () => {
     if (!user) return;
-    const inactive = analytics.inactiveMembers;
+    const inactive: any[] = [];
     if (inactive.length === 0) return;
     setSendingAlerts(new Set(inactive.map(m => m.user_id)));
     try {
@@ -284,75 +284,8 @@ export default function OwnerAnalyticsDashboard({ organizationId }: { organizati
             </Card>
           )}
 
-          {/* Monthly Check-ins */}
-          {analytics.monthlyAttendance.length > 0 && (
-            <Card className="glass-card">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Monthly Check-ins</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-40">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={analytics.monthlyAttendance}>
-                      <XAxis dataKey="name" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
-                      <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
-                      <Tooltip contentStyle={{ background: 'hsl(var(--card))', border: 'none', borderRadius: 8, fontSize: 12 }} />
-                      <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
-          {/* Inactive Members */}
-          {analytics.inactiveMembers.length > 0 && (
-            <Card className="glass-card border-orange-500/30">
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-orange-400" />
-                    Inactive Members (7+ days)
-                  </CardTitle>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-[10px] h-7 gap-1 border-orange-400/30 text-orange-400 hover:bg-orange-400/10"
-                    onClick={handleSendAllAlerts}
-                    disabled={sendingAlerts.size > 0}
-                  >
-                    {sendingAlerts.size > 0 ? <Loader2 className="w-3 h-3 animate-spin" /> : <Bell className="w-3 h-3" />}
-                    Alert All
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {analytics.inactiveMembers.slice(0, 15).map((member) => (
-                  <div key={member.user_id} className="flex items-center gap-2 p-2 rounded-lg bg-muted/30">
-                    <Avatar className="w-7 h-7">
-                      <AvatarImage src={member.avatar_url || ''} />
-                      <AvatarFallback className="text-xs">{member.name?.[0]}</AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm truncate flex-1">{member.name}</span>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0 text-primary hover:bg-primary/10"
-                      onClick={() => handleSendAlert(member.user_id, member.name)}
-                      disabled={sendingAlerts.has(member.user_id)}
-                    >
-                      {sendingAlerts.has(member.user_id) ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                    </Button>
-                    <Badge variant="outline" className="text-[10px] text-orange-400 border-orange-400/30">Inactive</Badge>
-                  </div>
-                ))}
-                {analytics.inactiveMembers.length > 15 && (
-                  <p className="text-xs text-muted-foreground text-center">+{analytics.inactiveMembers.length - 15} more</p>
-                )}
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
+
 
         <TabsContent value="demographics" className="mt-4">
           <MemberDemographics />
