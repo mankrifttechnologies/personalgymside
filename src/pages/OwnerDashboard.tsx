@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserRole } from '@/hooks/useUserRole';
 import { useCreateUser } from '@/hooks/useAdminUsers';
@@ -22,9 +22,13 @@ import EditableOrgSettings from '@/components/owner/EditableOrgSettings';
 import MemberActivityView from '@/components/owner/MemberActivityView';
 import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
 import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
+import MemberPaymentHistory from '@/components/owner/MemberPaymentHistory';
+import ReportsExport from '@/components/owner/ReportsExport';
+import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
 import {
   Building2, Users, BarChart3, Upload, Settings,
-  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard
+  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
+  FileSpreadsheet, ScanLine
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
