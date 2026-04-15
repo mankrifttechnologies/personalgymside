@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, Save, Loader2 } from 'lucide-react';
+import MembershipPlansManager from '@/components/admin/MembershipPlansManager';
 
 interface OrgSettingsProps {
   organization: any;
@@ -92,6 +93,8 @@ export default function EditableOrgSettings({ organization, onUpdate }: OrgSetti
           </Button>
         </CardContent>
       </Card>
+
+      <MembershipPlansManager />
     </div>
   );
 }
