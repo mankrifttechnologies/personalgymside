@@ -98,7 +98,7 @@ export default function OwnerDashboard() {
           </TabsList>
 
           <TabsContent value="overview" className="mt-4">
-            <OwnerAnalyticsDashboard />
+            <OwnerAnalyticsDashboard organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="members" className="mt-4">
