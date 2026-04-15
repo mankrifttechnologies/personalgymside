@@ -24,5 +24,9 @@ export default function MemberRoute({ children }: { children: React.ReactNode })
     return <Navigate to="/admin" replace />;
   }
 
+  if (role === 'trainer') {
+    return <Navigate to="/trainer" replace />;
+  }
+
   return <>{children}</>;
 }
