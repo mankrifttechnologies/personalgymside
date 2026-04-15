@@ -283,8 +283,7 @@ export default function OwnerAnalyticsDashboard({ organizationId }: { organizati
               </CardContent>
             </Card>
           )}
-
-
+        </TabsContent>
 
 
         <TabsContent value="demographics" className="mt-4">
