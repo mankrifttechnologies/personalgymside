@@ -5,11 +5,11 @@ import { useUserRole } from '@/hooks/useUserRole';
 import { useCreateUser } from '@/hooks/useAdminUsers';
 import { useOrgMembers, useRemoveOrgMember, useUpdateOrgMemberRole } from '@/hooks/useOrgMembers';
 import { supabase } from '@/integrations/supabase/client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -18,15 +18,19 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import BulkMemberUpload from '@/components/BulkMemberUpload';
 import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
+import EditableOrgSettings from '@/components/owner/EditableOrgSettings';
+import MemberActivityView from '@/components/owner/MemberActivityView';
+import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
 import {
   Building2, Users, BarChart3, Upload, Settings,
-  LogOut, Loader2, Plus, X, IndianRupee, UserMinus
+  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
 export default function OwnerDashboard() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { data: role, isLoading: roleLoading } = useUserRole();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
 
   const { data: organization } = useQuery({
@@ -74,7 +78,7 @@ export default function OwnerDashboard() {
 
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5 h-auto">
+          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7 h-auto gap-1">
             <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5">
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
@@ -82,6 +86,14 @@ export default function OwnerDashboard() {
             <TabsTrigger value="members" className="gap-1.5 text-xs py-2.5">
               <Users className="w-4 h-4" />
               <span className="hidden sm:inline">Members</span>
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="gap-1.5 text-xs py-2.5">
+              <Activity className="w-4 h-4" />
+              <span className="hidden sm:inline">Activity</span>
+            </TabsTrigger>
+            <TabsTrigger value="announcements" className="gap-1.5 text-xs py-2.5">
+              <Megaphone className="w-4 h-4" />
+              <span className="hidden sm:inline">News</span>
             </TabsTrigger>
             <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5">
               <Upload className="w-4 h-4" />
@@ -105,6 +117,14 @@ export default function OwnerDashboard() {
             <MembersTab organizationId={organization?.id} />
           </TabsContent>
 
+          <TabsContent value="activity" className="mt-4">
+            <MemberActivityView organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="announcements" className="mt-4">
+            <OrgAnnouncements />
+          </TabsContent>
+
           <TabsContent value="bulk-upload" className="mt-4">
             <BulkMemberUpload />
           </TabsContent>
@@ -114,7 +134,10 @@ export default function OwnerDashboard() {
           </TabsContent>
 
           <TabsContent value="settings" className="mt-4">
-            <OrgSettings organization={organization} />
+            <EditableOrgSettings
+              organization={organization}
+              onUpdate={() => queryClient.invalidateQueries({ queryKey: ['owner-organization'] })}
+            />
           </TabsContent>
         </Tabs>
       </main>
@@ -231,66 +254,6 @@ function MembersTab({ organizationId }: { organizationId: string | undefined }) 
           </Card>
         )}
       </div>
-    </div>
-  );
-}
-
-function OrgSettings({ organization }: { organization: any }) {
-  if (!organization) {
-    return (
-      <Card>
-        <CardContent className="p-8 text-center text-muted-foreground">
-          <Building2 className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>No organization found</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Organization Details</CardTitle>
-          <CardDescription>Your gym information on the platform</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <Label className="text-xs text-muted-foreground">Name</Label>
-              <p className="font-medium">{organization.name}</p>
-            </div>
-            <div>
-              <Label className="text-xs text-muted-foreground">Status</Label>
-              <Badge variant="default" className="mt-1">{organization.status}</Badge>
-            </div>
-            {organization.address && (
-              <div className="sm:col-span-2">
-                <Label className="text-xs text-muted-foreground">Address</Label>
-                <p className="text-sm">{organization.address}</p>
-              </div>
-            )}
-            {organization.phone && (
-              <div>
-                <Label className="text-xs text-muted-foreground">Phone</Label>
-                <p className="text-sm">{organization.phone}</p>
-              </div>
-            )}
-            {organization.email && (
-              <div>
-                <Label className="text-xs text-muted-foreground">Email</Label>
-                <p className="text-sm">{organization.email}</p>
-              </div>
-            )}
-            {organization.website && (
-              <div>
-                <Label className="text-xs text-muted-foreground">Website</Label>
-                <p className="text-sm">{organization.website}</p>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
