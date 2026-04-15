@@ -21,9 +21,10 @@ import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import EditableOrgSettings from '@/components/owner/EditableOrgSettings';
 import MemberActivityView from '@/components/owner/MemberActivityView';
 import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
+import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
 import {
   Building2, Users, BarChart3, Upload, Settings,
-  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone
+  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
