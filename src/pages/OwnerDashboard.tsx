@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserRole } from '@/hooks/useUserRole';
 import { useCreateUser } from '@/hooks/useAdminUsers';
@@ -22,9 +22,13 @@ import EditableOrgSettings from '@/components/owner/EditableOrgSettings';
 import MemberActivityView from '@/components/owner/MemberActivityView';
 import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
 import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
+import MemberPaymentHistory from '@/components/owner/MemberPaymentHistory';
+import ReportsExport from '@/components/owner/ReportsExport';
+import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
 import {
   Building2, Users, BarChart3, Upload, Settings,
-  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard
+  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
+  FileSpreadsheet, ScanLine
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
@@ -42,7 +46,7 @@ export default function OwnerDashboard() {
         .select('*')
         .eq('owner_id', user!.id)
         .maybeSingle();
-      return data;
+      return data as any;
     },
     enabled: !!user?.id,
   });
@@ -71,9 +75,16 @@ export default function OwnerDashboard() {
               <p className="text-xs text-muted-foreground">Owner Dashboard</p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={() => signOut()}>
-            <LogOut className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/qr-checkin">
+              <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                <ScanLine className="w-4 h-4" /> Check-In
+              </Button>
+            </Link>
+            <Button variant="ghost" size="icon" onClick={() => signOut()}>
+              <LogOut className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -108,6 +119,10 @@ export default function OwnerDashboard() {
               <TabsTrigger value="revenue" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
                 <IndianRupee className="w-4 h-4" />
                 Revenue
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <FileSpreadsheet className="w-4 h-4" />
+                Reports
               </TabsTrigger>
               <TabsTrigger value="settings" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
                 <Settings className="w-4 h-4" />
@@ -144,11 +159,18 @@ export default function OwnerDashboard() {
             <RevenueDashboard />
           </TabsContent>
 
+          <TabsContent value="reports" className="mt-4">
+            <ReportsExport organizationId={organization?.id} />
+          </TabsContent>
+
           <TabsContent value="settings" className="mt-4">
-            <EditableOrgSettings
-              organization={organization}
-              onUpdate={() => queryClient.invalidateQueries({ queryKey: ['owner-organization'] })}
-            />
+            <div className="space-y-4">
+              <GymCodeDisplay gymCode={organization?.gym_code} />
+              <EditableOrgSettings
+                organization={organization}
+                onUpdate={() => queryClient.invalidateQueries({ queryKey: ['owner-organization'] })}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </main>
@@ -163,6 +185,21 @@ function MembersTab({ organizationId }: { organizationId: string | undefined }) 
   const createUser = useCreateUser();
   const [createOpen, setCreateOpen] = useState(false);
   const [newUser, setNewUser] = useState({ email: '', password: '', name: '', role: 'member' as AppRole });
+
+  // Map user_id -> gym_member_id for payment history
+  const { data: gymMemberMap } = useQuery({
+    queryKey: ['gym-member-map-members', organizationId],
+    queryFn: async () => {
+      if (!members?.length) return new Map<string, string>();
+      const userIds = members.map(m => m.user_id);
+      const { data } = await supabase
+        .from('gym_members')
+        .select('id, user_id')
+        .in('user_id', userIds);
+      return new Map(data?.map(d => [d.user_id, d.id]) || []);
+    },
+    enabled: !!members?.length,
+  });
 
   const handleCreate = async () => {
     await createUser.mutateAsync({ ...newUser, organizationId });
@@ -236,6 +273,12 @@ function MembersTab({ organizationId }: { organizationId: string | undefined }) 
                 </div>
               </div>
               <div className="flex gap-1.5">
+                {gymMemberMap?.get(member.user_id) && (
+                  <MemberPaymentHistory
+                    gymMemberId={gymMemberMap.get(member.user_id)!}
+                    memberName={member.name || 'Member'}
+                  />
+                )}
                 <Button
                   size="sm"
                   variant="destructive"

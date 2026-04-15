@@ -42,6 +42,8 @@ import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
+import JoinGym from "./pages/JoinGym";
+import QRCheckIn from "./pages/QRCheckIn";
 import MemberRoute from "./components/MemberRoute";
 
 const queryClient = new QueryClient();
@@ -105,6 +107,8 @@ const App = () => {
                 <Route path="/demo" element={<Demo />} />
                 <Route path="/register-owner" element={<RegisterOwner />} />
                 <Route path="/register-org" element={<RegisterOrganization />} />
+                <Route path="/join-gym" element={<JoinGym />} />
+                <Route path="/qr-checkin" element={<QRCheckIn />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>

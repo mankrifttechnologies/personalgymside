@@ -1251,6 +1251,7 @@ export type Database = {
           address: string | null
           created_at: string
           email: string | null
+          gym_code: string | null
           id: string
           logo_url: string | null
           name: string
@@ -1264,6 +1265,7 @@ export type Database = {
           address?: string | null
           created_at?: string
           email?: string | null
+          gym_code?: string | null
           id?: string
           logo_url?: string | null
           name: string
@@ -1277,6 +1279,7 @@ export type Database = {
           address?: string | null
           created_at?: string
           email?: string | null
+          gym_code?: string | null
           id?: string
           logo_url?: string | null
           name?: string
@@ -2275,6 +2278,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_org_by_gym_code: {
+        Args: { code: string }
+        Returns: {
+          gym_code: string
+          id: string
+          name: string
+        }[]
+      }
       get_user_id_by_friend_code: { Args: { code: string }; Returns: string }
       has_role: {
         Args: {
