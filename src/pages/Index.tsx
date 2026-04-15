@@ -69,6 +69,9 @@ export default function Index() {
   if (userRole === 'admin') {
     return <Navigate to="/admin" replace />;
   }
+  if (userRole === 'trainer') {
+    return <Navigate to="/trainer" replace />;
+  }
 
   const needsOnboarding = profile && !(profile as any).onboarding_completed && !profile.fitness_goal;
   if (needsOnboarding && !showOnboarding) {

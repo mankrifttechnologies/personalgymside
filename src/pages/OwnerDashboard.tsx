@@ -21,9 +21,10 @@ import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import EditableOrgSettings from '@/components/owner/EditableOrgSettings';
 import MemberActivityView from '@/components/owner/MemberActivityView';
 import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
+import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
 import {
   Building2, Users, BarChart3, Upload, Settings,
-  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone
+  LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
@@ -78,7 +79,7 @@ export default function OwnerDashboard() {
 
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7 h-auto gap-1">
+          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto gap-1">
             <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5">
               <BarChart3 className="w-4 h-4" />
               <span className="hidden sm:inline">Overview</span>
@@ -94,6 +95,10 @@ export default function OwnerDashboard() {
             <TabsTrigger value="announcements" className="gap-1.5 text-xs py-2.5">
               <Megaphone className="w-4 h-4" />
               <span className="hidden sm:inline">News</span>
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="gap-1.5 text-xs py-2.5">
+              <CreditCard className="w-4 h-4" />
+              <span className="hidden sm:inline">Payments</span>
             </TabsTrigger>
             <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5">
               <Upload className="w-4 h-4" />
@@ -123,6 +128,10 @@ export default function OwnerDashboard() {
 
           <TabsContent value="announcements" className="mt-4">
             <OrgAnnouncements />
+          </TabsContent>
+
+          <TabsContent value="payments" className="mt-4">
+            <MemberPaymentRecording organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="bulk-upload" className="mt-4">
