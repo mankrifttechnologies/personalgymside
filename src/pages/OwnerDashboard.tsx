@@ -79,40 +79,42 @@ export default function OwnerDashboard() {
 
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 h-auto gap-1">
-            <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5">
-              <BarChart3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Overview</span>
-            </TabsTrigger>
-            <TabsTrigger value="members" className="gap-1.5 text-xs py-2.5">
-              <Users className="w-4 h-4" />
-              <span className="hidden sm:inline">Members</span>
-            </TabsTrigger>
-            <TabsTrigger value="activity" className="gap-1.5 text-xs py-2.5">
-              <Activity className="w-4 h-4" />
-              <span className="hidden sm:inline">Activity</span>
-            </TabsTrigger>
-            <TabsTrigger value="announcements" className="gap-1.5 text-xs py-2.5">
-              <Megaphone className="w-4 h-4" />
-              <span className="hidden sm:inline">News</span>
-            </TabsTrigger>
-            <TabsTrigger value="payments" className="gap-1.5 text-xs py-2.5">
-              <CreditCard className="w-4 h-4" />
-              <span className="hidden sm:inline">Payments</span>
-            </TabsTrigger>
-            <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5">
-              <Upload className="w-4 h-4" />
-              <span className="hidden sm:inline">Bulk Add</span>
-            </TabsTrigger>
-            <TabsTrigger value="revenue" className="gap-1.5 text-xs py-2.5">
-              <IndianRupee className="w-4 h-4" />
-              <span className="hidden sm:inline">Revenue</span>
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="gap-1.5 text-xs py-2.5">
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">Settings</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
+            <TabsList className="inline-flex w-max h-auto gap-1 p-1">
+              <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <BarChart3 className="w-4 h-4" />
+                Overview
+              </TabsTrigger>
+              <TabsTrigger value="members" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <Users className="w-4 h-4" />
+                Members
+              </TabsTrigger>
+              <TabsTrigger value="activity" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <Activity className="w-4 h-4" />
+                Activity
+              </TabsTrigger>
+              <TabsTrigger value="announcements" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <Megaphone className="w-4 h-4" />
+                News
+              </TabsTrigger>
+              <TabsTrigger value="payments" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <CreditCard className="w-4 h-4" />
+                Payments
+              </TabsTrigger>
+              <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <Upload className="w-4 h-4" />
+                Bulk Add
+              </TabsTrigger>
+              <TabsTrigger value="revenue" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <IndianRupee className="w-4 h-4" />
+                Revenue
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <Settings className="w-4 h-4" />
+                Settings
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="mt-4">
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
