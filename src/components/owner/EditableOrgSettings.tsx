@@ -93,6 +93,8 @@ export default function EditableOrgSettings({ organization, onUpdate }: OrgSetti
           </Button>
         </CardContent>
       </Card>
+
+      <MembershipPlansManager />
     </div>
   );
 }
