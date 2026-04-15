@@ -95,7 +95,7 @@ export default function JoinGym() {
   };
 
   return (
-    <div className="min-h-screen safe-area-top">
+    <div className="min-h-screen safe-area-top pb-8">
       <header className="p-4 flex items-center gap-3">
         <Link to="/">
           <Button variant="ghost" size="icon"><ChevronLeft className="w-6 h-6" /></Button>
