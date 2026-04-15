@@ -1,96 +1,192 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Activity, Compass, MessageCircle, User, Plus } from 'lucide-react';
+import { 
+  Activity, Compass, MessageCircle, User, Plus,
+  Building2, Users, BarChart3, Settings,
+  Dumbbell, Calendar, ClipboardList
+} from 'lucide-react';
 import { useUnreadMessages } from '@/hooks/useMessages';
+import { useUserRole } from '@/hooks/useUserRole';
 
-const NAV_ITEMS = [
+type NavItem = {
+  path: string;
+  icon: React.ElementType;
+  label: string;
+};
+
+const MEMBER_ITEMS: NavItem[] = [
   { path: '/', icon: Activity, label: 'Home' },
   { path: '/explorer', icon: Compass, label: 'Explore' },
   { path: '/messages', icon: MessageCircle, label: 'Chat' },
   { path: '/profile', icon: User, label: 'Profile' },
 ];
 
+const OWNER_ITEMS: NavItem[] = [
+  { path: '/owner', icon: Building2, label: 'Dashboard' },
+  { path: '/owner?tab=users', icon: Users, label: 'Members' },
+  { path: '/owner?tab=stats', icon: BarChart3, label: 'Analytics' },
+  { path: '/owner?tab=settings', icon: Settings, label: 'Settings' },
+];
+
+const TRAINER_ITEMS: NavItem[] = [
+  { path: '/trainer', icon: Dumbbell, label: 'Clients' },
+  { path: '/trainer?tab=schedule', icon: Calendar, label: 'Schedule' },
+  { path: '/trainer?tab=sessions', icon: ClipboardList, label: 'Sessions' },
+  { path: '/profile', icon: User, label: 'Profile' },
+];
+
+const ADMIN_ITEMS: NavItem[] = [
+  { path: '/admin', icon: Building2, label: 'Admin' },
+  { path: '/owner', icon: BarChart3, label: 'Manage' },
+  { path: '/messages', icon: MessageCircle, label: 'Chat' },
+  { path: '/profile', icon: User, label: 'Profile' },
+];
+
+function isItemActive(itemPath: string, currentPath: string, currentSearch: string) {
+  // For items with query params (like /owner?tab=users)
+  if (itemPath.includes('?')) {
+    const [basePath, query] = itemPath.split('?');
+    if (currentPath !== basePath) return false;
+    const params = new URLSearchParams(query);
+    const currentParams = new URLSearchParams(currentSearch);
+    for (const [key, value] of params.entries()) {
+      if (currentParams.get(key) !== value) return false;
+    }
+    return true;
+  }
+  // For base paths, exact match only
+  return currentPath === itemPath;
+}
+
 export default function BottomNav() {
   const location = useLocation();
   const currentPath = location.pathname;
-  const isWorkoutActive = currentPath === '/workout';
+  const currentSearch = location.search;
   const { unreadCount } = useUnreadMessages();
+  const { data: role } = useUserRole();
+
+  const isMember = !role || role === 'member';
+  const isOwner = role === 'owner';
+  const isTrainer = role === 'trainer';
+  const isAdmin = role === 'admin';
+
+  const navItems = isOwner
+    ? OWNER_ITEMS
+    : isTrainer
+    ? TRAINER_ITEMS
+    : isAdmin
+    ? ADMIN_ITEMS
+    : MEMBER_ITEMS;
+
+  const showWorkoutFab = isMember;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-      {/* Floating pill container */}
       <div className="mx-3 mb-2 sm:mx-4 sm:mb-3">
         <div className="glass-nav rounded-2xl px-2 py-2 max-w-lg mx-auto">
           <div className="flex justify-around items-center">
-            {/* First two nav items */}
-            {NAV_ITEMS.slice(0, 2).map((item) => {
-              const isActive = currentPath === item.path;
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
-                    isActive
-                      ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground active:scale-95'
-                  }`}
-                >
-                  <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 2} />
-                  <span className={`text-[10px] mt-0.5 ${isActive ? 'font-semibold' : 'font-medium'}`}>
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
-
-            {/* Center Workout FAB */}
-            <div className="flex flex-col items-center -mt-7">
-              <Link to="/workout">
-                <div
-                  className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
-                    isWorkoutActive
-                      ? 'gradient-primary glow-button scale-105'
-                      : 'gradient-primary'
-                  }`}
-                  style={{ boxShadow: '0 4px 20px hsl(24 100% 55% / 0.4)' }}
-                >
-                  <Plus className="w-7 h-7 text-primary-foreground" strokeWidth={2.5} />
-                </div>
-              </Link>
-              <span className={`text-[10px] mt-1 font-medium ${
-                isWorkoutActive ? 'text-primary' : 'text-muted-foreground'
-              }`}>Workout</span>
-            </div>
-
-            {/* Last two nav items */}
-            {NAV_ITEMS.slice(2).map((item) => {
-              const isActive = currentPath === item.path;
-              const Icon = item.icon;
-              const showBadge = item.path === '/messages' && unreadCount > 0;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
-                    isActive
-                      ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground active:scale-95'
-                  }`}
-                >
-                  <div className="relative">
-                    <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 2} />
-                    {showBadge && (
-                      <span className="absolute -top-1.5 -right-2.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center font-bold">
-                        {unreadCount > 9 ? '9+' : unreadCount}
+            {showWorkoutFab ? (
+              <>
+                {/* Member layout: 2 items, FAB, 2 items */}
+                {navItems.slice(0, 2).map((item) => {
+                  const isActive = isItemActive(item.path, currentPath, currentSearch);
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? 'text-primary bg-primary/10'
+                          : 'text-muted-foreground active:scale-95'
+                      }`}
+                    >
+                      <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 2} />
+                      <span className={`text-[10px] mt-0.5 ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                        {item.label}
                       </span>
-                    )}
-                  </div>
-                  <span className={`text-[10px] mt-0.5 ${isActive ? 'font-semibold' : 'font-medium'}`}>
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
+                    </Link>
+                  );
+                })}
+
+                {/* Center Workout FAB */}
+                <div className="flex flex-col items-center -mt-7">
+                  <Link to="/workout">
+                    <div
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
+                        currentPath === '/workout'
+                          ? 'gradient-primary glow-button scale-105'
+                          : 'gradient-primary'
+                      }`}
+                      style={{ boxShadow: '0 4px 20px hsl(24 100% 55% / 0.4)' }}
+                    >
+                      <Plus className="w-7 h-7 text-primary-foreground" strokeWidth={2.5} />
+                    </div>
+                  </Link>
+                  <span className={`text-[10px] mt-1 font-medium ${
+                    currentPath === '/workout' ? 'text-primary' : 'text-muted-foreground'
+                  }`}>Workout</span>
+                </div>
+
+                {navItems.slice(2).map((item) => {
+                  const isActive = isItemActive(item.path, currentPath, currentSearch);
+                  const Icon = item.icon;
+                  const showBadge = item.path === '/messages' && unreadCount > 0;
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? 'text-primary bg-primary/10'
+                          : 'text-muted-foreground active:scale-95'
+                      }`}
+                    >
+                      <div className="relative">
+                        <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 2} />
+                        {showBadge && (
+                          <span className="absolute -top-1.5 -right-2.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center font-bold">
+                            {unreadCount > 9 ? '9+' : unreadCount}
+                          </span>
+                        )}
+                      </div>
+                      <span className={`text-[10px] mt-0.5 ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </>
+            ) : (
+              /* Owner / Trainer / Admin: even 4-tab layout */
+              navItems.map((item) => {
+                const isActive = isItemActive(item.path, currentPath, currentSearch);
+                const Icon = item.icon;
+                const showBadge = item.path === '/messages' && unreadCount > 0;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                      isActive
+                        ? 'text-primary bg-primary/10'
+                        : 'text-muted-foreground active:scale-95'
+                    }`}
+                  >
+                    <div className="relative">
+                      <Icon className="w-[22px] h-[22px]" strokeWidth={isActive ? 2.5 : 2} />
+                      {showBadge && (
+                        <span className="absolute -top-1.5 -right-2.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] flex items-center justify-center font-bold">
+                          {unreadCount > 9 ? '9+' : unreadCount}
+                        </span>
+                      )}
+                    </div>
+                    <span className={`text-[10px] mt-0.5 ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })
+            )}
           </div>
         </div>
       </div>
