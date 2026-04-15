@@ -120,6 +120,10 @@ export default function OwnerDashboard() {
                 <IndianRupee className="w-4 h-4" />
                 Revenue
               </TabsTrigger>
+              <TabsTrigger value="reports" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
+                <FileSpreadsheet className="w-4 h-4" />
+                Reports
+              </TabsTrigger>
               <TabsTrigger value="settings" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
                 <Settings className="w-4 h-4" />
                 Settings
@@ -155,11 +159,18 @@ export default function OwnerDashboard() {
             <RevenueDashboard />
           </TabsContent>
 
+          <TabsContent value="reports" className="mt-4">
+            <ReportsExport organizationId={organization?.id} />
+          </TabsContent>
+
           <TabsContent value="settings" className="mt-4">
-            <EditableOrgSettings
-              organization={organization}
-              onUpdate={() => queryClient.invalidateQueries({ queryKey: ['owner-organization'] })}
-            />
+            <div className="space-y-4">
+              <GymCodeDisplay gymCode={organization?.gym_code} />
+              <EditableOrgSettings
+                organization={organization}
+                onUpdate={() => queryClient.invalidateQueries({ queryKey: ['owner-organization'] })}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </main>
