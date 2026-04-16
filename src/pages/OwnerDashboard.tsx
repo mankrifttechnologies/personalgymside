@@ -107,7 +107,8 @@ export default function OwnerDashboard() {
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* Mobile: 4 primary tabs + "More" hamburger sheet */}
-          {isMobile ? (
+          {/* Always use hamburger layout on screens < lg (1024px) */}
+          {isMobile || window.innerWidth < 1024 ? (
             <div className="flex items-center gap-1.5 bg-muted rounded-lg p-1">
               {OWNER_TABS.filter(t => t.primary).map(tab => {
                 const Icon = tab.icon;
@@ -168,9 +169,8 @@ export default function OwnerDashboard() {
               </Sheet>
             </div>
           ) : (
-            /* Desktop: horizontal scrollable tabs */
-            <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
-              <div className="inline-flex w-max h-auto gap-1 p-1 bg-muted rounded-lg">
+            /* Desktop (lg+): horizontal tabs, no scrolling needed */
+            <div className="flex flex-wrap gap-1 p-1 bg-muted rounded-lg">
                 {OWNER_TABS.map(tab => {
                   const Icon = tab.icon;
                   const isActive = activeTab === tab.value;
