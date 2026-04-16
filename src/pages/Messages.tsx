@@ -7,9 +7,8 @@ import BottomNav from '@/components/BottomNav';
 import FriendChat from '@/components/FriendChat';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, MessageCircle, Search, Loader2, Users, X, Phone, Video, MoreVertical, Camera } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Search, Loader2, Users, X, Phone, Video } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -43,28 +42,63 @@ export default function Messages() {
     const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
     if (diffHours < 1) return formatDistanceToNow(date, { addSuffix: false }).replace('about ', '');
-    if (diffDays < 1) {
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    if (diffDays < 7) {
-      return date.toLocaleDateString([], { weekday: 'short' });
-    }
+    if (diffDays < 1) return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (diffDays < 7) return date.toLocaleDateString([], { weekday: 'short' });
     return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
 
+  // Full-screen chat view when a conversation is selected
+  if (selectedChat) {
+    return (
+      <div className="fixed inset-0 z-50 bg-background flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+        {/* Chat Header */}
+        <div className="bg-primary text-primary-foreground px-2 py-2 flex items-center gap-2 shrink-0">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSelectedChat(null)}
+            className="h-9 w-9 shrink-0 text-primary-foreground hover:bg-primary-foreground/10"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <Avatar className="w-9 h-9 shrink-0 ring-2 ring-primary-foreground/20">
+            <AvatarImage src={selectedChat.avatar || undefined} />
+            <AvatarFallback className="bg-primary-foreground/20 text-primary-foreground text-xs font-bold">
+              {selectedChat.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-sm truncate leading-tight">{selectedChat.name}</p>
+            <p className="text-[11px] text-primary-foreground/70 leading-tight">Online</p>
+          </div>
+          <div className="flex items-center gap-0.5">
+            <Button variant="ghost" size="icon" className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10">
+              <Phone className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10">
+              <Video className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+        {/* Chat Body */}
+        <FriendChat friendId={selectedChat.id} friendName={selectedChat.name} />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-[100dvh] bg-background pb-20 safe-area-top">
+    <div className="min-h-[100dvh] bg-background pb-20" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-background border-b border-border pt-[env(safe-area-inset-top,0px)]">
+      <div className="sticky top-0 z-40 bg-primary text-primary-foreground">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-9 w-9 -ml-2">
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-9 w-9 -ml-2 text-primary-foreground hover:bg-primary-foreground/10">
               <ArrowLeft className="w-5 h-5" />
             </Button>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-lg font-bold">
               Messages
               {totalUnread > 0 && (
-                <span className="ml-2 text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-bold align-middle">
+                <span className="ml-2 text-[10px] bg-primary-foreground text-primary px-1.5 py-0.5 rounded-full font-bold align-middle">
                   {totalUnread}
                 </span>
               )}
@@ -74,7 +108,7 @@ export default function Messages() {
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9"
+              className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10"
               onClick={() => setShowSearch(!showSearch)}
             >
               {showSearch ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
@@ -82,7 +116,7 @@ export default function Messages() {
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9"
+              className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10"
               onClick={() => { setNewChatOpen(true); setMemberSearchQuery(''); }}
             >
               <MessageCircle className="w-5 h-5" />
@@ -90,17 +124,17 @@ export default function Messages() {
           </div>
         </div>
 
-        {/* Collapsible search */}
+        {/* Search bar */}
         {showSearch && (
           <div className="px-4 pb-3 animate-in slide-in-from-top-2 duration-200">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-foreground/50" />
               <input
                 placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autoFocus
-                className="w-full bg-muted rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30 transition-all placeholder:text-muted-foreground"
+                className="w-full bg-primary-foreground/15 text-primary-foreground placeholder:text-primary-foreground/50 rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:bg-primary-foreground/20 transition-all"
               />
             </div>
           </div>
@@ -108,7 +142,7 @@ export default function Messages() {
       </div>
 
       {/* Conversations List */}
-      <div className="px-2">
+      <div className="divide-y divide-border">
         {isLoading ? (
           <div className="flex items-center justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -136,18 +170,15 @@ export default function Messages() {
             <button
               key={conv.partnerId}
               onClick={() => setSelectedChat({ id: conv.partnerId, name: conv.partnerName, avatar: conv.partnerAvatar })}
-              className="w-full flex items-center gap-3 px-2 py-3 rounded-xl hover:bg-muted/60 transition-colors active:bg-muted/80 group"
+              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/40 transition-colors active:bg-muted/60"
             >
-              <div className="relative shrink-0">
-                <Avatar className="w-14 h-14 ring-2 ring-border">
-                  <AvatarImage src={conv.partnerAvatar || undefined} />
-                  <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary font-bold text-base">
-                    {conv.partnerName.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                {/* Online indicator dot (decorative) */}
-              </div>
-              <div className="flex-1 text-left min-w-0 py-0.5">
+              <Avatar className="w-13 h-13 shrink-0">
+                <AvatarImage src={conv.partnerAvatar || undefined} />
+                <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary font-bold text-sm">
+                  {conv.partnerName.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 text-left min-w-0">
                 <div className="flex items-center justify-between gap-2">
                   <span className={`font-semibold text-[15px] truncate ${conv.unreadCount > 0 ? 'text-foreground' : 'text-foreground'}`}>
                     {conv.partnerName}
@@ -158,9 +189,7 @@ export default function Messages() {
                 </div>
                 <div className="flex items-center justify-between gap-2 mt-0.5">
                   <p className={`text-[13px] truncate leading-snug ${conv.unreadCount > 0 ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                    {conv.isLastMessageFromMe && (
-                      <span className="text-muted-foreground">You: </span>
-                    )}
+                    {conv.isLastMessageFromMe && <span className="text-muted-foreground">You: </span>}
                     {conv.lastMessage}
                   </p>
                   {conv.unreadCount > 0 && (
@@ -174,44 +203,6 @@ export default function Messages() {
           ))
         )}
       </div>
-
-      {/* Chat Sheet */}
-      <Sheet open={!!selectedChat} onOpenChange={() => setSelectedChat(null)}>
-        <SheetContent side="bottom" className="h-[100dvh] p-0 rounded-none border-none">
-          {/* Instagram-style Chat Header */}
-          <div className="bg-background border-b border-border px-2 py-2.5 flex items-center gap-2 pt-[calc(env(safe-area-inset-top,0px)+8px)]">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSelectedChat(null)}
-              className="h-9 w-9 shrink-0"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <Avatar className="w-9 h-9 shrink-0 ring-2 ring-border">
-              <AvatarImage src={selectedChat?.avatar || undefined} />
-              <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary text-xs font-bold">
-                {(selectedChat?.name || '').slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm truncate leading-tight">{selectedChat?.name}</p>
-              <p className="text-[11px] text-muted-foreground leading-tight">Active now</p>
-            </div>
-            <div className="flex items-center gap-0.5">
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Phone className="w-4.5 h-4.5" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-9 w-9">
-                <Video className="w-4.5 h-4.5" />
-              </Button>
-            </div>
-          </div>
-          {selectedChat && (
-            <FriendChat friendId={selectedChat.id} friendName={selectedChat.name} />
-          )}
-        </SheetContent>
-      </Sheet>
 
       {/* New Conversation Dialog */}
       <Dialog open={newChatOpen} onOpenChange={setNewChatOpen}>
@@ -253,7 +244,7 @@ export default function Messages() {
                   }}
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-muted/70 transition-colors active:bg-muted"
                 >
-                  <Avatar className="w-12 h-12 ring-2 ring-border">
+                  <Avatar className="w-12 h-12">
                     <AvatarImage src={member.avatar_url || undefined} />
                     <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary text-sm font-bold">
                       {(member.name || '?').slice(0, 2).toUpperCase()}
