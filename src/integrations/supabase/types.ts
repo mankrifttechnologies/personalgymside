@@ -410,6 +410,41 @@ export type Database = {
           },
         ]
       }
+      daily_qr_codes: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string
+          id: string
+          organization_id: string
+          valid_date: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by: string
+          id?: string
+          organization_id: string
+          valid_date?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          organization_id?: string
+          valid_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_qr_codes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       equipment: {
         Row: {
           category: string
