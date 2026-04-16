@@ -10,11 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import BulkMemberUpload from '@/components/BulkMemberUpload';
 import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
@@ -25,12 +26,25 @@ import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
 import MemberPaymentHistory from '@/components/owner/MemberPaymentHistory';
 import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine
+  FileSpreadsheet, ScanLine, Menu
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
+
+const OWNER_TABS = [
+  { value: 'overview', label: 'Overview', icon: BarChart3, primary: true },
+  { value: 'members', label: 'Members', icon: Users, primary: true },
+  { value: 'activity', label: 'Activity', icon: Activity, primary: true },
+  { value: 'announcements', label: 'News', icon: Megaphone, primary: true },
+  { value: 'payments', label: 'Payments', icon: CreditCard, primary: false },
+  { value: 'bulk-upload', label: 'Bulk Add', icon: Upload, primary: false },
+  { value: 'revenue', label: 'Revenue', icon: IndianRupee, primary: false },
+  { value: 'reports', label: 'Reports', icon: FileSpreadsheet, primary: false },
+  { value: 'settings', label: 'Settings', icon: Settings, primary: false },
+] as const;
 
 export default function OwnerDashboard() {
   const { user, loading: authLoading, signOut } = useAuth();
