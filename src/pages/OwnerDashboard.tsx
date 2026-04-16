@@ -106,46 +106,92 @@ export default function OwnerDashboard() {
 
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
-            <TabsList className="inline-flex w-max h-auto gap-1 p-1">
-              <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <BarChart3 className="w-4 h-4" />
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="members" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Users className="w-4 h-4" />
-                Members
-              </TabsTrigger>
-              <TabsTrigger value="activity" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Activity className="w-4 h-4" />
-                Activity
-              </TabsTrigger>
-              <TabsTrigger value="announcements" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Megaphone className="w-4 h-4" />
-                News
-              </TabsTrigger>
-              <TabsTrigger value="payments" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <CreditCard className="w-4 h-4" />
-                Payments
-              </TabsTrigger>
-              <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Upload className="w-4 h-4" />
-                Bulk Add
-              </TabsTrigger>
-              <TabsTrigger value="revenue" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <IndianRupee className="w-4 h-4" />
-                Revenue
-              </TabsTrigger>
-              <TabsTrigger value="reports" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <FileSpreadsheet className="w-4 h-4" />
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Settings className="w-4 h-4" />
-                Settings
-              </TabsTrigger>
-            </TabsList>
-          </div>
+          {/* Mobile: 4 primary tabs + "More" hamburger sheet */}
+          {isMobile ? (
+            <div className="flex items-center gap-1.5 bg-muted rounded-lg p-1">
+              {OWNER_TABS.filter(t => t.primary).map(tab => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.value;
+                return (
+                  <button
+                    key={tab.value}
+                    onClick={() => setActiveTab(tab.value)}
+                    className={`flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-md text-[10px] font-medium transition-all ${
+                      isActive
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+              <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
+                <SheetTrigger asChild>
+                  <button
+                    className={`flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-md text-[10px] font-medium transition-all ${
+                      OWNER_TABS.some(t => !t.primary && activeTab === t.value)
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground'
+                    }`}
+                  >
+                    <Menu className="w-4 h-4" />
+                    More
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="rounded-t-2xl">
+                  <SheetHeader>
+                    <SheetTitle>More Options</SheetTitle>
+                  </SheetHeader>
+                  <div className="grid grid-cols-3 gap-3 py-4">
+                    {OWNER_TABS.filter(t => !t.primary).map(tab => {
+                      const Icon = tab.icon;
+                      const isActive = activeTab === tab.value;
+                      return (
+                        <button
+                          key={tab.value}
+                          onClick={() => { setActiveTab(tab.value); setMoreOpen(false); }}
+                          className={`flex flex-col items-center gap-1.5 p-3 rounded-xl text-xs font-medium transition-all ${
+                            isActive
+                              ? 'bg-primary/10 text-primary border border-primary/20'
+                              : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          {tab.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          ) : (
+            /* Desktop: horizontal scrollable tabs */
+            <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
+              <div className="inline-flex w-max h-auto gap-1 p-1 bg-muted rounded-lg">
+                {OWNER_TABS.map(tab => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.value;
+                  return (
+                    <button
+                      key={tab.value}
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`inline-flex items-center gap-1.5 text-xs py-2.5 px-3 rounded-md font-medium transition-all ${
+                        isActive
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <TabsContent value="overview" className="mt-4">
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
