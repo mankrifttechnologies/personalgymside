@@ -26,6 +26,7 @@ import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
 import MemberPaymentHistory from '@/components/owner/MemberPaymentHistory';
 import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
+import DailyQRGenerator from '@/components/owner/DailyQRGenerator';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
@@ -192,7 +193,8 @@ export default function OwnerDashboard() {
             </div>
           )}
 
-          <TabsContent value="overview" className="mt-4">
+          <TabsContent value="overview" className="mt-4 space-y-4">
+            {organization?.id && <DailyQRGenerator organizationId={organization.id} />}
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
           </TabsContent>
 
