@@ -188,8 +188,7 @@ export default function OwnerDashboard() {
                       {tab.label}
                     </button>
                   );
-                })}
-              </div>
+              })}
             </div>
           )}
 
