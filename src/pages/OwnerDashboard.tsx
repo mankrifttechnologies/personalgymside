@@ -10,11 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import BulkMemberUpload from '@/components/BulkMemberUpload';
 import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
@@ -25,18 +26,33 @@ import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
 import MemberPaymentHistory from '@/components/owner/MemberPaymentHistory';
 import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine
+  FileSpreadsheet, ScanLine, Menu
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
+
+const OWNER_TABS = [
+  { value: 'overview', label: 'Overview', icon: BarChart3, primary: true },
+  { value: 'members', label: 'Members', icon: Users, primary: true },
+  { value: 'activity', label: 'Activity', icon: Activity, primary: true },
+  { value: 'announcements', label: 'News', icon: Megaphone, primary: true },
+  { value: 'payments', label: 'Payments', icon: CreditCard, primary: false },
+  { value: 'bulk-upload', label: 'Bulk Add', icon: Upload, primary: false },
+  { value: 'revenue', label: 'Revenue', icon: IndianRupee, primary: false },
+  { value: 'reports', label: 'Reports', icon: FileSpreadsheet, primary: false },
+  { value: 'settings', label: 'Settings', icon: Settings, primary: false },
+] as const;
 
 export default function OwnerDashboard() {
   const { user, loading: authLoading, signOut } = useAuth();
   const { data: role, isLoading: roleLoading } = useUserRole();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
+  const [moreOpen, setMoreOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const { data: organization } = useQuery({
     queryKey: ['owner-organization', user?.id],
@@ -90,46 +106,92 @@ export default function OwnerDashboard() {
 
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
-            <TabsList className="inline-flex w-max h-auto gap-1 p-1">
-              <TabsTrigger value="overview" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <BarChart3 className="w-4 h-4" />
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="members" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Users className="w-4 h-4" />
-                Members
-              </TabsTrigger>
-              <TabsTrigger value="activity" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Activity className="w-4 h-4" />
-                Activity
-              </TabsTrigger>
-              <TabsTrigger value="announcements" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Megaphone className="w-4 h-4" />
-                News
-              </TabsTrigger>
-              <TabsTrigger value="payments" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <CreditCard className="w-4 h-4" />
-                Payments
-              </TabsTrigger>
-              <TabsTrigger value="bulk-upload" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Upload className="w-4 h-4" />
-                Bulk Add
-              </TabsTrigger>
-              <TabsTrigger value="revenue" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <IndianRupee className="w-4 h-4" />
-                Revenue
-              </TabsTrigger>
-              <TabsTrigger value="reports" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <FileSpreadsheet className="w-4 h-4" />
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="gap-1.5 text-xs py-2.5 px-3 min-w-[auto]">
-                <Settings className="w-4 h-4" />
-                Settings
-              </TabsTrigger>
-            </TabsList>
-          </div>
+          {/* Mobile: 4 primary tabs + "More" hamburger sheet */}
+          {isMobile ? (
+            <div className="flex items-center gap-1.5 bg-muted rounded-lg p-1">
+              {OWNER_TABS.filter(t => t.primary).map(tab => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.value;
+                return (
+                  <button
+                    key={tab.value}
+                    onClick={() => setActiveTab(tab.value)}
+                    className={`flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-md text-[10px] font-medium transition-all ${
+                      isActive
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+              <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
+                <SheetTrigger asChild>
+                  <button
+                    className={`flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-md text-[10px] font-medium transition-all ${
+                      OWNER_TABS.some(t => !t.primary && activeTab === t.value)
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground'
+                    }`}
+                  >
+                    <Menu className="w-4 h-4" />
+                    More
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="rounded-t-2xl">
+                  <SheetHeader>
+                    <SheetTitle>More Options</SheetTitle>
+                  </SheetHeader>
+                  <div className="grid grid-cols-3 gap-3 py-4">
+                    {OWNER_TABS.filter(t => !t.primary).map(tab => {
+                      const Icon = tab.icon;
+                      const isActive = activeTab === tab.value;
+                      return (
+                        <button
+                          key={tab.value}
+                          onClick={() => { setActiveTab(tab.value); setMoreOpen(false); }}
+                          className={`flex flex-col items-center gap-1.5 p-3 rounded-xl text-xs font-medium transition-all ${
+                            isActive
+                              ? 'bg-primary/10 text-primary border border-primary/20'
+                              : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          {tab.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
+          ) : (
+            /* Desktop: horizontal scrollable tabs */
+            <div className="overflow-x-auto -mx-4 px-4 scrollbar-hide">
+              <div className="inline-flex w-max h-auto gap-1 p-1 bg-muted rounded-lg">
+                {OWNER_TABS.map(tab => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.value;
+                  return (
+                    <button
+                      key={tab.value}
+                      onClick={() => setActiveTab(tab.value)}
+                      className={`inline-flex items-center gap-1.5 text-xs py-2.5 px-3 rounded-md font-medium transition-all ${
+                        isActive
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <TabsContent value="overview" className="mt-4">
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
