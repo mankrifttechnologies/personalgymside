@@ -51,6 +51,8 @@ export default function OwnerDashboard() {
   const { data: role, isLoading: roleLoading } = useUserRole();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('overview');
+  const [moreOpen, setMoreOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const { data: organization } = useQuery({
     queryKey: ['owner-organization', user?.id],
