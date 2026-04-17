@@ -45,6 +45,7 @@ import RegisterOwner from "./pages/RegisterOwner";
 import JoinGym from "./pages/JoinGym";
 import QRCheckIn from "./pages/QRCheckIn";
 import MemberRoute from "./components/MemberRoute";
+import FloatingChatButton from "./components/FloatingChatButton";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const App = () => {
             {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
             <BrowserRouter>
               <BackButtonHandler />
+              <FloatingChatButton />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />

@@ -16,7 +16,7 @@ type NavItem = {
 const MEMBER_ITEMS: NavItem[] = [
   { path: '/', icon: Activity, label: 'Home' },
   { path: '/explorer', icon: Compass, label: 'Explore' },
-  { path: '/messages', icon: MessageCircle, label: 'Chat' },
+  { path: '/leaderboard', icon: BarChart3, label: 'Ranks' },
   { path: '/profile', icon: User, label: 'Profile' },
 ];
 
