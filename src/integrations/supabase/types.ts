@@ -928,6 +928,77 @@ export type Database = {
           },
         ]
       }
+      marketplace_listings: {
+        Row: {
+          brand: string | null
+          category: string
+          condition: string
+          created_at: string
+          currency: string
+          delivery_option: string
+          description: string | null
+          id: string
+          location: string | null
+          organization_id: string | null
+          photos: string[]
+          price: number
+          seller_id: string
+          status: string
+          stock: number
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          brand?: string | null
+          category?: string
+          condition?: string
+          created_at?: string
+          currency?: string
+          delivery_option?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          organization_id?: string | null
+          photos?: string[]
+          price?: number
+          seller_id: string
+          status?: string
+          stock?: number
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          brand?: string | null
+          category?: string
+          condition?: string
+          created_at?: string
+          currency?: string
+          delivery_option?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          organization_id?: string | null
+          photos?: string[]
+          price?: number
+          seller_id?: string
+          status?: string
+          stock?: number
+          title?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_listings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       meal_plans: {
         Row: {
           created_at: string

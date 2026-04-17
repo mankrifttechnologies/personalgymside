@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Activity, Compass, MessageCircle, User, Plus,
+  Activity, Compass, MessageCircle, User, Plus, Store,
   Building2, Users, BarChart3, Settings,
   Dumbbell, Calendar, ClipboardList
 } from 'lucide-react';
@@ -16,7 +16,7 @@ type NavItem = {
 const MEMBER_ITEMS: NavItem[] = [
   { path: '/', icon: Activity, label: 'Home' },
   { path: '/explorer', icon: Compass, label: 'Explore' },
-  { path: '/leaderboard', icon: BarChart3, label: 'Ranks' },
+  { path: '/market', icon: Store, label: 'Market' },
   { path: '/profile', icon: User, label: 'Profile' },
 ];
 
