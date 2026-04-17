@@ -170,17 +170,17 @@ export default function Messages() {
             <button
               key={conv.partnerId}
               onClick={() => setSelectedChat({ id: conv.partnerId, name: conv.partnerName, avatar: conv.partnerAvatar })}
-              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/40 transition-colors active:bg-muted/60"
+              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/40 transition-colors active:bg-muted/60 text-left"
             >
-              <Avatar className="w-13 h-13 shrink-0">
-                <AvatarImage src={conv.partnerAvatar || undefined} />
+              <Avatar className="w-12 h-12 shrink-0">
+                <AvatarImage src={conv.partnerAvatar || undefined} className="object-cover" />
                 <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary font-bold text-sm">
                   {conv.partnerName.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex-1 text-left min-w-0">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <span className={`font-semibold text-[15px] truncate ${conv.unreadCount > 0 ? 'text-foreground' : 'text-foreground'}`}>
+                  <span className="font-semibold text-[15px] truncate text-foreground">
                     {conv.partnerName}
                   </span>
                   <span className={`text-[11px] shrink-0 ${conv.unreadCount > 0 ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>
