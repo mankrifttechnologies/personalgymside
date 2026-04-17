@@ -26,6 +26,7 @@ import GroupChallengesSection from '@/components/GroupChallenges';
 import ReferralCard from '@/components/ReferralCard';
 import CheckInStatsWidget from '@/components/CheckInStatsWidget';
 import QRScanCheckin from '@/components/QRScanCheckin';
+import FirstLaunchQRPrompt from '@/components/FirstLaunchQRPrompt';
 import StoriesBar from '@/components/StoriesBar';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
@@ -126,6 +127,7 @@ export default function Index() {
 
       <AnnouncementBanner />
       <AnnouncementPopup />
+      <FirstLaunchQRPrompt />
 
       <main className="px-4 space-y-4 pb-4">
         {/* QR Check-In — prominent at top */}
