@@ -153,22 +153,26 @@ export default function FriendChat({ friendId, friendName }: FriendChatProps) {
       </div>
 
       {/* Input Bar */}
-      <div className="shrink-0 px-3 py-2 border-t border-border bg-background" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 8px) + 8px)' }}>
+      <div
+        className="shrink-0 px-2.5 py-2 border-t border-border bg-background/95 backdrop-blur-sm"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 8px) + 8px)' }}
+      >
         <div className="flex items-end gap-2">
-          <div className="flex-1 flex items-center gap-2 bg-muted rounded-full px-4 min-h-[44px]">
+          <div className="flex-1 flex items-center gap-2 bg-muted rounded-3xl px-4 min-h-[42px] border border-border/50 focus-within:border-primary/40 transition-colors">
             <Smile className="w-5 h-5 text-muted-foreground shrink-0" />
             <input
               ref={inputRef}
-              placeholder="Message..."
+              placeholder="Type a message..."
               value={newMessage}
               onChange={handleInputChange}
               onKeyDown={handleKeyPress}
-              className="flex-1 bg-transparent text-sm py-2.5 outline-none placeholder:text-muted-foreground min-w-0"
+              enterKeyHint="send"
+              className="flex-1 bg-transparent text-[15px] py-2 outline-none placeholder:text-muted-foreground min-w-0"
             />
           </div>
           <Button
             size="icon"
-            className="rounded-full w-11 h-11 shrink-0 shadow-lg shadow-primary/20"
+            className="rounded-full w-11 h-11 shrink-0 shadow-md shadow-primary/25 active:scale-95 transition-transform"
             onClick={handleSend}
             disabled={sendMessage.isPending || !newMessage.trim()}
           >
