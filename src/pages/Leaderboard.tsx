@@ -230,16 +230,16 @@ export default function Leaderboard() {
         ) : (
           /* Leaderboard Tabs */
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as LeaderboardType)}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="streak" className="gap-1">
+            <TabsList className="grid w-full grid-cols-3 h-11">
+              <TabsTrigger value="streak" className="gap-1.5 text-xs sm:text-sm">
                 <Flame className="w-4 h-4" />
                 Streak
               </TabsTrigger>
-              <TabsTrigger value="attendance" className="gap-1">
+              <TabsTrigger value="attendance" className="gap-1.5 text-xs sm:text-sm">
                 <Calendar className="w-4 h-4" />
-                Attendance
+                Attend
               </TabsTrigger>
-              <TabsTrigger value="points" className="gap-1">
+              <TabsTrigger value="points" className="gap-1.5 text-xs sm:text-sm">
                 <Coins className="w-4 h-4" />
                 Points
               </TabsTrigger>
@@ -253,114 +253,98 @@ export default function Leaderboard() {
               ) : leaderboard && leaderboard.length > 0 ? (
                 <>
                   {/* Top 3 Podium */}
-                  <div className="flex justify-center items-end gap-2 mb-6 h-40">
-                    {/* 2nd Place */}
-                    {leaderboard[1] && (
-                      <div className="flex flex-col items-center">
-                        <Avatar className="w-12 h-12 border-2 border-gray-400">
-                          <AvatarImage src={leaderboard[1].avatar_url || undefined} />
-                          <AvatarFallback>
-                            {leaderboard[1].name?.[0]?.toUpperCase() || '2'}
-                          </AvatarFallback>
+                  <div className="flex justify-center items-end gap-3 mb-6 px-2">
+                    {leaderboard[1] ? (
+                      <div className="flex flex-col items-center flex-1 max-w-[110px]">
+                        <Avatar className="w-12 h-12 border-2 border-gray-400 shrink-0">
+                          <AvatarImage src={leaderboard[1].avatar_url || undefined} className="object-cover" />
+                          <AvatarFallback>{leaderboard[1].name?.[0]?.toUpperCase() || '2'}</AvatarFallback>
                         </Avatar>
-                        <p className="text-xs font-medium mt-1 truncate max-w-[80px]">
+                        <p className="text-xs font-medium mt-1.5 truncate w-full text-center">
                           {leaderboard[1].name || leaderboard[1].member_code}
                         </p>
-                        <div className="w-16 h-20 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg flex items-center justify-center mt-1">
-                          <span className="text-2xl font-bold text-white">2</span>
+                        <div className="w-full h-16 bg-gradient-to-t from-gray-400 to-gray-300 rounded-t-lg flex items-center justify-center mt-1">
+                          <span className="text-xl font-bold text-white">2</span>
                         </div>
                       </div>
-                    )}
-                    
-                    {/* 1st Place */}
+                    ) : <div className="flex-1 max-w-[110px]" />}
+
                     {leaderboard[0] && (
-                      <div className="flex flex-col items-center">
-                        <Crown className="w-6 h-6 text-yellow-500 mb-1" />
-                        <Avatar className="w-14 h-14 border-2 border-yellow-500">
-                          <AvatarImage src={leaderboard[0].avatar_url || undefined} />
-                          <AvatarFallback>
-                            {leaderboard[0].name?.[0]?.toUpperCase() || '1'}
-                          </AvatarFallback>
+                      <div className="flex flex-col items-center flex-1 max-w-[120px]">
+                        <Crown className="w-6 h-6 text-yellow-500 mb-1 shrink-0" />
+                        <Avatar className="w-14 h-14 border-2 border-yellow-500 shrink-0">
+                          <AvatarImage src={leaderboard[0].avatar_url || undefined} className="object-cover" />
+                          <AvatarFallback>{leaderboard[0].name?.[0]?.toUpperCase() || '1'}</AvatarFallback>
                         </Avatar>
-                        <p className="text-sm font-medium mt-1 truncate max-w-[80px]">
+                        <p className="text-sm font-semibold mt-1.5 truncate w-full text-center">
                           {leaderboard[0].name || leaderboard[0].member_code}
                         </p>
-                        <div className="w-20 h-28 bg-gradient-to-t from-yellow-500 to-amber-400 rounded-t-lg flex items-center justify-center mt-1">
-                          <span className="text-3xl font-bold text-white">1</span>
+                        <div className="w-full h-24 bg-gradient-to-t from-yellow-500 to-amber-400 rounded-t-lg flex items-center justify-center mt-1">
+                          <span className="text-2xl font-bold text-white">1</span>
                         </div>
                       </div>
                     )}
-                    
-                    {/* 3rd Place */}
-                    {leaderboard[2] && (
-                      <div className="flex flex-col items-center">
-                        <Avatar className="w-12 h-12 border-2 border-amber-600">
-                          <AvatarImage src={leaderboard[2].avatar_url || undefined} />
-                          <AvatarFallback>
-                            {leaderboard[2].name?.[0]?.toUpperCase() || '3'}
-                          </AvatarFallback>
+
+                    {leaderboard[2] ? (
+                      <div className="flex flex-col items-center flex-1 max-w-[110px]">
+                        <Avatar className="w-12 h-12 border-2 border-amber-600 shrink-0">
+                          <AvatarImage src={leaderboard[2].avatar_url || undefined} className="object-cover" />
+                          <AvatarFallback>{leaderboard[2].name?.[0]?.toUpperCase() || '3'}</AvatarFallback>
                         </Avatar>
-                        <p className="text-xs font-medium mt-1 truncate max-w-[80px]">
+                        <p className="text-xs font-medium mt-1.5 truncate w-full text-center">
                           {leaderboard[2].name || leaderboard[2].member_code}
                         </p>
-                        <div className="w-16 h-16 bg-gradient-to-t from-amber-600 to-orange-500 rounded-t-lg flex items-center justify-center mt-1">
-                          <span className="text-2xl font-bold text-white">3</span>
+                        <div className="w-full h-12 bg-gradient-to-t from-amber-600 to-orange-500 rounded-t-lg flex items-center justify-center mt-1">
+                          <span className="text-xl font-bold text-white">3</span>
                         </div>
                       </div>
-                    )}
+                    ) : <div className="flex-1 max-w-[110px]" />}
                   </div>
 
                   {/* Full List */}
-                  <ScrollArea className="h-[400px]">
-                    <div className="space-y-2">
-                      {leaderboard.map(entry => {
-                        const valueInfo = getValueLabel(activeTab);
-                        const ValueIcon = valueInfo.icon;
-                        const isCurrentUser = entry.member_id === currentMember?.id;
-                        
-                        return (
-                          <div
-                            key={entry.member_id}
-                            onClick={() => navigate(`/member/${entry.member_id}`)}
-                            className={`flex items-center gap-3 p-3 rounded-lg border transition-colors cursor-pointer ${
-                              isCurrentUser 
-                                ? 'bg-primary/10 border-primary/50' 
-                                : getRankGradient(entry.rank) || 'hover:bg-secondary/50 border-transparent'
-                            }`}
-                          >
-                            <div className="w-8 flex justify-center">
-                              {getRankIcon(entry.rank)}
-                            </div>
-                            
-                            <Avatar className="w-10 h-10">
-                              <AvatarImage src={entry.avatar_url || undefined} />
-                              <AvatarFallback>
-                                {entry.name?.[0]?.toUpperCase() || entry.member_code[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium truncate">
-                                {entry.name || entry.member_code}
-                                {isCurrentUser && (
-                                  <Badge variant="outline" className="ml-2 text-xs">You</Badge>
-                                )}
-                              </p>
-                              <p className="text-xs text-muted-foreground">{entry.member_code}</p>
-                            </div>
-                            
-                            <div className={`flex items-center gap-1 font-bold ${valueInfo.color}`}>
-                              <ValueIcon className="w-4 h-4" />
-                              <span>{getValue(entry, activeTab)}</span>
-                              <span className="text-xs font-normal text-muted-foreground">
-                                {valueInfo.label}
-                              </span>
-                            </div>
+                  <div className="space-y-2">
+                    {leaderboard.map(entry => {
+                      const valueInfo = getValueLabel(activeTab);
+                      const ValueIcon = valueInfo.icon;
+                      const isCurrentUser = entry.member_id === currentMember?.id;
+
+                      return (
+                        <div
+                          key={entry.member_id}
+                          onClick={() => navigate(`/member/${entry.member_id}`)}
+                          className={`flex items-center gap-2.5 p-2.5 rounded-xl border transition-colors cursor-pointer active:scale-[0.99] ${
+                            isCurrentUser
+                              ? 'bg-primary/10 border-primary/50'
+                              : getRankGradient(entry.rank) || 'hover:bg-secondary/50 border-border/40'
+                          }`}
+                        >
+                          <div className="w-7 flex justify-center shrink-0">
+                            {getRankIcon(entry.rank)}
                           </div>
-                        );
-                      })}
-                    </div>
-                  </ScrollArea>
+                          <Avatar className="w-10 h-10 shrink-0">
+                            <AvatarImage src={entry.avatar_url || undefined} className="object-cover" />
+                            <AvatarFallback>{entry.name?.[0]?.toUpperCase() || entry.member_code[0]}</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm flex items-center gap-1.5">
+                              <span className="truncate">{entry.name || entry.member_code}</span>
+                              {isCurrentUser && (
+                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 shrink-0">You</Badge>
+                              )}
+                            </p>
+                            <p className="text-[11px] text-muted-foreground truncate">{entry.member_code}</p>
+                          </div>
+                          <div className={`flex items-center gap-1 font-bold shrink-0 ${valueInfo.color}`}>
+                            <ValueIcon className="w-4 h-4" />
+                            <span className="text-sm">{getValue(entry, activeTab)}</span>
+                            <span className="text-[10px] font-normal text-muted-foreground">
+                              {valueInfo.label}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </>
               ) : (
                 <Card className="py-12 text-center">
