@@ -28,7 +28,7 @@ export default function FloatingChatButton() {
     <button
       onClick={() => navigate('/messages')}
       aria-label="Open messages"
-      className="fixed left-4 z-40 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 flex items-center justify-center active:scale-95 hover:bg-primary/90 transition-all"
+      className="fixed right-4 z-40 w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 flex items-center justify-center active:scale-95 hover:bg-primary/90 transition-all"
       style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 88px)' }}
     >
       <MessageCircle className="w-5 h-5" />
