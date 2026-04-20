@@ -20,6 +20,28 @@ export default function QRScanCheckin() {
     setScanning(true);
     setResult(null);
 
+    // On Android/Capacitor WebView and modern browsers, explicitly request the
+    // camera first so the OS permission prompt fires reliably. html5-qrcode
+    // sometimes silently fails on Capacitor when permission has not been
+    // granted yet.
+    try {
+      if (typeof navigator !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: 'environment' } },
+        });
+        // Immediately stop — html5-qrcode will reopen with its own pipeline.
+        stream.getTracks().forEach((t) => t.stop());
+      }
+    } catch (permErr: any) {
+      setScanning(false);
+      const msg =
+        permErr?.name === 'NotAllowedError'
+          ? 'Camera permission denied. Enable it in your device settings to scan.'
+          : 'Camera not available on this device.';
+      toast.error(msg);
+      return;
+    }
+
     try {
       const scanner = new Html5Qrcode(containerId);
       scannerRef.current = scanner;
@@ -37,7 +59,7 @@ export default function QRScanCheckin() {
       );
     } catch (err: any) {
       setScanning(false);
-      toast.error('Camera access denied or not available');
+      toast.error(err?.message || 'Could not start the QR scanner. Try again.');
     }
   };
 

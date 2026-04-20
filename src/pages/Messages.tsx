@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { useConversations } from '@/hooks/useConversations';
 import { useAuth } from '@/hooks/useAuth';
 import { useMemberSearch } from '@/hooks/useMemberSearch';
@@ -14,14 +15,42 @@ import { formatDistanceToNow } from 'date-fns';
 
 export default function Messages() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const { conversations, isLoading } = useConversations();
-  const [selectedChat, setSelectedChat] = useState<{ id: string; name: string; avatar?: string | null } | null>(null);
+  const [selectedChat, setSelectedChat] = useState<{ id: string; name: string; avatar?: string | null; prefill?: string } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [newChatOpen, setNewChatOpen] = useState(false);
   const [memberSearchQuery, setMemberSearchQuery] = useState('');
   const { data: members, isLoading: membersLoading } = useMemberSearch(memberSearchQuery);
+
+  // Auto-open chat when navigated with ?to=USER_ID&context=MESSAGE (e.g. from Marketplace)
+  const targetUserId = searchParams.get('to');
+  const prefillContext = searchParams.get('context');
+  useEffect(() => {
+    if (!targetUserId || !user) return;
+    let cancelled = false;
+    (async () => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('name, avatar_url')
+        .eq('user_id', targetUserId)
+        .maybeSingle();
+      if (cancelled) return;
+      setSelectedChat({
+        id: targetUserId,
+        name: profile?.name || 'Member',
+        avatar: profile?.avatar_url,
+        prefill: prefillContext || undefined,
+      });
+      // Clear params so back button to /messages shows inbox
+      setSearchParams({}, { replace: true });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [targetUserId, prefillContext, user, setSearchParams]);
 
   if (!user) {
     navigate('/auth');
@@ -81,13 +110,17 @@ export default function Messages() {
           </div>
         </div>
         {/* Chat Body */}
-        <FriendChat friendId={selectedChat.id} friendName={selectedChat.name} />
+        <FriendChat
+          friendId={selectedChat.id}
+          friendName={selectedChat.name}
+          initialDraft={selectedChat.prefill}
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-20" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+    <div className="min-h-[100dvh] bg-background pb-28" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       {/* Header */}
       <div className="sticky top-0 z-40 bg-primary text-primary-foreground">
         <div className="px-4 py-3 flex items-center justify-between">

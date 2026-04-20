@@ -9,6 +9,8 @@ import { format, isToday, isYesterday, isSameDay } from 'date-fns';
 interface FriendChatProps {
   friendId: string;
   friendName?: string;
+  /** Optional pre-filled draft message (e.g. when opened from Marketplace "Message seller"). */
+  initialDraft?: string;
 }
 
 function DateSeparator({ date }: { date: Date }) {
@@ -24,13 +26,23 @@ function DateSeparator({ date }: { date: Date }) {
   );
 }
 
-export default function FriendChat({ friendId, friendName }: FriendChatProps) {
+export default function FriendChat({ friendId, friendName, initialDraft }: FriendChatProps) {
   const { user } = useAuth();
   const { messages, isLoading, sendMessage, markAsRead } = useMessages(friendId);
   const { friendIsTyping, setIsTyping } = useTypingIndicator(friendId);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Pre-fill draft message once per friendId switch
+  useEffect(() => {
+    if (initialDraft) {
+      setNewMessage(initialDraft);
+      // Defer focus until after layout
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [friendId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

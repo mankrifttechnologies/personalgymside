@@ -108,8 +108,8 @@ export default function OwnerDashboard() {
       <main className="max-w-6xl mx-auto p-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* Mobile: 4 primary tabs + "More" hamburger sheet */}
-          {/* Always use hamburger layout on screens < lg (1024px) */}
-          {isMobile || window.innerWidth < 1024 ? (
+          {/* Mobile/tablet uses hamburger; desktop (lg+) shows all tabs inline */}
+          {isMobile ? (
             <div className="flex items-center gap-1.5 bg-muted rounded-lg p-1">
               {OWNER_TABS.filter(t => t.primary).map(tab => {
                 const Icon = tab.icon;

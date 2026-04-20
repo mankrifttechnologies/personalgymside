@@ -278,7 +278,7 @@ export default function FollowList() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20 safe-area-top">
+    <div className="min-h-screen bg-background pb-28 safe-area-top">
       <div className="container max-w-lg mx-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
         {/* Header */}
         <div className="flex items-center gap-2">
