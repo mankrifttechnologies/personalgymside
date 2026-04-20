@@ -98,7 +98,7 @@ export default function CreateListingDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) reset(); }}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-md w-[calc(100vw-1.5rem)] max-h-[92dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>List an item</DialogTitle>
           <DialogDescription>Sell to your gym community</DialogDescription>
@@ -132,7 +132,7 @@ export default function CreateListingDialog({ open, onOpenChange }: Props) {
                 </button>
               )}
             </div>
-            <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} />
+            <input ref={fileRef} type="file" accept="image/*" capture="environment" multiple className="hidden" onChange={handleUpload} />
           </div>
 
           <div>
