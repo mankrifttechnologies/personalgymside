@@ -445,6 +445,53 @@ export type Database = {
           },
         ]
       }
+      dunning_rules: {
+        Row: {
+          auto_suspend_after_days: number | null
+          channels: string[]
+          created_at: string
+          days_offset: number
+          id: string
+          is_active: boolean
+          message_template: string
+          name: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          auto_suspend_after_days?: number | null
+          channels?: string[]
+          created_at?: string
+          days_offset: number
+          id?: string
+          is_active?: boolean
+          message_template: string
+          name: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          auto_suspend_after_days?: number | null
+          channels?: string[]
+          created_at?: string
+          days_offset?: number
+          id?: string
+          is_active?: boolean
+          message_template?: string
+          name?: string
+          organization_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dunning_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       equipment: {
         Row: {
           category: string
@@ -792,6 +839,59 @@ export type Database = {
         }
         Relationships: []
       }
+      gym_landing_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          duration_label: string
+          features: string[]
+          id: string
+          is_active: boolean
+          is_featured: boolean
+          organization_id: string
+          price: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_label?: string
+          features?: string[]
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          organization_id: string
+          price?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          duration_label?: string
+          features?: string[]
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          organization_id?: string
+          price?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gym_landing_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gym_members: {
         Row: {
           batch: string | null
@@ -868,6 +968,89 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      invoices: {
+        Row: {
+          base_amount: number
+          cgst_amount: number
+          cgst_rate: number
+          created_at: string
+          created_by: string
+          currency: string
+          id: string
+          invoice_date: string
+          invoice_number: string
+          member_id: string
+          notes: string | null
+          organization_id: string
+          payment_method: string | null
+          payment_record_id: string | null
+          pdf_url: string | null
+          plan_name: string
+          sgst_amount: number
+          sgst_rate: number
+          status: string
+          total_amount: number
+          updated_at: string
+          upi_vpa: string | null
+        }
+        Insert: {
+          base_amount?: number
+          cgst_amount?: number
+          cgst_rate?: number
+          created_at?: string
+          created_by: string
+          currency?: string
+          id?: string
+          invoice_date?: string
+          invoice_number: string
+          member_id: string
+          notes?: string | null
+          organization_id: string
+          payment_method?: string | null
+          payment_record_id?: string | null
+          pdf_url?: string | null
+          plan_name: string
+          sgst_amount?: number
+          sgst_rate?: number
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          upi_vpa?: string | null
+        }
+        Update: {
+          base_amount?: number
+          cgst_amount?: number
+          cgst_rate?: number
+          created_at?: string
+          created_by?: string
+          currency?: string
+          id?: string
+          invoice_date?: string
+          invoice_number?: string
+          member_id?: string
+          notes?: string | null
+          organization_id?: string
+          payment_method?: string | null
+          payment_record_id?: string | null
+          pdf_url?: string | null
+          plan_name?: string
+          sgst_amount?: number
+          sgst_rate?: number
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          upi_vpa?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads: {
         Row: {
@@ -1311,6 +1494,151 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_queue: {
+        Row: {
+          channel: string
+          created_at: string
+          error: string | null
+          id: string
+          message: string
+          organization_id: string | null
+          payload: Json | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          recipient_user_id: string | null
+          scheduled_for: string
+          sent_at: string | null
+          status: string
+          template_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message: string
+          organization_id?: string | null
+          payload?: Json | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          recipient_user_id?: string | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          template_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          message?: string
+          organization_id?: string | null
+          payload?: Json | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          recipient_user_id?: string | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          template_key?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_queue_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_branding: {
+        Row: {
+          about: string | null
+          amenities: string[]
+          brand_color: string
+          brand_color_dark: string | null
+          cover_image_url: string | null
+          created_at: string
+          facebook_url: string | null
+          gallery_urls: string[]
+          google_maps_url: string | null
+          gst_number: string | null
+          id: string
+          instagram_handle: string | null
+          invoice_counter: number
+          invoice_prefix: string
+          logo_url: string | null
+          organization_id: string
+          tagline: string | null
+          trainer_highlights: Json
+          updated_at: string
+          upi_payee_name: string | null
+          upi_vpa: string | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          about?: string | null
+          amenities?: string[]
+          brand_color?: string
+          brand_color_dark?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          facebook_url?: string | null
+          gallery_urls?: string[]
+          google_maps_url?: string | null
+          gst_number?: string | null
+          id?: string
+          instagram_handle?: string | null
+          invoice_counter?: number
+          invoice_prefix?: string
+          logo_url?: string | null
+          organization_id: string
+          tagline?: string | null
+          trainer_highlights?: Json
+          updated_at?: string
+          upi_payee_name?: string | null
+          upi_vpa?: string | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          about?: string | null
+          amenities?: string[]
+          brand_color?: string
+          brand_color_dark?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          facebook_url?: string | null
+          gallery_urls?: string[]
+          google_maps_url?: string | null
+          gst_number?: string | null
+          id?: string
+          instagram_handle?: string | null
+          invoice_counter?: number
+          invoice_prefix?: string
+          logo_url?: string | null
+          organization_id?: string
+          tagline?: string | null
+          trainer_highlights?: Json
+          updated_at?: string
+          upi_payee_name?: string | null
+          upi_vpa?: string | null
+          whatsapp_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_branding_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_members: {
         Row: {
           created_at: string
@@ -1695,6 +2023,42 @@ export type Database = {
           user_id?: string
           weight_kg?: number | null
           xp?: number | null
+        }
+        Relationships: []
+      }
+      progress_photos: {
+        Row: {
+          ai_analysis: Json | null
+          created_at: string
+          id: string
+          notes: string | null
+          photo_date: string
+          photo_url: string
+          pose_type: string
+          user_id: string
+          weight_kg: number | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          photo_date?: string
+          photo_url: string
+          pose_type?: string
+          user_id: string
+          weight_kg?: number | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          photo_date?: string
+          photo_url?: string
+          pose_type?: string
+          user_id?: string
+          weight_kg?: number | null
         }
         Relationships: []
       }
