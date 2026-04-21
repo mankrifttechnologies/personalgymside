@@ -32,10 +32,8 @@ export default function ListingDetailSheet({ listing, onClose }: Props) {
   return (
     <Dialog open={!!listing} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-md w-[calc(100vw-1.5rem)] max-h-[92dvh] overflow-y-auto p-0 gap-0">
-        <VisuallyHidden>
-          <DialogTitle>{listing.title}</DialogTitle>
-          <DialogDescription>Product details</DialogDescription>
-        </VisuallyHidden>
+        <DialogTitle className="sr-only">{listing.title}</DialogTitle>
+        <DialogDescription className="sr-only">Product details</DialogDescription>
         {/* Photo carousel */}
         <div className="relative aspect-square bg-muted">
           {listing.photos[activePhoto] && (
