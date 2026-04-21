@@ -20,6 +20,7 @@ import BulkMemberUpload from '@/components/BulkMemberUpload';
 import OwnerAnalyticsDashboard from '@/components/admin/OwnerAnalyticsDashboard';
 import RevenueDashboard from '@/components/admin/RevenueDashboard';
 import EditableOrgSettings from '@/components/owner/EditableOrgSettings';
+import BrandingSettings from '@/components/owner/BrandingSettings';
 import MemberActivityView from '@/components/owner/MemberActivityView';
 import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
 import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
@@ -31,7 +32,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine, Menu
+  FileSpreadsheet, ScanLine, Menu, Palette
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
@@ -44,6 +45,7 @@ const OWNER_TABS = [
   { value: 'bulk-upload', label: 'Bulk Add', icon: Upload, primary: false },
   { value: 'revenue', label: 'Revenue', icon: IndianRupee, primary: false },
   { value: 'reports', label: 'Reports', icon: FileSpreadsheet, primary: false },
+  { value: 'branding', label: 'Branding', icon: Palette, primary: false },
   { value: 'settings', label: 'Settings', icon: Settings, primary: false },
 ] as const;
 
@@ -224,6 +226,10 @@ export default function OwnerDashboard() {
 
           <TabsContent value="reports" className="mt-4">
             <ReportsExport organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="branding" className="mt-4">
+            <BrandingSettings organizationId={organization?.id} gymCode={organization?.gym_code} />
           </TabsContent>
 
           <TabsContent value="settings" className="mt-4">

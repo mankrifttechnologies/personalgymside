@@ -45,6 +45,7 @@ import RegisterOwner from "./pages/RegisterOwner";
 import JoinGym from "./pages/JoinGym";
 import QRCheckIn from "./pages/QRCheckIn";
 import Market from "./pages/Market";
+import GymLanding from "./pages/GymLanding";
 import MemberRoute from "./components/MemberRoute";
 import FloatingChatButton from "./components/FloatingChatButton";
 
@@ -113,6 +114,7 @@ const App = () => {
                 <Route path="/join-gym" element={<JoinGym />} />
                 <Route path="/qr-checkin" element={<QRCheckIn />} />
                 <Route path="/market" element={<Market />} />
+                <Route path="/g/:gymCode" element={<GymLanding />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
