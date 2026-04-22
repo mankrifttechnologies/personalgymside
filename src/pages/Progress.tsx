@@ -194,6 +194,11 @@ export default function Progress() {
           </div>
         )}
 
+        {/* AI Progress Photo Comparison */}
+        <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.35s' }}>
+          <ProgressPhotoComparison />
+        </div>
+
         {/* Goals Progress */}
         <div className="glass rounded-xl p-4 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <h3 className="font-semibold mb-4">Your Goal</h3>
