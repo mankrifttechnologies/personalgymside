@@ -5,6 +5,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import { MUSCLE_GROUPS } from '@/types/fitness';
 import BottomNav from '@/components/BottomNav';
+import ProgressPhotoComparison from '@/components/ProgressPhotoComparison';
 import { 
   TrendingUp, ChevronLeft, Calendar, Flame, Dumbbell,
   Target, History
