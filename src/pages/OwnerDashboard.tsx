@@ -25,6 +25,7 @@ import MemberActivityView from '@/components/owner/MemberActivityView';
 import OrgAnnouncements from '@/components/owner/OrgAnnouncements';
 import MemberPaymentRecording from '@/components/owner/MemberPaymentRecording';
 import MemberPaymentHistory from '@/components/owner/MemberPaymentHistory';
+import InvoicesTab from '@/components/owner/InvoicesTab';
 import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
 import DailyQRGenerator from '@/components/owner/DailyQRGenerator';
@@ -32,7 +33,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine, Menu, Palette
+  FileSpreadsheet, ScanLine, Menu, Palette, FileText
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
@@ -42,6 +43,7 @@ const OWNER_TABS = [
   { value: 'activity', label: 'Activity', icon: Activity, primary: true },
   { value: 'announcements', label: 'News', icon: Megaphone, primary: true },
   { value: 'payments', label: 'Payments', icon: CreditCard, primary: false },
+  { value: 'invoices', label: 'Invoices', icon: FileText, primary: false },
   { value: 'bulk-upload', label: 'Bulk Add', icon: Upload, primary: false },
   { value: 'revenue', label: 'Revenue', icon: IndianRupee, primary: false },
   { value: 'reports', label: 'Reports', icon: FileSpreadsheet, primary: false },
@@ -214,6 +216,10 @@ export default function OwnerDashboard() {
 
           <TabsContent value="payments" className="mt-4">
             <MemberPaymentRecording organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="invoices" className="mt-4">
+            <InvoicesTab organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="bulk-upload" className="mt-4">
