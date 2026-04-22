@@ -64,9 +64,9 @@ export default function InvoicesTab({ organizationId }: Props) {
       if (gm) {
         m.set(om.user_id, {
           gymMemberId: gm.id,
-          name: om.profile?.name || om.profile?.email || 'Member',
-          phone: om.profile?.phone || null,
-          email: om.profile?.email || null,
+          name: om.name || 'Member',
+          phone: om.phone || null,
+          email: om.email || null,
         });
       }
     });
@@ -104,15 +104,15 @@ export default function InvoicesTab({ organizationId }: Props) {
     try {
       // Find member info
       const gm = gymMembers?.find(g => g.id === inv.member_id);
-      const om = members?.find((m: any) => m.user_id === gm?.user_id);
-      const name = om?.profile?.name || om?.profile?.email || 'Member';
+      const om: any = members?.find((m: any) => m.user_id === gm?.user_id);
+      const name = om?.name || 'Member';
 
       const invoiceData: InvoiceData = {
         invoice_number: inv.invoice_number,
         invoice_date: inv.invoice_date,
         member_name: name,
-        member_phone: om?.profile?.phone || null,
-        member_email: om?.profile?.email || null,
+        member_phone: om?.phone || null,
+        member_email: om?.email || null,
         plan_name: inv.plan_name,
         base_amount: Number(inv.base_amount),
         cgst_rate: Number(inv.cgst_rate),
@@ -290,8 +290,8 @@ export default function InvoicesTab({ organizationId }: Props) {
             <div className="space-y-2">
               {invoices.map(inv => {
                 const gm = gymMembers?.find(g => g.id === inv.member_id);
-                const om = members?.find((m: any) => m.user_id === gm?.user_id);
-                const name = om?.profile?.name || 'Member';
+                const om: any = members?.find((m: any) => m.user_id === gm?.user_id);
+                const name = om?.name || 'Member';
                 return (
                   <div key={inv.id} className="flex items-center justify-between gap-3 p-3 rounded-lg border bg-card hover:bg-accent/50 transition">
                     <div className="min-w-0 flex-1">
