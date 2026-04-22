@@ -149,10 +149,10 @@ export function useRunDunningSweep() {
       const userIds = members?.map(m => m.user_id).filter(Boolean) ?? [];
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('user_id, name, phone')
+        .select('user_id, name')
         .in('user_id', userIds);
       const memberMap = new Map(members?.map(m => [m.id, m]) ?? []);
-      const profileMap = new Map(profiles?.map(p => [p.user_id, p]) ?? []);
+      const profileMap = new Map((profiles ?? []).map((p: any) => [p.user_id, p]));
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -166,9 +166,9 @@ export function useRunDunningSweep() {
         const daysOverdue = Math.floor((today.getTime() - due.getTime()) / 86400000);
         const member = memberMap.get(payment.member_id);
         if (!member) continue;
-        const profile = profileMap.get(member.user_id);
+        const profile: any = profileMap.get(member.user_id);
         const name = profile?.name || 'Member';
-        const phone = profile?.phone || null;
+        const phone: string | null = null; // phone not yet on profiles
 
         for (const rule of rules as DunningRule[]) {
           // days_offset: negative = before due, positive = after due
