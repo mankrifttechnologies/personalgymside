@@ -2026,6 +2026,51 @@ export type Database = {
         }
         Relationships: []
       }
+      progress_comparisons: {
+        Row: {
+          after_photo_id: string
+          ai_changes: Json | null
+          ai_summary: string | null
+          before_photo_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          after_photo_id: string
+          ai_changes?: Json | null
+          ai_summary?: string | null
+          before_photo_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          after_photo_id?: string
+          ai_changes?: Json | null
+          ai_summary?: string | null
+          before_photo_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "progress_comparisons_after_photo_id_fkey"
+            columns: ["after_photo_id"]
+            isOneToOne: false
+            referencedRelation: "progress_photos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "progress_comparisons_before_photo_id_fkey"
+            columns: ["before_photo_id"]
+            isOneToOne: false
+            referencedRelation: "progress_photos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       progress_photos: {
         Row: {
           ai_analysis: Json | null
