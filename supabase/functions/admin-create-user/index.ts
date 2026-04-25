@@ -31,14 +31,39 @@ Deno.serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    // Check if user is admin or owner
+    // Check if user is admin or owner (via user_roles, organization_members, or organizations.owner_id)
+    let isAuthorized = false;
+
     const { data: roleData } = await userClient
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle();
 
-    if (roleData?.role !== 'admin' && roleData?.role !== 'owner') {
+    if (roleData?.role === 'admin' || roleData?.role === 'owner') {
+      isAuthorized = true;
+    }
+
+    if (!isAuthorized) {
+      const { data: ownedOrg } = await userClient
+        .from('organizations')
+        .select('id')
+        .eq('owner_id', user.id)
+        .maybeSingle();
+      if (ownedOrg?.id) isAuthorized = true;
+    }
+
+    if (!isAuthorized) {
+      const { data: orgMember } = await userClient
+        .from('organization_members')
+        .select('role')
+        .eq('user_id', user.id)
+        .in('role', ['owner', 'admin'])
+        .maybeSingle();
+      if (orgMember) isAuthorized = true;
+    }
+
+    if (!isAuthorized) {
       throw new Error('Only admins and owners can create users');
     }
 
