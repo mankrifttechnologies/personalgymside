@@ -60,7 +60,7 @@ export default function BackButtonHandler() {
         return;
       }
 
-      // For dynamic routes like /member/:id or /follow/:id/:tab, go to parent
+      // For dynamic routes
       if (path.startsWith('/member/')) {
         navigate('/explorer');
         return;
@@ -69,9 +69,18 @@ export default function BackButtonHandler() {
         navigate('/profile');
         return;
       }
+      if (path.startsWith('/g/')) {
+        // public gym landing → close app or go home
+        App.minimizeApp();
+        return;
+      }
 
-      // Fallback: navigate back in history, or go home
-      navigate(-1);
+      // Fallback: navigate back in history; if no history, go home
+      if (window.history.length > 1) {
+        navigate(-1);
+      } else {
+        navigate('/');
+      }
     });
 
     return () => {
