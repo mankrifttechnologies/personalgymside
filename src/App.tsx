@@ -8,6 +8,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import SplashScreen from "@/components/SplashScreen";
 import BackButtonHandler from "@/components/BackButtonHandler";
+import NativeSetup from "@/components/NativeSetup";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Workout from "./pages/Workout";
