@@ -76,6 +76,7 @@ const App = () => {
             <Sonner />
             {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
             <BrowserRouter>
+              <NativeSetup />
               <BackButtonHandler />
               <FloatingChatButton />
               <Routes>
