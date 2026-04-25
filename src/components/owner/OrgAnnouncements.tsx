@@ -126,6 +126,20 @@ export default function OrgAnnouncements() {
                   </Select>
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Duration</Label>
+                <Select value={form.duration} onValueChange={v => setForm({ ...form, duration: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 day</SelectItem>
+                    <SelectItem value="3">3 days</SelectItem>
+                    <SelectItem value="7">1 week</SelectItem>
+                    <SelectItem value="14">2 weeks</SelectItem>
+                    <SelectItem value="30">1 month</SelectItem>
+                    <SelectItem value="never">No expiry</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Button className="w-full" onClick={() => createAnnouncement.mutate()} disabled={createAnnouncement.isPending || !form.title.trim() || !form.message.trim()}>
                 {createAnnouncement.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Megaphone className="w-4 h-4 mr-2" />}
                 Publish Announcement
