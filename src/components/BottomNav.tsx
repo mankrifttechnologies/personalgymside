@@ -172,7 +172,7 @@ export default function BottomNav() {
                   <Link to="/workout">
                     <div
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
-                        currentPath === '/workout'
+                        workoutActive
                           ? 'gradient-primary glow-button scale-105'
                           : 'gradient-primary'
                       }`}
@@ -182,7 +182,7 @@ export default function BottomNav() {
                     </div>
                   </Link>
                   <span className={`text-[10px] mt-1 font-medium ${
-                    currentPath === '/workout' ? 'text-primary' : 'text-muted-foreground'
+                    workoutActive ? 'text-primary' : 'text-muted-foreground'
                   }`}>Workout</span>
                 </div>
 
