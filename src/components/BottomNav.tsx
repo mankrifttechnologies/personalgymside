@@ -134,9 +134,12 @@ export default function BottomNav() {
     : MEMBER_ITEMS;
 
   const showWorkoutFab = isMember;
+  const workoutActive = resolveActivePath(currentPath) === '/workout';
+
+  if (shouldHideNav(currentPath)) return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       <div className="mx-3 mb-2 sm:mx-4 sm:mb-3">
         <div className="glass-nav rounded-2xl px-2 py-2 max-w-lg mx-auto">
           <div className="flex justify-around items-center">
