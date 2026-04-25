@@ -41,6 +41,51 @@ const ADMIN_ITEMS: NavItem[] = [
   { path: '/profile', icon: User, label: 'Profile' },
 ];
 
+// Maps deep/child routes to the top-level tab that should appear active.
+// Keys are tested with `startsWith` so dynamic segments are covered.
+const DEEP_ROUTE_TAB: Record<string, string> = {
+  // Member tabs
+  '/nutrition': '/',
+  '/progress': '/',
+  '/history': '/',
+  '/schedule': '/',
+  '/classes': '/',
+  '/duels': '/',
+  '/pt-sessions': '/',
+  '/membership': '/profile',
+  '/measurements': '/profile',
+  '/reminders': '/profile',
+  '/friends': '/profile',
+  '/attendance': '/profile',
+  '/leaderboard': '/profile',
+  '/rewards': '/profile',
+  '/support': '/profile',
+  '/install': '/profile',
+  '/follow/': '/profile',
+  '/member/': '/explorer',
+  '/records': '/workout',
+  '/templates': '/workout',
+  '/mobility': '/workout',
+  '/market': '/market',
+  '/g/': '/explorer', // public gym landing falls back to Explore tab
+};
+
+function resolveActivePath(currentPath: string): string {
+  // Direct match wins
+  if (['/', '/explorer', '/workout', '/profile', '/market', '/messages',
+       '/owner', '/trainer', '/admin'].includes(currentPath)) {
+    return currentPath;
+  }
+  // Deep-route prefix match (longest first for specificity)
+  const keys = Object.keys(DEEP_ROUTE_TAB).sort((a, b) => b.length - a.length);
+  for (const key of keys) {
+    if (currentPath === key || currentPath.startsWith(key)) {
+      return DEEP_ROUTE_TAB[key];
+    }
+  }
+  return currentPath;
+}
+
 function isItemActive(itemPath: string, currentPath: string, currentSearch: string) {
   // For items with query params (like /owner?tab=users)
   if (itemPath.includes('?')) {
@@ -53,8 +98,19 @@ function isItemActive(itemPath: string, currentPath: string, currentSearch: stri
     }
     return true;
   }
-  // For base paths, exact match only
-  return currentPath === itemPath;
+  // Resolve deep routes to their parent tab for active state
+  const activePath = resolveActivePath(currentPath);
+  return activePath === itemPath;
+}
+
+// Routes where the bottom nav must NOT be shown
+const HIDDEN_ROUTES = ['/auth', '/demo', '/qr-checkin', '/install',
+                       '/register-owner', '/register-org', '/join-gym'];
+
+function shouldHideNav(path: string) {
+  if (HIDDEN_ROUTES.includes(path)) return true;
+  if (path.startsWith('/g/')) return true; // public gym landing
+  return false;
 }
 
 export default function BottomNav() {
@@ -78,9 +134,12 @@ export default function BottomNav() {
     : MEMBER_ITEMS;
 
   const showWorkoutFab = isMember;
+  const workoutActive = resolveActivePath(currentPath) === '/workout';
+
+  if (shouldHideNav(currentPath)) return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
       <div className="mx-3 mb-2 sm:mx-4 sm:mb-3">
         <div className="glass-nav rounded-2xl px-2 py-2 max-w-lg mx-auto">
           <div className="flex justify-around items-center">
@@ -113,7 +172,7 @@ export default function BottomNav() {
                   <Link to="/workout">
                     <div
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
-                        currentPath === '/workout'
+                        workoutActive
                           ? 'gradient-primary glow-button scale-105'
                           : 'gradient-primary'
                       }`}
@@ -123,7 +182,7 @@ export default function BottomNav() {
                     </div>
                   </Link>
                   <span className={`text-[10px] mt-1 font-medium ${
-                    currentPath === '/workout' ? 'text-primary' : 'text-muted-foreground'
+                    workoutActive ? 'text-primary' : 'text-muted-foreground'
                   }`}>Workout</span>
                 </div>
 
