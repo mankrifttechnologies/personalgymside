@@ -18,7 +18,7 @@ export default function OrgAnnouncements() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [createOpen, setCreateOpen] = useState(false);
-  const [form, setForm] = useState({ title: '', message: '', priority: 'normal', announcement_type: 'general' });
+  const [form, setForm] = useState({ title: '', message: '', priority: 'normal', announcement_type: 'general', duration: '7' });
 
   const { data: announcements, isLoading } = useQuery({
     queryKey: ['org-announcements', user?.id],
@@ -36,6 +36,13 @@ export default function OrgAnnouncements() {
 
   const createAnnouncement = useMutation({
     mutationFn: async () => {
+      let expires_at: string | null = null;
+      if (form.duration !== 'never') {
+        const days = parseInt(form.duration, 10);
+        if (!isNaN(days) && days > 0) {
+          expires_at = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+        }
+      }
       const { error } = await supabase.from('gym_announcements').insert({
         title: form.title,
         message: form.message,
@@ -43,6 +50,7 @@ export default function OrgAnnouncements() {
         announcement_type: form.announcement_type,
         created_by: user!.id,
         is_active: true,
+        expires_at,
       });
       if (error) throw error;
     },
@@ -50,7 +58,7 @@ export default function OrgAnnouncements() {
       queryClient.invalidateQueries({ queryKey: ['org-announcements'] });
       toast.success('Announcement published');
       setCreateOpen(false);
-      setForm({ title: '', message: '', priority: 'normal', announcement_type: 'general' });
+      setForm({ title: '', message: '', priority: 'normal', announcement_type: 'general', duration: '7' });
     },
     onError: (err: any) => toast.error('Failed: ' + err.message),
   });
