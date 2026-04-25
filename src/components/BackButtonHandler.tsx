@@ -3,11 +3,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 
-// Root paths where back button should minimize the app
+// Root paths where back button should minimize the app (top-level tabs / dashboards)
 const ROOT_PATHS = ['/', '/explorer', '/workout', '/messages', '/profile', '/auth', '/owner', '/admin', '/trainer'];
 
 // Explicit parent mappings for sub-pages
 const PARENT_MAP: Record<string, string> = {
+  // Member sub-pages
   '/nutrition': '/',
   '/progress': '/',
   '/measurements': '/profile',
@@ -21,15 +22,17 @@ const PARENT_MAP: Record<string, string> = {
   '/leaderboard': '/profile',
   '/rewards': '/profile',
   '/support': '/profile',
-  '/membership': '/',
-  '/install': '/',
+  '/membership': '/profile',
+  '/install': '/profile',
   '/classes': '/',
   '/duels': '/',
-  '/mobility': '/',
+  '/mobility': '/workout',
   '/pt-sessions': '/',
+  '/market': '/explorer',
+  // Public / onboarding
   '/demo': '/',
   '/register-owner': '/auth',
-  '/register-org': '/',
+  '/register-org': '/auth',
   '/join-gym': '/',
   '/qr-checkin': '/owner',
 };
