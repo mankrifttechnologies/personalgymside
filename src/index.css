@@ -248,10 +248,15 @@
     min-width: 44px;
   }
 
-  /* Native app content area */
+  /* Native app content area — reserves space for floating bottom nav + safe areas */
   .app-content {
     padding-top: env(safe-area-inset-top, 0px);
-    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Utility for any fixed/floating element that should sit above the bottom nav */
+  .above-bottom-nav {
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
   }
 }
 
