@@ -65,7 +65,7 @@ export default function Auth() {
               <img src={appLogo} alt="FitAI Coach" className="w-14 h-14 object-contain" />
               <h1 className="text-4xl font-bold text-gradient">FitAI Coach</h1>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">developed by Ankit Shahi</p>
+            <p className="text-sm text-muted-foreground mt-2">developed by Mankrift Technologies</p>
           </div>
 
           <h2 className="text-xl font-semibold text-center mb-6">

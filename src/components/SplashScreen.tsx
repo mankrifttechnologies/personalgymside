@@ -46,7 +46,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         </h1>
         
         <p className="text-muted-foreground text-sm mb-8">
-          developed by Ankit Shahi
+          developed by Mankrift Technologies
         </p>
 
         {/* Loading indicator */}
