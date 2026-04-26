@@ -143,13 +143,15 @@ export default function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pointer-events-none"
       style={{
         paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)',
-        paddingLeft: 'max(env(safe-area-inset-left, 0px), 0px)',
-        paddingRight: 'max(env(safe-area-inset-right, 0px), 0px)',
+        // Reserve ~16px gutters on each side for Capacitor / iOS / Android
+        // edge back-swipe gestures so the nav never intercepts them.
+        paddingLeft: 'max(env(safe-area-inset-left, 0px), 16px)',
+        paddingRight: 'max(env(safe-area-inset-right, 0px), 16px)',
       }}
     >
-      <div className="mx-3 mb-2 sm:mx-4 sm:mb-3 pointer-events-auto">
-        <div className="glass-nav rounded-2xl px-2 py-2 max-w-lg mx-auto">
-          <div className="flex justify-around items-center">
+      <div className="mb-2 sm:mb-3 pointer-events-auto">
+        <div className="glass-nav rounded-2xl px-2 py-1.5 max-w-lg mx-auto touch-manipulation">
+          <div className="flex justify-around items-center gap-1">
             {showWorkoutFab ? (
               <>
                 {/* Member layout: 2 items, FAB, 2 items */}
