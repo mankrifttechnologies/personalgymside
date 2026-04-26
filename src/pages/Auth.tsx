@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Dumbbell, Mail, Lock, ArrowRight, Info, Building2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Info, Building2 } from 'lucide-react';
+import appLogo from '@/assets/app-logo.png';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -61,9 +62,7 @@ export default function Auth() {
         <div className="glass rounded-2xl p-8 animate-slide-up">
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center justify-center gap-3">
-              <div className="p-3 rounded-xl bg-primary/20">
-                <Dumbbell className="w-8 h-8 text-primary" />
-              </div>
+              <img src={appLogo} alt="FitAI Coach" className="w-14 h-14 object-contain" />
               <h1 className="text-4xl font-bold text-gradient">FitAI Coach</h1>
             </div>
             <p className="text-sm text-muted-foreground mt-2">developed by Ankit Shahi</p>
