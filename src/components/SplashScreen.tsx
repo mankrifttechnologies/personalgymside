@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Dumbbell } from 'lucide-react';
+import appLogo from '@/assets/app-logo.png';
 
 interface SplashScreenProps {
   onComplete: () => void;
@@ -37,8 +37,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
       {/* Logo and branding */}
       <div className="relative flex flex-col items-center animate-scale-in">
-        <div className="p-5 rounded-2xl bg-primary/20 mb-6 animate-pulse">
-          <Dumbbell className="w-16 h-16 text-primary" />
+        <div className="mb-6 animate-pulse">
+          <img src={appLogo} alt="FitAI Coach" className="w-28 h-28 object-contain" />
         </div>
         
         <h1 className="text-5xl md:text-6xl font-bold text-gradient mb-3">
