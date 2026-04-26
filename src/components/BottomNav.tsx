@@ -139,8 +139,15 @@ export default function BottomNav() {
   if (shouldHideNav(currentPath)) return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-      <div className="mx-3 mb-2 sm:mx-4 sm:mb-3">
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pointer-events-none"
+      style={{
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)',
+        paddingLeft: 'max(env(safe-area-inset-left, 0px), 0px)',
+        paddingRight: 'max(env(safe-area-inset-right, 0px), 0px)',
+      }}
+    >
+      <div className="mx-3 mb-2 sm:mx-4 sm:mb-3 pointer-events-auto">
         <div className="glass-nav rounded-2xl px-2 py-2 max-w-lg mx-auto">
           <div className="flex justify-around items-center">
             {showWorkoutFab ? (
