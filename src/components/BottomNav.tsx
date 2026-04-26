@@ -178,7 +178,7 @@ export default function BottomNav() {
 
                 {/* Center Workout FAB */}
                 <div className="flex flex-col items-center -mt-7">
-                  <Link to="/workout">
+                  <Link to="/workout" className="p-1 -m-1 touch-manipulation select-none" aria-label="Workout">
                     <div
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
                         workoutActive
