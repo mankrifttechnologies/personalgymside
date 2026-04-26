@@ -143,13 +143,15 @@ export default function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 lg:hidden pointer-events-none"
       style={{
         paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)',
-        paddingLeft: 'max(env(safe-area-inset-left, 0px), 0px)',
-        paddingRight: 'max(env(safe-area-inset-right, 0px), 0px)',
+        // Reserve ~16px gutters on each side for Capacitor / iOS / Android
+        // edge back-swipe gestures so the nav never intercepts them.
+        paddingLeft: 'max(env(safe-area-inset-left, 0px), 16px)',
+        paddingRight: 'max(env(safe-area-inset-right, 0px), 16px)',
       }}
     >
-      <div className="mx-3 mb-2 sm:mx-4 sm:mb-3 pointer-events-auto">
-        <div className="glass-nav rounded-2xl px-2 py-2 max-w-lg mx-auto">
-          <div className="flex justify-around items-center">
+      <div className="mb-2 sm:mb-3 pointer-events-auto">
+        <div className="glass-nav rounded-2xl px-2 py-1.5 max-w-lg mx-auto touch-manipulation">
+          <div className="flex justify-around items-center gap-1">
             {showWorkoutFab ? (
               <>
                 {/* Member layout: 2 items, FAB, 2 items */}
@@ -160,7 +162,7 @@ export default function BottomNav() {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                      className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl transition-all duration-200 touch-manipulation select-none ${
                         isActive
                           ? 'text-primary bg-primary/10'
                           : 'text-muted-foreground active:scale-95'
@@ -176,7 +178,7 @@ export default function BottomNav() {
 
                 {/* Center Workout FAB */}
                 <div className="flex flex-col items-center -mt-7">
-                  <Link to="/workout">
+                  <Link to="/workout" className="p-1 -m-1 touch-manipulation select-none" aria-label="Workout">
                     <div
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
                         workoutActive
@@ -201,7 +203,7 @@ export default function BottomNav() {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                      className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl transition-all duration-200 touch-manipulation select-none ${
                         isActive
                           ? 'text-primary bg-primary/10'
                           : 'text-muted-foreground active:scale-95'
@@ -232,7 +234,7 @@ export default function BottomNav() {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                    className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl transition-all duration-200 touch-manipulation select-none ${
                       isActive
                         ? 'text-primary bg-primary/10'
                         : 'text-muted-foreground active:scale-95'
