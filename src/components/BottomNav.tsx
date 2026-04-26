@@ -162,7 +162,7 @@ export default function BottomNav() {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                      className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl transition-all duration-200 touch-manipulation select-none ${
                         isActive
                           ? 'text-primary bg-primary/10'
                           : 'text-muted-foreground active:scale-95'
@@ -203,7 +203,7 @@ export default function BottomNav() {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                      className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl transition-all duration-200 touch-manipulation select-none ${
                         isActive
                           ? 'text-primary bg-primary/10'
                           : 'text-muted-foreground active:scale-95'
@@ -234,7 +234,7 @@ export default function BottomNav() {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex flex-col items-center justify-center w-14 h-12 rounded-xl transition-all duration-200 ${
+                    className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl transition-all duration-200 touch-manipulation select-none ${
                       isActive
                         ? 'text-primary bg-primary/10'
                         : 'text-muted-foreground active:scale-95'
