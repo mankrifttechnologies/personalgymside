@@ -12,14 +12,14 @@ export default function FloatingChatButton() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const { data: role } = useUserRole();
   const { unreadCount } = useUnreadMessages();
 
-  const isMember = !role || role === 'member';
+  // Hide on auth/messages/workout and when not signed in.
+  // Visible to ALL authenticated users (members, trainers, owners, admins)
+  // so gym staff can chat with members.
   const hiddenRoutes = ['/messages', '/auth', '/workout'];
   const isHidden =
     !user ||
-    !isMember ||
     hiddenRoutes.some((r) => location.pathname.startsWith(r));
 
   if (isHidden) return null;
