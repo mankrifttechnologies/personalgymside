@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import CreateListingDialog from '@/components/marketplace/CreateListingDialog';
 import ListingDetailSheet from '@/components/marketplace/ListingDetailSheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import BottomNav from '@/components/BottomNav';
 
 export default function Market() {
   const navigate = useNavigate();
@@ -160,6 +161,7 @@ export default function Market() {
 
       <CreateListingDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ListingDetailSheet listing={selected} onClose={() => setSelected(null)} />
+      <BottomNav />
     </div>
   );
 }
