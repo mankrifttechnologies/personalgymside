@@ -161,6 +161,7 @@ export default function Market() {
 
       <CreateListingDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ListingDetailSheet listing={selected} onClose={() => setSelected(null)} />
+      <BottomNav />
     </div>
   );
 }
