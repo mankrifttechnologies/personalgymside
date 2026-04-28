@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MessageCircle } from 'lucide-react';
 import { useUnreadMessages } from '@/hooks/useMessages';
-import { useUserRole } from '@/hooks/useUserRole';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
