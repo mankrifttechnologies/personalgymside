@@ -103,7 +103,7 @@ const App = () => {
                 <Route path="/owner" element={<OwnerDashboard />} />
                 <Route path="/trainer" element={<TrainerDashboard />} />
                 <Route path="/support" element={<MemberRoute><Support /></MemberRoute>} />
-                <Route path="/messages" element={<MemberRoute><Messages /></MemberRoute>} />
+                <Route path="/messages" element={<Messages />} />
                 <Route path="/membership" element={<MemberRoute><Membership /></MemberRoute>} />
                 <Route path="/install" element={<Install />} />
                 <Route path="/classes" element={<MemberRoute><Classes /></MemberRoute>} />
