@@ -17,6 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import CreateListingDialog from '@/components/marketplace/CreateListingDialog';
 import ListingDetailSheet from '@/components/marketplace/ListingDetailSheet';
 import { Skeleton } from '@/components/ui/skeleton';
+import BottomNav from '@/components/BottomNav';
 
 export default function Market() {
   const navigate = useNavigate();
