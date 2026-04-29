@@ -417,6 +417,7 @@ export type Database = {
           created_by: string
           id: string
           organization_id: string
+          qr_type: string
           valid_date: string
         }
         Insert: {
@@ -425,6 +426,7 @@ export type Database = {
           created_by: string
           id?: string
           organization_id: string
+          qr_type?: string
           valid_date?: string
         }
         Update: {
@@ -433,6 +435,7 @@ export type Database = {
           created_by?: string
           id?: string
           organization_id?: string
+          qr_type?: string
           valid_date?: string
         }
         Relationships: [
