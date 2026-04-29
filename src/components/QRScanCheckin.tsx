@@ -80,12 +80,14 @@ export default function QRScanCheckin() {
     setProcessing(true);
 
     try {
+      const today = new Date().toISOString().split('T')[0];
+
       // Validate QR code
       const { data: qrCode, error: qrError } = await supabase
         .from('daily_qr_codes')
         .select('*')
         .eq('code', code)
-        .eq('valid_date', new Date().toISOString().split('T')[0])
+        .eq('valid_date', today)
         .maybeSingle();
 
       if (qrError) throw qrError;
@@ -110,32 +112,23 @@ export default function QRScanCheckin() {
         return;
       }
 
-      // Check if already checked in today
-      const today = new Date().toISOString().split('T')[0];
-      const { data: existing } = await supabase
+      // Find today's open session (checked in, not yet checked out)
+      const { data: openSession } = await supabase
         .from('attendance_logs')
-        .select('id, check_out_time')
+        .select('id, check_in_time')
         .eq('member_id', member.id)
         .gte('check_in_time', today + 'T00:00:00')
         .is('check_out_time', null)
         .maybeSingle();
 
-      if (existing) {
-        // Check out
-        const now = new Date();
-        const { error } = await supabase
-          .from('attendance_logs')
-          .update({
-            check_out_time: now.toISOString(),
-            duration_minutes: Math.floor((now.getTime() - new Date(today + 'T00:00:00').getTime()) / 60000),
-            status: 'checked_out',
-          })
-          .eq('id', existing.id);
-        if (error) throw error;
-        setResult('success');
-        setResultMsg('Checked out successfully! 👋');
-      } else {
-        // Check in
+      const qrType = (qrCode as any).qr_type ?? 'checkin';
+
+      if (qrType === 'checkin') {
+        if (openSession) {
+          setResult('error');
+          setResultMsg("You're already checked in. Scan the Check-Out QR when leaving.");
+          return;
+        }
         const { error } = await supabase
           .from('attendance_logs')
           .insert({
@@ -147,10 +140,30 @@ export default function QRScanCheckin() {
         if (error) throw error;
         setResult('success');
         setResultMsg('Checked in successfully! 💪');
+      } else {
+        // checkout
+        if (!openSession) {
+          setResult('error');
+          setResultMsg("You haven't checked in today. Scan the Check-In QR first.");
+          return;
+        }
+        const now = new Date();
+        const checkInDate = new Date(openSession.check_in_time);
+        const { error } = await supabase
+          .from('attendance_logs')
+          .update({
+            check_out_time: now.toISOString(),
+            duration_minutes: Math.max(1, Math.floor((now.getTime() - checkInDate.getTime()) / 60000)),
+            status: 'checked_out',
+          })
+          .eq('id', openSession.id);
+        if (error) throw error;
+        setResult('success');
+        setResultMsg('Checked out successfully! 👋');
       }
     } catch (err: any) {
       setResult('error');
-      setResultMsg(err.message || 'Check-in failed');
+      setResultMsg(err.message || 'Scan failed');
     } finally {
       setProcessing(false);
     }
