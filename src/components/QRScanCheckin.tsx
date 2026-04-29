@@ -5,39 +5,89 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { ScanLine, CheckCircle2, XCircle, Loader2, Camera, X } from 'lucide-react';
+import {
+  ScanLine,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  Camera,
+  X,
+  RefreshCw,
+  AlertTriangle,
+} from 'lucide-react';
+
+type ScannerState = 'idle' | 'starting' | 'scanning' | 'detected';
 
 export default function QRScanCheckin() {
   const { user } = useAuth();
-  const [scanning, setScanning] = useState(false);
+  const [state, setState] = useState<ScannerState>('idle');
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<'success' | 'error' | null>(null);
   const [resultMsg, setResultMsg] = useState('');
+  const [startError, setStartError] = useState<string | null>(null);
+  const [secondsScanning, setSecondsScanning] = useState(0);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const startTimeoutRef = useRef<number | null>(null);
+  const tickRef = useRef<number | null>(null);
   const containerId = 'qr-reader';
 
-  const startScanner = async () => {
-    setScanning(true);
-    setResult(null);
+  const clearTimers = () => {
+    if (startTimeoutRef.current) {
+      window.clearTimeout(startTimeoutRef.current);
+      startTimeoutRef.current = null;
+    }
+    if (tickRef.current) {
+      window.clearInterval(tickRef.current);
+      tickRef.current = null;
+    }
+  };
 
-    // On Android/Capacitor WebView and modern browsers, explicitly request the
-    // camera first so the OS permission prompt fires reliably. html5-qrcode
-    // sometimes silently fails on Capacitor when permission has not been
-    // granted yet.
+  const stopScanner = async () => {
+    clearTimers();
+    if (scannerRef.current) {
+      try {
+        await scannerRef.current.stop();
+        await scannerRef.current.clear();
+      } catch {
+        /* ignore */
+      }
+      scannerRef.current = null;
+    }
+    setState('idle');
+    setSecondsScanning(0);
+  };
+
+  const startScanner = async () => {
+    setStartError(null);
+    setResult(null);
+    setSecondsScanning(0);
+    setState('starting');
+
+    // 12s safety timeout: if camera never starts, surface an error.
+    startTimeoutRef.current = window.setTimeout(async () => {
+      if (state !== 'scanning') {
+        setStartError("Camera is taking too long to start. Try again, or use the manual code option below.");
+        await stopScanner();
+      }
+    }, 12000);
+
+    // Pre-request camera permission so the OS prompt fires reliably on
+    // Capacitor/Android WebView before html5-qrcode opens its own pipeline.
     try {
       if (typeof navigator !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: { ideal: 'environment' } },
         });
-        // Immediately stop — html5-qrcode will reopen with its own pipeline.
         stream.getTracks().forEach((t) => t.stop());
       }
     } catch (permErr: any) {
-      setScanning(false);
+      clearTimers();
+      setState('idle');
       const msg =
         permErr?.name === 'NotAllowedError'
           ? 'Camera permission denied. Enable it in your device settings to scan.'
           : 'Camera not available on this device.';
+      setStartError(msg);
       toast.error(msg);
       return;
     }
@@ -50,29 +100,42 @@ export default function QRScanCheckin() {
         { facingMode: 'environment' },
         { fps: 10, qrbox: { width: 250, height: 250 } },
         async (decodedText) => {
-          await scanner.stop();
+          setState('detected');
+          clearTimers();
+          try {
+            await scanner.stop();
+            await scanner.clear();
+          } catch {
+            /* ignore */
+          }
           scannerRef.current = null;
-          setScanning(false);
           handleQRCode(decodedText);
         },
-        () => {} // ignore errors during scanning
+        () => {
+          /* ignore per-frame decode errors */
+        }
       );
-    } catch (err: any) {
-      setScanning(false);
-      toast.error(err?.message || 'Could not start the QR scanner. Try again.');
-    }
-  };
 
-  const stopScanner = async () => {
-    if (scannerRef.current) {
-      try { await scannerRef.current.stop(); } catch {}
-      scannerRef.current = null;
+      // Camera is live now.
+      clearTimers();
+      setState('scanning');
+      tickRef.current = window.setInterval(() => {
+        setSecondsScanning((s) => s + 1);
+      }, 1000);
+    } catch (err: any) {
+      clearTimers();
+      setState('idle');
+      const msg = err?.message || 'Could not start the QR scanner. Try again.';
+      setStartError(msg);
+      toast.error(msg);
     }
-    setScanning(false);
   };
 
   useEffect(() => {
-    return () => { stopScanner(); };
+    return () => {
+      stopScanner();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleQRCode = async (code: string) => {
@@ -82,7 +145,6 @@ export default function QRScanCheckin() {
     try {
       const today = new Date().toISOString().split('T')[0];
 
-      // Validate QR code
       const { data: qrCode, error: qrError } = await supabase
         .from('daily_qr_codes')
         .select('*')
@@ -97,7 +159,6 @@ export default function QRScanCheckin() {
         return;
       }
 
-      // Get member record
       const { data: member, error: memberError } = await supabase
         .from('gym_members')
         .select('id')
@@ -112,7 +173,6 @@ export default function QRScanCheckin() {
         return;
       }
 
-      // Find today's open session (checked in, not yet checked out)
       const { data: openSession } = await supabase
         .from('attendance_logs')
         .select('id, check_in_time')
@@ -129,19 +189,16 @@ export default function QRScanCheckin() {
           setResultMsg("You're already checked in. Scan the Check-Out QR when leaving.");
           return;
         }
-        const { error } = await supabase
-          .from('attendance_logs')
-          .insert({
-            member_id: member.id,
-            check_in_time: new Date().toISOString(),
-            status: 'checked_in',
-            is_on_time: true,
-          });
+        const { error } = await supabase.from('attendance_logs').insert({
+          member_id: member.id,
+          check_in_time: new Date().toISOString(),
+          status: 'checked_in',
+          is_on_time: true,
+        });
         if (error) throw error;
         setResult('success');
         setResultMsg('Checked in successfully! 💪');
       } else {
-        // checkout
         if (!openSession) {
           setResult('error');
           setResultMsg("You haven't checked in today. Scan the Check-In QR first.");
@@ -153,7 +210,10 @@ export default function QRScanCheckin() {
           .from('attendance_logs')
           .update({
             check_out_time: now.toISOString(),
-            duration_minutes: Math.max(1, Math.floor((now.getTime() - checkInDate.getTime()) / 60000)),
+            duration_minutes: Math.max(
+              1,
+              Math.floor((now.getTime() - checkInDate.getTime()) / 60000)
+            ),
             status: 'checked_out',
           })
           .eq('id', openSession.id);
@@ -169,12 +229,15 @@ export default function QRScanCheckin() {
     }
   };
 
+  // ---------- Render states ----------
+
   if (processing) {
     return (
       <Card>
         <CardContent className="p-6 text-center">
           <Loader2 className="w-10 h-10 animate-spin text-primary mx-auto mb-3" />
-          <p className="text-sm font-medium">Processing check-in...</p>
+          <p className="text-sm font-medium">Processing your scan…</p>
+          <p className="text-xs text-muted-foreground mt-1">Just a moment</p>
         </CardContent>
       </Card>
     );
@@ -191,7 +254,11 @@ export default function QRScanCheckin() {
           )}
           <p className="font-semibold mb-1">{result === 'success' ? 'Done!' : 'Oops!'}</p>
           <p className="text-sm text-muted-foreground mb-4">{resultMsg}</p>
-          <Button variant="outline" onClick={() => setResult(null)} className="rounded-xl">
+          <Button
+            variant="outline"
+            onClick={() => setResult(null)}
+            className="rounded-xl"
+          >
             Scan Again
           </Button>
         </CardContent>
@@ -199,12 +266,73 @@ export default function QRScanCheckin() {
     );
   }
 
+  const isCameraOpen = state === 'starting' || state === 'scanning' || state === 'detected';
+  const showSlowHint = state === 'scanning' && secondsScanning >= 10;
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
-        {scanning ? (
-          <div className="relative">
-            <div id={containerId} className="w-full" style={{ minHeight: 280 }} />
+        {isCameraOpen ? (
+          <div className="relative bg-black">
+            {/* Always-mounted reader container so html5-qrcode can attach */}
+            <div
+              id={containerId}
+              className="w-full"
+              style={{ minHeight: 320 }}
+            />
+
+            {/* Starting overlay */}
+            {state === 'starting' && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white text-center px-6">
+                <Loader2 className="w-8 h-8 animate-spin mb-3" />
+                <p className="text-sm font-medium">Starting camera…</p>
+                <p className="text-xs text-white/70 mt-1">
+                  Allow camera access if prompted
+                </p>
+              </div>
+            )}
+
+            {/* Detected overlay */}
+            {state === 'detected' && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white text-center px-6">
+                <CheckCircle2 className="w-10 h-10 text-accent mb-2" />
+                <p className="text-sm font-medium">QR detected</p>
+              </div>
+            )}
+
+            {/* Scanning guide overlay */}
+            {state === 'scanning' && (
+              <>
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-[250px] h-[250px]">
+                    {/* Corner brackets */}
+                    <span className="absolute top-0 left-0 w-7 h-7 border-t-2 border-l-2 border-primary rounded-tl-lg" />
+                    <span className="absolute top-0 right-0 w-7 h-7 border-t-2 border-r-2 border-primary rounded-tr-lg" />
+                    <span className="absolute bottom-0 left-0 w-7 h-7 border-b-2 border-l-2 border-primary rounded-bl-lg" />
+                    <span className="absolute bottom-0 right-0 w-7 h-7 border-b-2 border-r-2 border-primary rounded-br-lg" />
+                    {/* Animated scan line */}
+                    <span className="absolute left-2 right-2 top-1/2 h-0.5 bg-primary/80 shadow-[0_0_12px_2px_hsl(var(--primary))] animate-pulse" />
+                  </div>
+                </div>
+
+                <div className="pointer-events-none absolute bottom-3 left-0 right-0 flex justify-center px-4">
+                  <div className="bg-background/85 backdrop-blur rounded-full px-3 py-1.5 flex items-center gap-2 text-xs font-medium">
+                    <ScanLine className="w-3.5 h-3.5 text-primary" />
+                    Place QR in view
+                  </div>
+                </div>
+
+                {showSlowHint && (
+                  <div className="absolute top-3 left-3 right-12 bg-background/90 backdrop-blur rounded-xl px-3 py-2 flex items-start gap-2 text-xs">
+                    <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                    <span className="text-foreground">
+                      Trouble scanning? Hold steady, ensure good lighting, and keep the QR fully inside the frame.
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
+
             <Button
               variant="ghost"
               size="icon"
@@ -221,12 +349,31 @@ export default function QRScanCheckin() {
               <ScanLine className="w-12 h-12 text-primary/20 absolute animate-pulse" />
             </div>
             <div>
-              <p className="font-semibold text-sm mb-0.5">QR Check-In</p>
-              <p className="text-xs text-muted-foreground">Scan your gym's daily QR code to check in</p>
+              <p className="font-semibold text-sm mb-0.5">QR Attendance</p>
+              <p className="text-xs text-muted-foreground">
+                Scan your gym's check-in or check-out QR code
+              </p>
             </div>
+
+            {startError && (
+              <div className="text-left bg-destructive/10 border border-destructive/30 rounded-xl px-3 py-2 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-destructive shrink-0 mt-0.5" />
+                <p className="text-xs text-destructive">{startError}</p>
+              </div>
+            )}
+
             <Button onClick={startScanner} className="gap-2 rounded-xl w-full">
-              <Camera className="w-4 h-4" />
-              Open Scanner
+              {startError ? (
+                <>
+                  <RefreshCw className="w-4 h-4" />
+                  Try Again
+                </>
+              ) : (
+                <>
+                  <Camera className="w-4 h-4" />
+                  Open Scanner
+                </>
+              )}
             </Button>
           </div>
         )}
