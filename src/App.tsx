@@ -43,11 +43,13 @@ import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
+import RegisterMember from "./pages/RegisterMember";
 import JoinGym from "./pages/JoinGym";
 import QRCheckIn from "./pages/QRCheckIn";
 import Market from "./pages/Market";
 import GymLanding from "./pages/GymLanding";
 import MemberRoute from "./components/MemberRoute";
+import VerifiedMemberRoute from "./components/VerifiedMemberRoute";
 import FloatingChatButton from "./components/FloatingChatButton";
 
 const queryClient = new QueryClient();
@@ -93,7 +95,7 @@ const App = () => {
                 <Route path="/schedule" element={<MemberRoute><Schedule /></MemberRoute>} />
                 <Route path="/friends" element={<MemberRoute><Friends /></MemberRoute>} />
                 <Route path="/history" element={<MemberRoute><History /></MemberRoute>} />
-                <Route path="/attendance" element={<MemberRoute><Attendance /></MemberRoute>} />
+                <Route path="/attendance" element={<VerifiedMemberRoute featureName="attendance check-in"><Attendance /></VerifiedMemberRoute>} />
                 <Route path="/leaderboard" element={<MemberRoute><Leaderboard /></MemberRoute>} />
                 <Route path="/rewards" element={<MemberRoute><Rewards /></MemberRoute>} />
                 <Route path="/member/:id" element={<MemberRoute><MemberProfile /></MemberRoute>} />
@@ -104,14 +106,15 @@ const App = () => {
                 <Route path="/trainer" element={<TrainerDashboard />} />
                 <Route path="/support" element={<MemberRoute><Support /></MemberRoute>} />
                 <Route path="/messages" element={<Messages />} />
-                <Route path="/membership" element={<MemberRoute><Membership /></MemberRoute>} />
+                <Route path="/membership" element={<VerifiedMemberRoute featureName="membership plans"><Membership /></VerifiedMemberRoute>} />
                 <Route path="/install" element={<Install />} />
-                <Route path="/classes" element={<MemberRoute><Classes /></MemberRoute>} />
+                <Route path="/classes" element={<VerifiedMemberRoute featureName="class bookings"><Classes /></VerifiedMemberRoute>} />
                 <Route path="/duels" element={<MemberRoute><Duels /></MemberRoute>} />
                 <Route path="/mobility" element={<MemberRoute><Mobility /></MemberRoute>} />
-                <Route path="/pt-sessions" element={<MemberRoute><PTSessions /></MemberRoute>} />
+                <Route path="/pt-sessions" element={<VerifiedMemberRoute featureName="personal training bookings"><PTSessions /></VerifiedMemberRoute>} />
                 <Route path="/demo" element={<Demo />} />
                 <Route path="/register-owner" element={<RegisterOwner />} />
+                <Route path="/register" element={<RegisterMember />} />
                 <Route path="/register-org" element={<RegisterOrganization />} />
                 <Route path="/join-gym" element={<JoinGym />} />
                 <Route path="/qr-checkin" element={<QRCheckIn />} />

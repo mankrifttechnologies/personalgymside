@@ -30,19 +30,21 @@ import DunningTab from '@/components/owner/DunningTab';
 import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
 import DailyQRGenerator from '@/components/owner/DailyQRGenerator';
+import PendingMemberApprovals from '@/components/owner/PendingMemberApprovals';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine, Menu, Palette, FileText, AlertCircle
+  FileSpreadsheet, ScanLine, Menu, Palette, FileText, AlertCircle, UserCheck
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
 const OWNER_TABS = [
   { value: 'overview', label: 'Overview', icon: BarChart3, primary: true },
   { value: 'members', label: 'Members', icon: Users, primary: true },
-  { value: 'activity', label: 'Activity', icon: Activity, primary: true },
-  { value: 'announcements', label: 'News', icon: Megaphone, primary: true },
+  { value: 'approvals', label: 'Approvals', icon: UserCheck, primary: true },
+  { value: 'activity', label: 'Activity', icon: Activity, primary: false },
+  { value: 'announcements', label: 'News', icon: Megaphone, primary: false },
   { value: 'payments', label: 'Payments', icon: CreditCard, primary: false },
   { value: 'invoices', label: 'Invoices', icon: FileText, primary: false },
   { value: 'dunning', label: 'Dunning', icon: AlertCircle, primary: false },
@@ -200,12 +202,17 @@ export default function OwnerDashboard() {
           )}
 
           <TabsContent value="overview" className="mt-4 space-y-4">
+            <PendingMemberApprovals organizationId={organization?.id} compact />
             {organization?.id && <DailyQRGenerator organizationId={organization.id} />}
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="members" className="mt-4">
             <MembersTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="approvals" className="mt-4">
+            <PendingMemberApprovals organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="activity" className="mt-4">

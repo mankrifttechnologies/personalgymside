@@ -27,6 +27,9 @@ import ReferralCard from '@/components/ReferralCard';
 import CheckInStatsWidget from '@/components/CheckInStatsWidget';
 import QRScanCheckin from '@/components/QRScanCheckin';
 import FirstLaunchQRPrompt from '@/components/FirstLaunchQRPrompt';
+import { useIsPendingVerification } from '@/hooks/useMemberVerification';
+import { Card, CardContent } from '@/components/ui/card';
+import { Clock } from 'lucide-react';
 import StoriesBar from '@/components/StoriesBar';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
@@ -42,6 +45,7 @@ export default function Index() {
   const { getRecoveryStatus } = useMuscleRecovery();
   const { totals } = useCalories();
   const { getTodaySchedule } = useWeeklySchedule();
+  const { isPending: pendingVerification, organizationName: pendingOrgName } = useIsPendingVerification();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   if (authLoading || roleLoading) {
@@ -130,8 +134,25 @@ export default function Index() {
       <FirstLaunchQRPrompt />
 
       <main className="px-4 space-y-4 pb-4">
-        {/* QR Check-In — prominent at top */}
-        <QRScanCheckin />
+        {/* QR Check-In — prominent at top (locked while pending verification) */}
+        {pendingVerification ? (
+          <Card className="border-warning/40 bg-warning/5">
+            <CardContent className="p-4 flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-warning/15 shrink-0">
+                <Clock className="w-5 h-5 text-warning" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm">Awaiting verification</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Attendance check-in unlocks once {pendingOrgName || 'your gym'} verifies you.
+                  Most other features are already available.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <QRScanCheckin />
+        )}
 
         {/* Notification Banner */}
         <NotificationBanner />

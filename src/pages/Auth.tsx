@@ -122,9 +122,16 @@ export default function Auth() {
             <div className="p-4 bg-muted/50 rounded-lg">
               <div className="flex items-start gap-3">
                 <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <div className="text-sm text-muted-foreground">
-                  <p className="font-medium text-foreground mb-1">Need an account?</p>
-                  <p>Accounts are created by administrators only. Contact your gym admin or staff to get access.</p>
+                <div className="text-sm">
+                  <p className="font-medium text-foreground mb-1">New here?</p>
+                  <p className="text-muted-foreground mb-2">
+                    Sign up yourself with your gym's code. You'll get instant access — your gym just
+                    needs to verify you for attendance &amp; bookings.
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => navigate('/register')} className="gap-1">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                    Sign Up With Gym Code
+                  </Button>
                 </div>
               </div>
             </div>

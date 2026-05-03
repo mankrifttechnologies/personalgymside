@@ -81,11 +81,12 @@ export default function JoinGym() {
           member_code: 'FIT' + Math.floor(Math.random() * 100000).toString().padStart(5, '0'),
           organization_id: foundOrg.id,
           status: 'active',
-        });
+          is_verified: false,
+        } as any);
         if (gmError) throw gmError;
       }
 
-      toast.success(`Welcome to ${foundOrg.name}! 🎉`);
+      toast.success(`Joined ${foundOrg.name}! Awaiting verification 🎉`);
       setJoined(true);
     } catch (err: any) {
       toast.error(err.message || 'Failed to join');
