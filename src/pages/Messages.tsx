@@ -79,9 +79,12 @@ export default function Messages() {
   // Full-screen chat view when a conversation is selected
   if (selectedChat) {
     return (
-      <div className="fixed inset-0 z-50 bg-background flex flex-col" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+      <div
+        className="fixed inset-0 z-[60] bg-background flex flex-col overflow-hidden"
+        style={{ height: '100dvh', paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      >
         {/* Chat Header */}
-        <div className="bg-primary text-primary-foreground px-2 py-2 flex items-center gap-2 shrink-0">
+        <div className="bg-primary text-primary-foreground px-2 py-2 flex items-center gap-2 shrink-0 min-w-0">
           <Button
             variant="ghost"
             size="icon"
@@ -96,11 +99,11 @@ export default function Messages() {
               {selectedChat.name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 overflow-hidden">
             <p className="font-semibold text-sm truncate leading-tight">{selectedChat.name}</p>
-            <p className="text-[11px] text-primary-foreground/70 leading-tight">Online</p>
+            <p className="text-[11px] text-primary-foreground/70 leading-tight truncate">Online</p>
           </div>
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-0.5 shrink-0">
             <Button variant="ghost" size="icon" className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10">
               <Phone className="w-4 h-4" />
             </Button>
