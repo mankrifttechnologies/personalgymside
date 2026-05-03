@@ -49,6 +49,7 @@ import QRCheckIn from "./pages/QRCheckIn";
 import Market from "./pages/Market";
 import GymLanding from "./pages/GymLanding";
 import MemberRoute from "./components/MemberRoute";
+import VerifiedMemberRoute from "./components/VerifiedMemberRoute";
 import FloatingChatButton from "./components/FloatingChatButton";
 
 const queryClient = new QueryClient();
