@@ -43,6 +43,7 @@ import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
+import RegisterMember from "./pages/RegisterMember";
 import JoinGym from "./pages/JoinGym";
 import QRCheckIn from "./pages/QRCheckIn";
 import Market from "./pages/Market";
@@ -112,6 +113,7 @@ const App = () => {
                 <Route path="/pt-sessions" element={<MemberRoute><PTSessions /></MemberRoute>} />
                 <Route path="/demo" element={<Demo />} />
                 <Route path="/register-owner" element={<RegisterOwner />} />
+                <Route path="/register" element={<RegisterMember />} />
                 <Route path="/register-org" element={<RegisterOrganization />} />
                 <Route path="/join-gym" element={<JoinGym />} />
                 <Route path="/qr-checkin" element={<QRCheckIn />} />
