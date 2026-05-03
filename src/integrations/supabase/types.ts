@@ -900,6 +900,7 @@ export type Database = {
           batch: string | null
           created_at: string
           id: string
+          is_verified: boolean
           joined_at: string
           member_code: string
           organization_id: string | null
@@ -912,6 +913,7 @@ export type Database = {
           batch?: string | null
           created_at?: string
           id?: string
+          is_verified?: boolean
           joined_at?: string
           member_code: string
           organization_id?: string | null
@@ -924,6 +926,7 @@ export type Database = {
           batch?: string | null
           created_at?: string
           id?: string
+          is_verified?: boolean
           joined_at?: string
           member_code?: string
           organization_id?: string | null
