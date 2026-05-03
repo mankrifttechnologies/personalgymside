@@ -27,6 +27,9 @@ import ReferralCard from '@/components/ReferralCard';
 import CheckInStatsWidget from '@/components/CheckInStatsWidget';
 import QRScanCheckin from '@/components/QRScanCheckin';
 import FirstLaunchQRPrompt from '@/components/FirstLaunchQRPrompt';
+import { useIsPendingVerification } from '@/hooks/useMemberVerification';
+import { Card, CardContent } from '@/components/ui/card';
+import { Clock } from 'lucide-react';
 import StoriesBar from '@/components/StoriesBar';
 import { 
   Dumbbell, Flame, Target, TrendingUp, 
@@ -42,6 +45,7 @@ export default function Index() {
   const { getRecoveryStatus } = useMuscleRecovery();
   const { totals } = useCalories();
   const { getTodaySchedule } = useWeeklySchedule();
+  const { isPending: pendingVerification, organizationName: pendingOrgName } = useIsPendingVerification();
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   if (authLoading || roleLoading) {
