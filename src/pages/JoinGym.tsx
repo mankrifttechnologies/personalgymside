@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ChevronLeft, Building2, Loader2, CheckCircle2, Search } from 'lucide-react';
+import AuthQuickLinks from '@/components/AuthQuickLinks';
 
 export default function JoinGym() {
   const { user, loading: authLoading } = useAuth();
