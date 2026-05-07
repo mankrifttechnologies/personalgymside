@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Mail, Lock, ArrowRight, Building2, User } from 'lucide-react';
+import AuthQuickLinks from '@/components/AuthQuickLinks';
 
 export default function RegisterOwner() {
   const [email, setEmail] = useState('');
