@@ -44,6 +44,8 @@ import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
 import RegisterMember from "./pages/RegisterMember";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import JoinGym from "./pages/JoinGym";
 import QRCheckIn from "./pages/QRCheckIn";
 import Market from "./pages/Market";
@@ -84,6 +86,8 @@ const App = () => {
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/workout" element={<MemberRoute><Workout /></MemberRoute>} />
                 <Route path="/nutrition" element={<MemberRoute><Nutrition /></MemberRoute>} />
                 <Route path="/profile" element={<MemberRoute><Profile /></MemberRoute>} />
