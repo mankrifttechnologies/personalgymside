@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Mail, Lock, ArrowRight, Building2, User } from 'lucide-react';
+import AuthQuickLinks from '@/components/AuthQuickLinks';
 
 export default function RegisterOwner() {
   const [email, setEmail] = useState('');
@@ -118,10 +119,8 @@ export default function RegisterOwner() {
             </Button>
           </form>
 
-          <div className="mt-4 text-center">
-            <Button variant="link" onClick={() => navigate('/auth')} className="text-sm">
-              Already have an account? Sign In
-            </Button>
+          <div className="mt-6 pt-4 border-t border-border/40">
+            <AuthQuickLinks />
           </div>
         </div>
       </div>
