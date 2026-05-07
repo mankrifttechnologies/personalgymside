@@ -18,6 +18,7 @@ import {
   CheckCircle2,
   ChevronLeft,
 } from 'lucide-react';
+import AuthQuickLinks from '@/components/AuthQuickLinks';
 
 type Step = 'gym' | 'account' | 'success';
 
