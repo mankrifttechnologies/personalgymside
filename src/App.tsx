@@ -44,6 +44,8 @@ import Demo from "./pages/Demo";
 import RegisterOrganization from "./pages/RegisterOrganization";
 import RegisterOwner from "./pages/RegisterOwner";
 import RegisterMember from "./pages/RegisterMember";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import JoinGym from "./pages/JoinGym";
 import QRCheckIn from "./pages/QRCheckIn";
 import Market from "./pages/Market";
