@@ -118,10 +118,8 @@ export default function RegisterOwner() {
             </Button>
           </form>
 
-          <div className="mt-4 text-center">
-            <Button variant="link" onClick={() => navigate('/auth')} className="text-sm">
-              Already have an account? Sign In
-            </Button>
+          <div className="mt-6 pt-4 border-t border-border/40">
+            <AuthQuickLinks />
           </div>
         </div>
       </div>
