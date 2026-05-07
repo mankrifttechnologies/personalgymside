@@ -167,6 +167,12 @@ export default function JoinGym() {
                 </CardContent>
               </Card>
             )}
+
+            <Card>
+              <CardContent className="p-4">
+                <AuthQuickLinks />
+              </CardContent>
+            </Card>
           </>
         )}
       </main>
