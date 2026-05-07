@@ -125,5 +125,9 @@ export default function Auth() {
             </p>
             <AuthQuickLinks />
           </div>
+        </div>
+      </div>
+    </div>
   );
 }
+
