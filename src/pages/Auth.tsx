@@ -107,6 +107,16 @@ export default function Auth() {
               </div>
             </div>
 
+            <div className="text-right -mt-2">
+              <button
+                type="button"
+                onClick={() => navigate('/forgot-password')}
+                className="text-xs text-primary hover:underline"
+              >
+                Forgot password?
+              </button>
+            </div>
+
             <Button 
               type="submit" 
               variant="energy" 
