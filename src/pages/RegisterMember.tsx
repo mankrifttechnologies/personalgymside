@@ -180,10 +180,8 @@ export default function RegisterMember() {
                   </Button>
                 </div>
 
-                <div className="text-center pt-2">
-                  <Button variant="link" onClick={() => navigate('/auth')} className="text-sm">
-                    Already have an account? Sign In
-                  </Button>
+                <div className="pt-3 border-t border-border/40">
+                  <AuthQuickLinks />
                 </div>
               </CardContent>
             </Card>
