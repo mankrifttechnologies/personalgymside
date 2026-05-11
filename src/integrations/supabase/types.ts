@@ -904,6 +904,7 @@ export type Database = {
           joined_at: string
           member_code: string
           organization_id: string | null
+          pending_gym_name: string | null
           status: Database["public"]["Enums"]["member_status"]
           trainer_id: string | null
           updated_at: string
@@ -917,6 +918,7 @@ export type Database = {
           joined_at?: string
           member_code: string
           organization_id?: string | null
+          pending_gym_name?: string | null
           status?: Database["public"]["Enums"]["member_status"]
           trainer_id?: string | null
           updated_at?: string
@@ -930,6 +932,7 @@ export type Database = {
           joined_at?: string
           member_code?: string
           organization_id?: string | null
+          pending_gym_name?: string | null
           status?: Database["public"]["Enums"]["member_status"]
           trainer_id?: string | null
           updated_at?: string
@@ -2814,6 +2817,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      search_organizations_by_name: {
+        Args: { query: string }
+        Returns: {
+          gym_code: string
+          id: string
+          name: string
+        }[]
       }
     }
     Enums: {
