@@ -112,8 +112,10 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               <Dumbbell className="w-12 h-12 text-primary" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome to <span className="text-gradient">FitAI Coach</span></h1>
-              <p className="text-muted-foreground">Let's set up your profile so we can personalize your experience.</p>
+              <h1 className="text-3xl font-bold mb-2">
+                {hasName ? <>Welcome, <span className="text-gradient">{profile?.name}</span>!</> : <>Welcome to <span className="text-gradient">FitAI Coach</span></>}
+              </h1>
+              <p className="text-muted-foreground">Let's personalize your experience with a few quick details.</p>
             </div>
           </div>
         )}
@@ -125,10 +127,12 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               <h2 className="text-xl font-bold">About You</h2>
             </div>
             <div className="space-y-4">
-              <div>
-                <label className="text-sm text-muted-foreground">Your Name *</label>
-                <Input placeholder="e.g., Ankit" value={name} onChange={e => setName(e.target.value)} />
-              </div>
+              {!hasName && (
+                <div>
+                  <label className="text-sm text-muted-foreground">Your Name *</label>
+                  <Input placeholder="e.g., Ankit" value={name} onChange={e => setName(e.target.value)} />
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm text-muted-foreground">Age</label>
