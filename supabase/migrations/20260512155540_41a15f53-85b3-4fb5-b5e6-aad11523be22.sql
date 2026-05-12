@@ -1,0 +1,1 @@
+ALTER TABLE public.workout_reminders ADD CONSTRAINT workout_reminders_user_id_unique UNIQUE (user_id);
