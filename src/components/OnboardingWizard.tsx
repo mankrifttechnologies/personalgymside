@@ -35,7 +35,7 @@ interface OnboardingWizardProps {
 }
 
 export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
-  const { updateProfile } = useProfile();
+  const { profile, updateProfile } = useProfile();
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
@@ -46,6 +46,19 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
   const [activityLevel, setActivityLevel] = useState<ActivityLevel | ''>('');
   const [diet, setDiet] = useState<DietPreference | ''>('');
   const [saving, setSaving] = useState(false);
+
+  // Pre-fill from existing profile (e.g., name set during sign-up)
+  useEffect(() => {
+    if (!profile) return;
+    if (profile.name && !name) setName(profile.name);
+    if (profile.age && !age) setAge(String(profile.age));
+    if (profile.height_cm && !heightCm) setHeightCm(String(profile.height_cm));
+    if (profile.weight_kg && !weightKg) setWeightKg(String(profile.weight_kg));
+    if (profile.gender && !gender) setGender(profile.gender);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.user_id]);
+
+  const hasName = !!profile?.name?.trim();
 
   const progress = ((step + 1) / STEPS.length) * 100;
 
