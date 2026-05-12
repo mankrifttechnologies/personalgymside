@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useProfile } from '@/hooks/useProfile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,7 +35,7 @@ interface OnboardingWizardProps {
 }
 
 export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
-  const { updateProfile } = useProfile();
+  const { profile, updateProfile } = useProfile();
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
@@ -46,6 +46,19 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
   const [activityLevel, setActivityLevel] = useState<ActivityLevel | ''>('');
   const [diet, setDiet] = useState<DietPreference | ''>('');
   const [saving, setSaving] = useState(false);
+
+  // Pre-fill from existing profile (e.g., name set during sign-up)
+  useEffect(() => {
+    if (!profile) return;
+    if (profile.name && !name) setName(profile.name);
+    if (profile.age && !age) setAge(String(profile.age));
+    if (profile.height_cm && !heightCm) setHeightCm(String(profile.height_cm));
+    if (profile.weight_kg && !weightKg) setWeightKg(String(profile.weight_kg));
+    if (profile.gender && !gender) setGender(profile.gender);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.user_id]);
+
+  const hasName = !!profile?.name?.trim();
 
   const progress = ((step + 1) / STEPS.length) * 100;
 
@@ -99,8 +112,10 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               <Dumbbell className="w-12 h-12 text-primary" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome to <span className="text-gradient">FitAI Coach</span></h1>
-              <p className="text-muted-foreground">Let's set up your profile so we can personalize your experience.</p>
+              <h1 className="text-3xl font-bold mb-2">
+                {hasName ? <>Welcome, <span className="text-gradient">{profile?.name}</span>!</> : <>Welcome to <span className="text-gradient">FitAI Coach</span></>}
+              </h1>
+              <p className="text-muted-foreground">Let's personalize your experience with a few quick details.</p>
             </div>
           </div>
         )}
@@ -112,10 +127,12 @@ export default function OnboardingWizard({ onComplete }: OnboardingWizardProps) 
               <h2 className="text-xl font-bold">About You</h2>
             </div>
             <div className="space-y-4">
-              <div>
-                <label className="text-sm text-muted-foreground">Your Name *</label>
-                <Input placeholder="e.g., Ankit" value={name} onChange={e => setName(e.target.value)} />
-              </div>
+              {!hasName && (
+                <div>
+                  <label className="text-sm text-muted-foreground">Your Name *</label>
+                  <Input placeholder="e.g., Ankit" value={name} onChange={e => setName(e.target.value)} />
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm text-muted-foreground">Age</label>
