@@ -764,6 +764,7 @@ export type Database = {
           id: string
           is_active: boolean
           message: string
+          organization_id: string | null
           priority: string
           title: string
         }
@@ -775,6 +776,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           message: string
+          organization_id?: string | null
           priority?: string
           title: string
         }
@@ -786,6 +788,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           message?: string
+          organization_id?: string | null
           priority?: string
           title?: string
         }
