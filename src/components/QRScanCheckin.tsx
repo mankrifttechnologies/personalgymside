@@ -18,7 +18,12 @@ import {
 
 type ScannerState = 'idle' | 'starting' | 'scanning' | 'detected';
 
-export default function QRScanCheckin() {
+interface QRScanCheckinProps {
+  /** Called shortly after a successful check-in/out so the host (sheet/dialog) can auto-close. */
+  onSuccess?: () => void;
+}
+
+export default function QRScanCheckin({ onSuccess }: QRScanCheckinProps = {}) {
   const { user } = useAuth();
   const [state, setState] = useState<ScannerState>('idle');
   const [processing, setProcessing] = useState(false);
@@ -198,6 +203,7 @@ export default function QRScanCheckin() {
         if (error) throw error;
         setResult('success');
         setResultMsg('Checked in successfully! 💪');
+        if (onSuccess) window.setTimeout(() => onSuccess(), 1600);
       } else {
         if (!openSession) {
           setResult('error');
@@ -220,6 +226,7 @@ export default function QRScanCheckin() {
         if (error) throw error;
         setResult('success');
         setResultMsg('Checked out successfully! 👋');
+        if (onSuccess) window.setTimeout(() => onSuccess(), 1600);
       }
     } catch (err: any) {
       setResult('error');

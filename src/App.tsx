@@ -54,7 +54,19 @@ import MemberRoute from "./components/MemberRoute";
 import VerifiedMemberRoute from "./components/VerifiedMemberRoute";
 import FloatingChatButton from "./components/FloatingChatButton";
 
-const queryClient = new QueryClient();
+// Tuned for "Instagram-fast" feel: keep cached data visible instantly,
+// avoid redundant refetches on every focus/mount, and cap retries.
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000,           // data is fresh for 1 min — no refetch spam
+      gcTime: 5 * 60_000,          // keep cache for 5 min for instant back-nav
+      refetchOnWindowFocus: false, // don't reload every time user tabs back
+      refetchOnReconnect: false,
+      retry: 1,
+    },
+  },
+});
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);

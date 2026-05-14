@@ -1,98 +1,45 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useGymMember } from '@/hooks/useAttendance';
+import { useMembershipPlans } from '@/hooks/useRevenue';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import BottomNav from '@/components/BottomNav';
 import { toast } from 'sonner';
 import {
-  CreditCard, Crown, Check, Loader2, ChevronLeft,
-  Zap, Shield, Star, ExternalLink
+  Crown, Check, Loader2, ChevronLeft,
+  Shield, IndianRupee, Sparkles,
 } from 'lucide-react';
-
-// TODO: Replace these with your actual Stripe price IDs after creating products
-const PLANS = [
-  {
-    name: 'Basic',
-    price: '₹499/mo',
-    priceId: 'price_basic_monthly', // Replace with actual
-    features: ['Gym access', 'Basic workout tracking', 'Community feed'],
-    icon: Zap,
-    color: 'from-secondary to-muted',
-  },
-  {
-    name: 'Pro',
-    price: '₹999/mo',
-    priceId: 'price_pro_monthly', // Replace with actual
-    features: ['Everything in Basic', 'AI Coach', 'Smart Workout Builder', 'Progress reports', 'Priority support'],
-    icon: Star,
-    popular: true,
-    color: 'from-primary to-energy-glow',
-  },
-  {
-    name: 'Elite',
-    price: '₹1,999/mo',
-    priceId: 'price_elite_monthly', // Replace with actual
-    features: ['Everything in Pro', 'Personal trainer access', '1-on-1 video calls', 'Custom meal plans', 'VIP badge'],
-    icon: Crown,
-    color: 'from-warning to-accent',
-  },
-];
+import { format, addDays } from 'date-fns';
 
 export default function Membership() {
   const { user, loading: authLoading } = useAuth();
-  const [subscription, setSubscription] = useState<any>(null);
-  const [checkingSubscription, setCheckingSubscription] = useState(true);
-  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
-  const [managingPortal, setManagingPortal] = useState(false);
+  const { data: gymMember } = useGymMember();
+  const { data: plans, isLoading: plansLoading } = useMembershipPlans();
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
+  const [latestPayment, setLatestPayment] = useState<any | null>(null);
+  const [loadingLatest, setLoadingLatest] = useState(true);
 
+  // Fetch the user's latest payment record so we can show their active plan / pending request
   useEffect(() => {
-    if (user) checkSubscription();
-  }, [user]);
-
-  const checkSubscription = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke('check-subscription');
-      if (error) throw error;
-      setSubscription(data);
-    } catch (e) {
-      console.error('Subscription check error:', e);
-    } finally {
-      setCheckingSubscription(false);
+    if (!gymMember?.id) {
+      setLoadingLatest(false);
+      return;
     }
-  };
-
-  const handleSubscribe = async (priceId: string) => {
-    setLoadingPlan(priceId);
-    try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { priceId },
-      });
-      if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (e: any) {
-      toast.error(e.message || 'Failed to start checkout');
-    } finally {
-      setLoadingPlan(null);
-    }
-  };
-
-  const handleManageSubscription = async () => {
-    setManagingPortal(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('customer-portal');
-      if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, '_blank');
-      }
-    } catch (e: any) {
-      toast.error(e.message || 'Failed to open portal');
-    } finally {
-      setManagingPortal(false);
-    }
-  };
+    (async () => {
+      const { data } = await supabase
+        .from('payment_records')
+        .select('id, amount, status, payment_date, plan_id, membership_plans(name, duration_days)')
+        .eq('member_id', gymMember.id)
+        .order('payment_date', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      setLatestPayment(data);
+      setLoadingLatest(false);
+    })();
+  }, [gymMember?.id, submittingId]);
 
   if (authLoading) {
     return (
@@ -101,15 +48,39 @@ export default function Membership() {
       </div>
     );
   }
-
   if (!user) return <Navigate to="/auth" replace />;
 
-  // Check for success/cancel params
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('success') === 'true') {
-    toast.success('Subscription activated! Welcome aboard! 🎉');
-    window.history.replaceState({}, '', '/membership');
-  }
+  const handleActivate = async (planId: string, price: number) => {
+    if (!gymMember?.id) {
+      toast.error('You need to join a gym before activating a plan.');
+      return;
+    }
+    setSubmittingId(planId);
+    try {
+      const { error } = await supabase.from('payment_records').insert({
+        member_id: gymMember.id,
+        plan_id: planId,
+        amount: price,
+        payment_method: 'pending',
+        status: 'pending',
+        notes: 'Activation requested by member',
+        created_by: user.id,
+      });
+      if (error) throw error;
+      toast.success('Activation request sent to your gym owner!');
+    } catch (e: any) {
+      toast.error(e.message || 'Failed to request activation');
+    } finally {
+      setSubmittingId(null);
+    }
+  };
+
+  const activePlan =
+    latestPayment?.status === 'paid'
+      ? latestPayment
+      : null;
+  const pendingPlan =
+    latestPayment?.status === 'pending' ? latestPayment : null;
 
   return (
     <div className="min-h-screen pb-24 safe-area-top">
@@ -121,92 +92,113 @@ export default function Membership() {
         </Link>
         <div className="flex-1">
           <h1 className="text-xl font-bold">Membership Plans</h1>
-          <p className="text-sm text-muted-foreground">Choose your fitness journey</p>
+          <p className="text-sm text-muted-foreground">Choose your plan & request activation</p>
         </div>
-        {subscription?.subscribed && (
-          <Button
-            variant="glass"
-            size="sm"
-            onClick={handleManageSubscription}
-            disabled={managingPortal}
-            className="gap-1"
-          >
-            {managingPortal ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
-            Manage
-          </Button>
-        )}
       </header>
 
       <main className="px-4 space-y-4">
-        {/* Current subscription banner */}
-        {subscription?.subscribed && (
+        {/* Active / Pending banner */}
+        {!loadingLatest && activePlan && (
           <div className="glass rounded-xl p-4 border-l-4 border-accent animate-slide-up">
             <div className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-accent" />
-              <span className="font-semibold text-accent">Active Subscription</span>
+              <span className="font-semibold text-accent">Active Plan</span>
+            </div>
+            <p className="text-sm mt-1">
+              {(activePlan as any).membership_plans?.name || 'Membership'}
+            </p>
+            {(activePlan as any).membership_plans?.duration_days && (
+              <p className="text-xs text-muted-foreground">
+                Valid till {format(
+                  addDays(new Date(activePlan.payment_date), (activePlan as any).membership_plans.duration_days),
+                  'dd MMM yyyy'
+                )}
+              </p>
+            )}
+          </div>
+        )}
+
+        {!loadingLatest && pendingPlan && (
+          <div className="glass rounded-xl p-4 border-l-4 border-warning animate-slide-up">
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-5 h-5 text-warning animate-spin" />
+              <span className="font-semibold text-warning">Awaiting confirmation</span>
             </div>
             <p className="text-sm text-muted-foreground mt-1">
-              Renews {subscription.subscription_end
-                ? new Date(subscription.subscription_end).toLocaleDateString()
-                : 'soon'}
+              Your gym owner will confirm your payment shortly.
             </p>
           </div>
         )}
 
-        {checkingSubscription ? (
+        {plansLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
+        ) : !plans || plans.filter(p => p.is_active).length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center text-muted-foreground">
+              <Crown className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p className="font-medium">No plans available yet</p>
+              <p className="text-sm mt-1">Your gym hasn't published membership plans.</p>
+            </CardContent>
+          </Card>
         ) : (
           <div className="space-y-4">
-            {PLANS.map((plan) => {
-              const Icon = plan.icon;
-              const isCurrentPlan = subscription?.subscribed && subscription?.product_id;
-
+            {plans.filter(p => p.is_active).map(plan => {
+              const isPending = pendingPlan?.plan_id === plan.id;
+              const isActive = activePlan?.plan_id === plan.id;
               return (
                 <div
-                  key={plan.priceId}
-                  className={`glass rounded-xl p-5 relative overflow-hidden animate-slide-up ${
-                    plan.popular ? 'ring-2 ring-primary' : ''
-                  }`}
+                  key={plan.id}
+                  className="glass rounded-xl p-5 relative overflow-hidden animate-slide-up"
                 >
-                  {plan.popular && (
-                    <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-bl-lg font-medium">
-                      Most Popular
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary to-energy-glow shrink-0">
+                        <Sparkles className="w-5 h-5 text-primary-foreground" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-base truncate">{plan.name}</h3>
+                        <p className="text-xs text-muted-foreground capitalize">
+                          {plan.plan_type} · {plan.duration_days} days
+                        </p>
+                      </div>
                     </div>
-                  )}
-
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className={`p-2.5 rounded-xl bg-gradient-to-br ${plan.color}`}>
-                      <Icon className="w-5 h-5 text-foreground" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-lg">{plan.name}</h3>
-                      <p className="text-xl font-bold text-primary">{plan.price}</p>
+                    <div className="flex items-center text-xl font-bold text-primary shrink-0">
+                      <IndianRupee className="w-4 h-4" />
+                      {plan.price}
                     </div>
                   </div>
 
-                  <ul className="space-y-2 mb-4">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm">
-                        <Check className="w-4 h-4 text-accent flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {plan.description && (
+                    <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
+                      {plan.description}
+                    </p>
+                  )}
+
+                  {plan.features.length > 0 && (
+                    <ul className="space-y-1.5 mb-4">
+                      {plan.features.slice(0, 5).map((feature, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-accent flex-shrink-0" />
+                          <span className="truncate">{feature as string}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <Button
-                    variant={plan.popular ? 'energy' : 'secondary'}
+                    variant={isActive ? 'secondary' : 'energy'}
                     className="w-full gap-2"
-                    onClick={() => handleSubscribe(plan.priceId)}
-                    disabled={!!loadingPlan || subscription?.subscribed}
+                    onClick={() => handleActivate(plan.id, plan.price)}
+                    disabled={!!submittingId || isActive || isPending}
                   >
-                    {loadingPlan === plan.priceId ? (
+                    {submittingId === plan.id ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <ExternalLink className="w-4 h-4" />
-                    )}
-                    {subscription?.subscribed ? 'Current Plan' : 'Subscribe'}
+                    ) : isActive ? (
+                      <Check className="w-4 h-4" />
+                    ) : null}
+                    {isActive ? 'Active Plan' : isPending ? 'Pending approval' : 'Activate Plan'}
                   </Button>
                 </div>
               );
@@ -214,13 +206,9 @@ export default function Membership() {
           </div>
         )}
 
-        <Button
-          variant="ghost"
-          className="w-full"
-          onClick={checkSubscription}
-        >
-          Refresh subscription status
-        </Button>
+        <p className="text-[11px] text-muted-foreground text-center px-4">
+          Tap "Activate Plan" to send a request to your gym owner. Pay them in person — they'll confirm the payment in the app.
+        </p>
       </main>
 
       <BottomNav />

@@ -71,7 +71,7 @@ export default function FirstLaunchQRPrompt() {
             </Button>
           </div>
         </SheetHeader>
-        <QRScanCheckin />
+        <QRScanCheckin onSuccess={dismiss} />
         <Button variant="ghost" onClick={dismiss} className="w-full mt-3 text-muted-foreground">
           Skip for now
         </Button>

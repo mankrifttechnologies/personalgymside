@@ -215,11 +215,11 @@ export default function Friends() {
               </h3>
               <div className="flex gap-2">
                 <Input
-                  placeholder="Enter friend code..."
+                  placeholder="Friend code or member code (FIT…)"
                   value={friendCode}
                   onChange={(e) => setFriendCode(e.target.value.toUpperCase())}
                   className="font-mono uppercase tracking-wider"
-                  maxLength={8}
+                  maxLength={10}
                 />
                 <Button 
                   variant="energy"
@@ -233,6 +233,9 @@ export default function Friends() {
                   )}
                 </Button>
               </div>
+              <p className="text-[11px] text-muted-foreground mt-2">
+                Works across any gym — paste a friend code or their FIT member code.
+              </p>
             </div>
 
             {/* Pending Requests */}
