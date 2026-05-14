@@ -122,6 +122,7 @@ export default function OwnerDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <BranchSwitcher value={selectedBranch} onChange={handleBranchChange} />
             <Link to="/qr-checkin">
               <Button variant="outline" size="sm" className="gap-1.5 text-xs">
                 <ScanLine className="w-4 h-4" /> Check-In
