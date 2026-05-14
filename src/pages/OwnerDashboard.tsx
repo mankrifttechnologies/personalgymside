@@ -31,11 +31,18 @@ import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
 import DailyQRGenerator from '@/components/owner/DailyQRGenerator';
 import PendingMemberApprovals from '@/components/owner/PendingMemberApprovals';
+import TrialsTab from '@/components/owner/TrialsTab';
+import ReengagementTab from '@/components/owner/ReengagementTab';
+import TaxExportTab from '@/components/owner/TaxExportTab';
+import BranchSwitcher from '@/components/owner/BranchSwitcher';
+import MultiBranchRollup from '@/components/owner/MultiBranchRollup';
+import { useOwnerOrganizations, ALL_BRANCHES, getStoredBranch, setStoredBranch } from '@/hooks/useOwnerOrganizations';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine, Menu, Palette, FileText, AlertCircle, UserCheck
+  FileSpreadsheet, ScanLine, Menu, Palette, FileText, AlertCircle, UserCheck,
+  Sparkles, Heart, Receipt
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
@@ -48,6 +55,9 @@ const OWNER_TABS = [
   { value: 'payments', label: 'Payments', icon: CreditCard, primary: false },
   { value: 'invoices', label: 'Invoices', icon: FileText, primary: false },
   { value: 'dunning', label: 'Dunning', icon: AlertCircle, primary: false },
+  { value: 'trials', label: 'Trials', icon: Sparkles, primary: false },
+  { value: 'reengage', label: 'Re-engage', icon: Heart, primary: false },
+  { value: 'tax', label: 'Tax', icon: Receipt, primary: false },
   { value: 'bulk-upload', label: 'Bulk Add', icon: Upload, primary: false },
   { value: 'revenue', label: 'Revenue', icon: IndianRupee, primary: false },
   { value: 'reports', label: 'Reports', icon: FileSpreadsheet, primary: false },
@@ -62,19 +72,30 @@ export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [moreOpen, setMoreOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { data: ownerOrgs } = useOwnerOrganizations();
+  const [selectedBranch, setSelectedBranch] = useState<string>(() => getStoredBranch() || ALL_BRANCHES);
+
+  // First org as fallback when "All branches" is selected for tabs that need a single org
+  const effectiveOrgId = selectedBranch === ALL_BRANCHES ? ownerOrgs?.[0]?.id : selectedBranch;
 
   const { data: organization } = useQuery({
-    queryKey: ['owner-organization', user?.id],
+    queryKey: ['owner-organization', effectiveOrgId],
     queryFn: async () => {
+      if (!effectiveOrgId) return null;
       const { data } = await supabase
         .from('organizations')
         .select('*')
-        .eq('owner_id', user!.id)
+        .eq('id', effectiveOrgId)
         .maybeSingle();
       return data as any;
     },
-    enabled: !!user?.id,
+    enabled: !!effectiveOrgId,
   });
+
+  const handleBranchChange = (id: string) => {
+    setSelectedBranch(id);
+    setStoredBranch(id);
+  };
 
   if (authLoading || roleLoading) {
     return (
@@ -101,6 +122,7 @@ export default function OwnerDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <BranchSwitcher value={selectedBranch} onChange={handleBranchChange} />
             <Link to="/qr-checkin">
               <Button variant="outline" size="sm" className="gap-1.5 text-xs">
                 <ScanLine className="w-4 h-4" /> Check-In
@@ -202,6 +224,7 @@ export default function OwnerDashboard() {
           )}
 
           <TabsContent value="overview" className="mt-4 space-y-4">
+            {selectedBranch === ALL_BRANCHES && (ownerOrgs?.length || 0) > 1 && <MultiBranchRollup />}
             <PendingMemberApprovals organizationId={organization?.id} compact />
             {organization?.id && <DailyQRGenerator organizationId={organization.id} />}
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
@@ -233,6 +256,18 @@ export default function OwnerDashboard() {
 
           <TabsContent value="dunning" className="mt-4">
             <DunningTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="trials" className="mt-4">
+            <TrialsTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="reengage" className="mt-4">
+            <ReengagementTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="tax" className="mt-4">
+            <TaxExportTab organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="bulk-upload" className="mt-4">

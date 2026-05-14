@@ -1574,18 +1574,22 @@ export type Database = {
           amenities: string[]
           brand_color: string
           brand_color_dark: string | null
+          business_address: string | null
           cover_image_url: string | null
           created_at: string
           facebook_url: string | null
           gallery_urls: string[]
           google_maps_url: string | null
           gst_number: string | null
+          gstin: string | null
           id: string
           instagram_handle: string | null
           invoice_counter: number
           invoice_prefix: string
           logo_url: string | null
           organization_id: string
+          pan: string | null
+          state_code: string | null
           tagline: string | null
           trainer_highlights: Json
           updated_at: string
@@ -1598,18 +1602,22 @@ export type Database = {
           amenities?: string[]
           brand_color?: string
           brand_color_dark?: string | null
+          business_address?: string | null
           cover_image_url?: string | null
           created_at?: string
           facebook_url?: string | null
           gallery_urls?: string[]
           google_maps_url?: string | null
           gst_number?: string | null
+          gstin?: string | null
           id?: string
           instagram_handle?: string | null
           invoice_counter?: number
           invoice_prefix?: string
           logo_url?: string | null
           organization_id: string
+          pan?: string | null
+          state_code?: string | null
           tagline?: string | null
           trainer_highlights?: Json
           updated_at?: string
@@ -1622,18 +1630,22 @@ export type Database = {
           amenities?: string[]
           brand_color?: string
           brand_color_dark?: string | null
+          business_address?: string | null
           cover_image_url?: string | null
           created_at?: string
           facebook_url?: string | null
           gallery_urls?: string[]
           google_maps_url?: string | null
           gst_number?: string | null
+          gstin?: string | null
           id?: string
           instagram_handle?: string | null
           invoice_counter?: number
           invoice_prefix?: string
           logo_url?: string | null
           organization_id?: string
+          pan?: string | null
+          state_code?: string | null
           tagline?: string | null
           trainer_highlights?: Json
           updated_at?: string
@@ -1753,6 +1765,9 @@ export type Database = {
           plan_id: string | null
           status: string
           updated_at: string
+          upi_link: string | null
+          upi_qr_url: string | null
+          upi_vpa: string | null
         }
         Insert: {
           amount?: number
@@ -1769,6 +1784,9 @@ export type Database = {
           plan_id?: string | null
           status?: string
           updated_at?: string
+          upi_link?: string | null
+          upi_qr_url?: string | null
+          upi_vpa?: string | null
         }
         Update: {
           amount?: number
@@ -1785,6 +1803,9 @@ export type Database = {
           plan_id?: string | null
           status?: string
           updated_at?: string
+          upi_link?: string | null
+          upi_qr_url?: string | null
+          upi_vpa?: string | null
         }
         Relationships: [
           {
@@ -1984,6 +2005,7 @@ export type Database = {
           level: number | null
           name: string | null
           onboarding_completed: boolean | null
+          phone: string | null
           tier: string | null
           updated_at: string | null
           user_id: string
@@ -2007,6 +2029,7 @@ export type Database = {
           level?: number | null
           name?: string | null
           onboarding_completed?: boolean | null
+          phone?: string | null
           tier?: string | null
           updated_at?: string | null
           user_id: string
@@ -2030,6 +2053,7 @@ export type Database = {
           level?: number | null
           name?: string | null
           onboarding_completed?: boolean | null
+          phone?: string | null
           tier?: string | null
           updated_at?: string | null
           user_id?: string
@@ -2154,6 +2178,75 @@ export type Database = {
           start_time?: string
           status?: string
           trainer_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reengagement_contacts: {
+        Row: {
+          channel: string
+          contacted_at: string
+          contacted_by: string
+          id: string
+          member_id: string
+          message: string | null
+          organization_id: string
+        }
+        Insert: {
+          channel?: string
+          contacted_at?: string
+          contacted_by: string
+          id?: string
+          member_id: string
+          message?: string | null
+          organization_id: string
+        }
+        Update: {
+          channel?: string
+          contacted_at?: string
+          contacted_by?: string
+          id?: string
+          member_id?: string
+          message?: string | null
+          organization_id?: string
+        }
+        Relationships: []
+      }
+      reengagement_templates: {
+        Row: {
+          channel: string
+          created_at: string
+          created_by: string
+          id: string
+          inactivity_days: number
+          is_active: boolean
+          message_template: string
+          name: string
+          organization_id: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          created_by: string
+          id?: string
+          inactivity_days?: number
+          is_active?: boolean
+          message_template: string
+          name: string
+          organization_id: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          inactivity_days?: number
+          is_active?: boolean
+          message_template?: string
+          name?: string
+          organization_id?: string
           updated_at?: string
         }
         Relationships: []
@@ -2366,6 +2459,63 @@ export type Database = {
           subject?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      trials: {
+        Row: {
+          converted_at: string | null
+          converted_payment_id: string | null
+          created_at: string
+          created_by: string
+          end_date: string
+          id: string
+          lead_id: string | null
+          member_id: string | null
+          notes: string | null
+          organization_id: string
+          plan_id: string | null
+          prospect_name: string
+          prospect_phone: string | null
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          converted_at?: string | null
+          converted_payment_id?: string | null
+          created_at?: string
+          created_by: string
+          end_date: string
+          id?: string
+          lead_id?: string | null
+          member_id?: string | null
+          notes?: string | null
+          organization_id: string
+          plan_id?: string | null
+          prospect_name: string
+          prospect_phone?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          converted_at?: string | null
+          converted_payment_id?: string | null
+          created_at?: string
+          created_by?: string
+          end_date?: string
+          id?: string
+          lead_id?: string | null
+          member_id?: string | null
+          notes?: string | null
+          organization_id?: string
+          plan_id?: string | null
+          prospect_name?: string
+          prospect_phone?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
