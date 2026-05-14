@@ -19,6 +19,10 @@ export interface OrgBranding {
   facebook_url: string | null;
   google_maps_url: string | null;
   gst_number: string | null;
+  gstin: string | null;
+  pan: string | null;
+  business_address: string | null;
+  state_code: string | null;
   upi_vpa: string | null;
   upi_payee_name: string | null;
   invoice_prefix: string;
