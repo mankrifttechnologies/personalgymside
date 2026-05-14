@@ -224,6 +224,7 @@ export default function OwnerDashboard() {
           )}
 
           <TabsContent value="overview" className="mt-4 space-y-4">
+            {selectedBranch === ALL_BRANCHES && (ownerOrgs?.length || 0) > 1 && <MultiBranchRollup />}
             <PendingMemberApprovals organizationId={organization?.id} compact />
             {organization?.id && <DailyQRGenerator organizationId={organization.id} />}
             <OwnerAnalyticsDashboard organizationId={organization?.id} />
@@ -255,6 +256,18 @@ export default function OwnerDashboard() {
 
           <TabsContent value="dunning" className="mt-4">
             <DunningTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="trials" className="mt-4">
+            <TrialsTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="reengage" className="mt-4">
+            <ReengagementTab organizationId={organization?.id} />
+          </TabsContent>
+
+          <TabsContent value="tax" className="mt-4">
+            <TaxExportTab organizationId={organization?.id} />
           </TabsContent>
 
           <TabsContent value="bulk-upload" className="mt-4">
