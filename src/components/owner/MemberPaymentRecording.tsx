@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Textarea } from '@/components/ui/textarea';
 import { IndianRupee, Plus, Loader2, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
+import UPIPaymentLinkDialog from './UPIPaymentLinkDialog';
 
 interface MemberPaymentProps {
   organizationId?: string;
@@ -225,12 +226,20 @@ export default function MemberPaymentRecording({ organizationId }: MemberPayment
                   <p className="font-medium text-sm truncate">{name || 'Member'}</p>
                   <p className="text-xs text-muted-foreground">{format(new Date(p.payment_date), 'dd MMM yyyy')} • {p.payment_method}</p>
                 </div>
-                <div className="text-right">
+                <div className="text-right space-y-1">
                   <p className="font-bold text-sm">₹{Number(p.amount).toLocaleString()}</p>
                   <Badge variant={p.status === 'paid' ? 'default' : p.status === 'pending' ? 'secondary' : 'destructive'} className="text-[10px]">
                     {p.status}
                   </Badge>
                 </div>
+                {p.status !== 'paid' && (
+                  <UPIPaymentLinkDialog
+                    organizationId={organizationId}
+                    amount={p.amount}
+                    memberName={name || 'Member'}
+                    invoiceRef={p.invoice_number || undefined}
+                  />
+                )}
               </CardContent>
             </Card>
           );
