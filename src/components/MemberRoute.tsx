@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useUserRole } from '@/hooks/useUserRole';
 import { Loader2 } from 'lucide-react';
+import WhatsAppGymButton from './WhatsAppGymButton';
 
 /**
  * Wraps member-only routes. If the user is an owner, redirect to /admin.
@@ -28,5 +29,10 @@ export default function MemberRoute({ children }: { children: React.ReactNode })
     return <Navigate to="/trainer" replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <WhatsAppGymButton variant="floating" />
+    </>
+  );
 }
