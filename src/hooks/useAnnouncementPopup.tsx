@@ -7,17 +7,18 @@ export function useUnreadAnnouncements() {
   return useQuery({
     queryKey: ['unread-announcements', user?.id],
     queryFn: async () => {
-      // Get active announcements
+      // Get active, non-expired announcements (RLS scopes by gym)
       const { data: announcements, error: aErr } = await supabase
         .from('gym_announcements')
-        .select('id, title, message, priority, announcement_type, created_at')
+        .select('id, title, message, priority, announcement_type, created_at, expires_at')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
       if (aErr) throw aErr;
 
-      // Filter out expired
-      const now = new Date();
-      const active = announcements?.filter(a => true) || []; // expires_at handled by is_active
+      const nowMs = Date.now();
+      const active = (announcements || []).filter(
+        a => !a.expires_at || new Date(a.expires_at).getTime() > nowMs
+      );
 
       if (active.length === 0) return [];
 

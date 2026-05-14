@@ -18,7 +18,7 @@ export default function OrgAnnouncements() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [createOpen, setCreateOpen] = useState(false);
-  const [form, setForm] = useState({ title: '', message: '', priority: 'normal', announcement_type: 'general', duration: '7' });
+  const [form, setForm] = useState({ title: '', message: '', priority: 'normal', announcement_type: 'general', duration: '1' });
 
   const { data: announcements, isLoading } = useQuery({
     queryKey: ['org-announcements', user?.id],
@@ -36,19 +36,28 @@ export default function OrgAnnouncements() {
 
   const createAnnouncement = useMutation({
     mutationFn: async () => {
+      // Default to 1 day if duration is empty/invalid
       let expires_at: string | null = null;
       if (form.duration !== 'never') {
         const days = parseInt(form.duration, 10);
-        if (!isNaN(days) && days > 0) {
-          expires_at = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
-        }
+        const finalDays = !isNaN(days) && days > 0 ? days : 1;
+        expires_at = new Date(Date.now() + finalDays * 24 * 60 * 60 * 1000).toISOString();
       }
+
+      // Resolve this owner's organization so members of that gym (and only that gym) see it
+      const { data: org } = await supabase
+        .from('organizations')
+        .select('id')
+        .eq('owner_id', user!.id)
+        .maybeSingle();
+
       const { error } = await supabase.from('gym_announcements').insert({
         title: form.title,
         message: form.message,
         priority: form.priority,
         announcement_type: form.announcement_type,
         created_by: user!.id,
+        organization_id: org?.id ?? null,
         is_active: true,
         expires_at,
       });
@@ -56,9 +65,10 @@ export default function OrgAnnouncements() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['org-announcements'] });
+      queryClient.invalidateQueries({ queryKey: ['announcements'] });
       toast.success('Announcement published');
       setCreateOpen(false);
-      setForm({ title: '', message: '', priority: 'normal', announcement_type: 'general', duration: '7' });
+      setForm({ title: '', message: '', priority: 'normal', announcement_type: 'general', duration: '1' });
     },
     onError: (err: any) => toast.error('Failed: ' + err.message),
   });

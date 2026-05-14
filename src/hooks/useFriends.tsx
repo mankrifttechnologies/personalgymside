@@ -102,40 +102,48 @@ export function useFriends() {
     },
   });
 
-  // Send friend request by code
+  // Send friend request by code (accepts either profile friend_code OR gym member_code like FIT12345)
   const sendFriendRequest = useMutation({
-    mutationFn: async (friendCode: string) => {
+    mutationFn: async (code: string) => {
       if (!user) throw new Error('Not authenticated');
-      
-      // Use secure database function to find user by friend code
-      const { data: friendUserId, error: findError } = await supabase
-        .rpc('get_user_id_by_friend_code', { code: friendCode.toUpperCase() });
-      
-      if (findError) {
-        console.error('Friend code lookup error:', findError);
-        throw new Error('Friend code not found');
+      const trimmed = code.trim().toUpperCase();
+      if (!trimmed) throw new Error('Enter a code');
+
+      // 1) Try profiles.friend_code first (8-char short code)
+      let friendUserId: string | null = null;
+      const { data: byFriendCode } = await supabase
+        .rpc('get_user_id_by_friend_code', { code: trimmed });
+      if (byFriendCode) friendUserId = byFriendCode as string;
+
+      // 2) Fallback: lookup by gym member_code (e.g. FIT12345) — works across gyms
+      if (!friendUserId) {
+        const { data: gm } = await supabase
+          .from('gym_members')
+          .select('user_id')
+          .eq('member_code', trimmed)
+          .maybeSingle();
+        if (gm?.user_id) friendUserId = gm.user_id;
       }
 
       if (!friendUserId) {
-        throw new Error('Friend code not found');
+        throw new Error('No member found with that code');
       }
 
       if (friendUserId === user.id) {
         throw new Error("You can't add yourself as a friend");
       }
 
-      // Check if already friends
+      // Check if already friends / requested
       const { data: existing } = await supabase
         .from('friendships')
         .select('id')
         .or(`and(user_id.eq.${user.id},friend_id.eq.${friendUserId}),and(user_id.eq.${friendUserId},friend_id.eq.${user.id})`)
-        .single();
+        .maybeSingle();
 
       if (existing) {
         throw new Error('Friend request already exists');
       }
 
-      // Send request
       const { data, error } = await supabase
         .from('friendships')
         .insert({
@@ -145,7 +153,7 @@ export function useFriends() {
         })
         .select()
         .single();
-      
+
       if (error) throw error;
       return data;
     },
