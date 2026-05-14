@@ -72,19 +72,30 @@ export default function OwnerDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [moreOpen, setMoreOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { data: ownerOrgs } = useOwnerOrganizations();
+  const [selectedBranch, setSelectedBranch] = useState<string>(() => getStoredBranch() || ALL_BRANCHES);
+
+  // First org as fallback when "All branches" is selected for tabs that need a single org
+  const effectiveOrgId = selectedBranch === ALL_BRANCHES ? ownerOrgs?.[0]?.id : selectedBranch;
 
   const { data: organization } = useQuery({
-    queryKey: ['owner-organization', user?.id],
+    queryKey: ['owner-organization', effectiveOrgId],
     queryFn: async () => {
+      if (!effectiveOrgId) return null;
       const { data } = await supabase
         .from('organizations')
         .select('*')
-        .eq('owner_id', user!.id)
+        .eq('id', effectiveOrgId)
         .maybeSingle();
       return data as any;
     },
-    enabled: !!user?.id,
+    enabled: !!effectiveOrgId,
   });
+
+  const handleBranchChange = (id: string) => {
+    setSelectedBranch(id);
+    setStoredBranch(id);
+  };
 
   if (authLoading || roleLoading) {
     return (
