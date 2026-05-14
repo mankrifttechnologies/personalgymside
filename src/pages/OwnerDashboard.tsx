@@ -31,11 +31,18 @@ import ReportsExport from '@/components/owner/ReportsExport';
 import GymCodeDisplay from '@/components/owner/GymCodeDisplay';
 import DailyQRGenerator from '@/components/owner/DailyQRGenerator';
 import PendingMemberApprovals from '@/components/owner/PendingMemberApprovals';
+import TrialsTab from '@/components/owner/TrialsTab';
+import ReengagementTab from '@/components/owner/ReengagementTab';
+import TaxExportTab from '@/components/owner/TaxExportTab';
+import BranchSwitcher from '@/components/owner/BranchSwitcher';
+import MultiBranchRollup from '@/components/owner/MultiBranchRollup';
+import { useOwnerOrganizations, ALL_BRANCHES, getStoredBranch, setStoredBranch } from '@/hooks/useOwnerOrganizations';
 import { useIsMobile } from '@/hooks/use-mobile';
 import {
   Building2, Users, BarChart3, Upload, Settings,
   LogOut, Loader2, Plus, IndianRupee, UserMinus, Activity, Megaphone, CreditCard,
-  FileSpreadsheet, ScanLine, Menu, Palette, FileText, AlertCircle, UserCheck
+  FileSpreadsheet, ScanLine, Menu, Palette, FileText, AlertCircle, UserCheck,
+  Sparkles, Heart, Receipt
 } from 'lucide-react';
 import type { AppRole } from '@/types/attendance';
 
@@ -48,6 +55,9 @@ const OWNER_TABS = [
   { value: 'payments', label: 'Payments', icon: CreditCard, primary: false },
   { value: 'invoices', label: 'Invoices', icon: FileText, primary: false },
   { value: 'dunning', label: 'Dunning', icon: AlertCircle, primary: false },
+  { value: 'trials', label: 'Trials', icon: Sparkles, primary: false },
+  { value: 'reengage', label: 'Re-engage', icon: Heart, primary: false },
+  { value: 'tax', label: 'Tax', icon: Receipt, primary: false },
   { value: 'bulk-upload', label: 'Bulk Add', icon: Upload, primary: false },
   { value: 'revenue', label: 'Revenue', icon: IndianRupee, primary: false },
   { value: 'reports', label: 'Reports', icon: FileSpreadsheet, primary: false },
