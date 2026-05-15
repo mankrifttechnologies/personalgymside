@@ -81,35 +81,43 @@ export default function Messages() {
     return (
       <div
         className="fixed inset-0 z-[60] bg-background flex flex-col overflow-hidden"
-        style={{ height: '100dvh', paddingTop: 'env(safe-area-inset-top, 0px)' }}
+        style={{ height: '100dvh' }}
       >
-        {/* Chat Header */}
-        <div className="bg-primary text-primary-foreground px-2 py-2 flex items-center gap-2 shrink-0 min-w-0">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSelectedChat(null)}
-            className="h-9 w-9 shrink-0 text-primary-foreground hover:bg-primary-foreground/10"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <Avatar className="w-9 h-9 shrink-0 ring-2 ring-primary-foreground/20">
-            <AvatarImage src={selectedChat.avatar || undefined} />
-            <AvatarFallback className="bg-primary-foreground/20 text-primary-foreground text-xs font-bold">
-              {selectedChat.name.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0 overflow-hidden">
-            <p className="font-semibold text-sm truncate leading-tight">{selectedChat.name}</p>
-            <p className="text-[11px] text-primary-foreground/70 leading-tight truncate">Online</p>
-          </div>
-          <div className="flex items-center gap-0.5 shrink-0">
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10">
-              <Phone className="w-4 h-4" />
+        {/* Chat Header (extends under status bar via safe-area padding) */}
+        <div
+          className="bg-primary text-primary-foreground shrink-0 shadow-md"
+          style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+        >
+          <div className="px-2 py-2 flex items-center gap-2 min-w-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSelectedChat(null)}
+              className="h-10 w-10 shrink-0 text-primary-foreground hover:bg-primary-foreground/10 -mr-1"
+            >
+              <ArrowLeft className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10">
-              <Video className="w-4 h-4" />
-            </Button>
+            <div className="relative shrink-0">
+              <Avatar className="w-10 h-10 ring-2 ring-primary-foreground/20">
+                <AvatarImage src={selectedChat.avatar || undefined} className="object-cover" />
+                <AvatarFallback className="bg-primary-foreground/20 text-primary-foreground text-xs font-bold">
+                  {selectedChat.name.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-primary" />
+            </div>
+            <div className="flex-1 min-w-0 overflow-hidden ml-1">
+              <p className="font-semibold text-[15px] truncate leading-tight">{selectedChat.name}</p>
+              <p className="text-[11px] text-primary-foreground/75 leading-tight truncate">online</p>
+            </div>
+            <div className="flex items-center gap-0.5 shrink-0">
+              <Button variant="ghost" size="icon" className="h-10 w-10 text-primary-foreground hover:bg-primary-foreground/10">
+                <Video className="w-[18px] h-[18px]" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-10 w-10 text-primary-foreground hover:bg-primary-foreground/10">
+                <Phone className="w-[18px] h-[18px]" />
+              </Button>
+            </div>
           </div>
         </div>
         {/* Chat Body */}
