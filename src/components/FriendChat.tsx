@@ -139,17 +139,17 @@ export default function FriendChat({ friendId, friendName, initialDraft }: Frien
                 {showDate && <DateSeparator date={msgDate} />}
                 <div className={`flex ${isMe ? 'justify-end' : 'justify-start'} ${isLastInGroup ? 'mb-2' : 'mb-0.5'}`}>
                   <div
-                    className={`max-w-[80%] px-3 py-1.5 shadow-sm ${
+                    className={`relative max-w-[75%] pl-2.5 pr-2 pt-1.5 pb-1 shadow-sm ${
                       isMe
                         ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-md'
                         : 'bg-card text-foreground border border-border/60 rounded-2xl rounded-bl-md'
                     }`}
                   >
-                    <p className="text-[14.5px] leading-[1.4] break-words whitespace-pre-wrap">
+                    <p className="text-[14.5px] leading-[1.35] break-words whitespace-pre-wrap pr-[58px]">
                       {message.content}
                     </p>
                     <div
-                      className={`flex items-center justify-end gap-1 mt-0.5 ${
+                      className={`absolute bottom-1 right-2 flex items-center gap-0.5 ${
                         isMe ? 'text-primary-foreground/70' : 'text-muted-foreground/70'
                       }`}
                     >
@@ -203,7 +203,7 @@ export default function FriendChat({ friendId, friendName, initialDraft }: Frien
               autoCorrect="on"
               className="flex-1 bg-transparent text-[15px] py-2.5 outline-none placeholder:text-muted-foreground min-w-0"
             />
-            <Paperclip className="w-5 h-5 text-muted-foreground shrink-0 rotate-45" />
+            <Paperclip className="w-5 h-5 text-muted-foreground shrink-0 -rotate-45" />
           </div>
           <Button
             size="icon"
