@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import QRScanCheckin from '@/components/QRScanCheckin';
-import { ScanLine, X } from 'lucide-react';
+import { ScanLine } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -52,23 +52,21 @@ export default function FirstLaunchQRPrompt() {
 
   return (
     <Sheet open={open} onOpenChange={(v) => !v && dismiss()}>
-      <SheetContent side="bottom" className="rounded-t-3xl px-4 pb-6 pt-4 max-h-[92dvh] overflow-y-auto">
+      <SheetContent
+        side="bottom"
+        className="rounded-t-3xl px-4 pb-6 pt-4 max-h-[92dvh] overflow-y-auto [&>button]:hidden"
+      >
         <SheetHeader className="text-left mb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-primary/15 flex items-center justify-center">
-                <ScanLine className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <SheetTitle className="text-base">Mark today's attendance</SheetTitle>
-                <SheetDescription className="text-xs">
-                  Scan the QR code displayed on your gym's door to check in instantly.
-                </SheetDescription>
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-primary/15 flex items-center justify-center shrink-0">
+              <ScanLine className="w-5 h-5 text-primary" />
             </div>
-            <Button variant="ghost" size="icon" onClick={dismiss} className="rounded-full -mr-1">
-              <X className="w-5 h-5" />
-            </Button>
+            <div>
+              <SheetTitle className="text-base">Mark today's attendance</SheetTitle>
+              <SheetDescription className="text-xs">
+                Scan the QR code displayed on your gym's door to check in instantly.
+              </SheetDescription>
+            </div>
           </div>
         </SheetHeader>
         <QRScanCheckin onSuccess={dismiss} />
