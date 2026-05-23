@@ -356,6 +356,14 @@ export default function Index() {
               <span className="text-[10px] font-semibold">Mobility</span>
             </div>
           </Link>
+          <Link to="/daily-routine">
+            <div className="glass-card p-3 text-center active:scale-95 transition-transform relative overflow-hidden">
+              <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center mx-auto mb-2">
+                <Play className="w-5 h-5 text-accent" />
+              </div>
+              <span className="text-[10px] font-semibold">Daily Routine</span>
+            </div>
+          </Link>
         </div>
 
         {/* Weekly Challenges */}

@@ -38,6 +38,7 @@ import Install from "./pages/Install";
 import Classes from "./pages/Classes";
 import Duels from "./pages/Duels";
 import Mobility from "./pages/Mobility";
+import DailyRoutine from "./pages/DailyRoutine";
 import PTSessions from "./pages/PTSessions";
 import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
@@ -127,6 +128,7 @@ const App = () => {
                 <Route path="/classes" element={<VerifiedMemberRoute featureName="class bookings"><Classes /></VerifiedMemberRoute>} />
                 <Route path="/duels" element={<MemberRoute><Duels /></MemberRoute>} />
                 <Route path="/mobility" element={<MemberRoute><Mobility /></MemberRoute>} />
+                <Route path="/daily-routine" element={<MemberRoute><DailyRoutine /></MemberRoute>} />
                 <Route path="/pt-sessions" element={<VerifiedMemberRoute featureName="personal training bookings"><PTSessions /></VerifiedMemberRoute>} />
                 <Route path="/demo" element={<Demo />} />
                 <Route path="/register-owner" element={<RegisterOwner />} />
