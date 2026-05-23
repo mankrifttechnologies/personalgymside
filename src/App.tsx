@@ -38,6 +38,7 @@ import Install from "./pages/Install";
 import Classes from "./pages/Classes";
 import Duels from "./pages/Duels";
 import Mobility from "./pages/Mobility";
+import DailyRoutine from "./pages/DailyRoutine";
 import PTSessions from "./pages/PTSessions";
 import NotFound from "./pages/NotFound";
 import Demo from "./pages/Demo";
