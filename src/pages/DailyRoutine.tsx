@@ -252,14 +252,24 @@ export default function DailyRoutine() {
                     <p className="text-[11px] text-muted-foreground/80 mt-1">{ex.notes}</p>
                   )}
                 </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="gap-1.5"
-                  onClick={() => openDemo(ex.exercise_name)}
-                >
-                  <Play className="w-3.5 h-3.5" /> Demo
-                </Button>
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    variant="energy"
+                    size="sm"
+                    className="gap-1.5 h-8"
+                    onClick={() => { setVideoExercise(ex.exercise_name); setVideoOpen(true); }}
+                  >
+                    <Play className="w-3.5 h-3.5" fill="currentColor" /> Video
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1.5 h-7 text-[11px]"
+                    onClick={() => openDemo(ex.exercise_name)}
+                  >
+                    Steps
+                  </Button>
+                </div>
               </div>
 
               {/* Sets tracker */}
