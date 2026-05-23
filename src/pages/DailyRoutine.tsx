@@ -155,7 +155,7 @@ export default function DailyRoutine() {
           weight_kg: avgWeight > 0 ? avgWeight : null,
         });
       }
-      try { await awardXP(50, 'Completed daily routine'); } catch {}
+      try { await addXP.mutateAsync(50); } catch {}
       setFinished(true);
       toast.success('Workout completed! +50 XP');
     } catch (err: any) {
