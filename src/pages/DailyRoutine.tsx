@@ -37,6 +37,8 @@ export default function DailyRoutine() {
   const [isLoading, setIsLoading] = useState(false);
   const [demoExercise, setDemoExercise] = useState<string | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
+  const [videoExercise, setVideoExercise] = useState<string | null>(null);
+  const [videoOpen, setVideoOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [finished, setFinished] = useState(false);
 
