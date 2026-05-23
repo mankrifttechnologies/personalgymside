@@ -10,6 +10,7 @@ import { useWorkouts } from '@/hooks/useWorkouts';
 import { useXP } from '@/hooks/useXP';
 import BottomNav from '@/components/BottomNav';
 import ExerciseDemoSheet from '@/components/ExerciseDemoSheet';
+import ExerciseVideoSheet from '@/components/ExerciseVideoSheet';
 import { MUSCLE_GROUPS, MuscleGroup } from '@/types/fitness';
 
 interface RoutineExercise {
@@ -36,6 +37,8 @@ export default function DailyRoutine() {
   const [isLoading, setIsLoading] = useState(false);
   const [demoExercise, setDemoExercise] = useState<string | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
+  const [videoExercise, setVideoExercise] = useState<string | null>(null);
+  const [videoOpen, setVideoOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [finished, setFinished] = useState(false);
 
@@ -249,14 +252,24 @@ export default function DailyRoutine() {
                     <p className="text-[11px] text-muted-foreground/80 mt-1">{ex.notes}</p>
                   )}
                 </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="gap-1.5"
-                  onClick={() => openDemo(ex.exercise_name)}
-                >
-                  <Play className="w-3.5 h-3.5" /> Demo
-                </Button>
+                <div className="flex flex-col gap-1.5">
+                  <Button
+                    variant="energy"
+                    size="sm"
+                    className="gap-1.5 h-8"
+                    onClick={() => { setVideoExercise(ex.exercise_name); setVideoOpen(true); }}
+                  >
+                    <Play className="w-3.5 h-3.5" fill="currentColor" /> Video
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1.5 h-7 text-[11px]"
+                    onClick={() => openDemo(ex.exercise_name)}
+                  >
+                    Steps
+                  </Button>
+                </div>
               </div>
 
               {/* Sets tracker */}
@@ -371,6 +384,12 @@ export default function DailyRoutine() {
           </div>
         )}
       </main>
+
+      <ExerciseVideoSheet
+        exerciseName={videoExercise}
+        open={videoOpen}
+        onOpenChange={setVideoOpen}
+      />
 
       <ExerciseDemoSheet
         exerciseName={demoExercise}
