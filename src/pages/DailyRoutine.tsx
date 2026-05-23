@@ -385,6 +385,12 @@ export default function DailyRoutine() {
         )}
       </main>
 
+      <ExerciseVideoSheet
+        exerciseName={videoExercise}
+        open={videoOpen}
+        onOpenChange={setVideoOpen}
+      />
+
       <ExerciseDemoSheet
         exerciseName={demoExercise}
         open={demoOpen}
