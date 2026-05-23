@@ -10,6 +10,7 @@ import { useWorkouts } from '@/hooks/useWorkouts';
 import { useXP } from '@/hooks/useXP';
 import BottomNav from '@/components/BottomNav';
 import ExerciseDemoSheet from '@/components/ExerciseDemoSheet';
+import ExerciseVideoSheet from '@/components/ExerciseVideoSheet';
 import { MUSCLE_GROUPS, MuscleGroup } from '@/types/fitness';
 
 interface RoutineExercise {
