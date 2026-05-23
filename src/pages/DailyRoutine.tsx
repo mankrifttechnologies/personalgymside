@@ -30,7 +30,7 @@ const storageKey = (uid: string) => `daily-routine:${uid}:${new Date().toISOStri
 export default function DailyRoutine() {
   const { user, loading: authLoading } = useAuth();
   const { createWorkout, addExercise } = useWorkouts();
-  const { awardXP } = useXP();
+  const { addXP } = useXP();
 
   const [routine, setRoutine] = useState<RoutineExercise[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
