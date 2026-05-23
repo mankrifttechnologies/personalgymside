@@ -237,6 +237,20 @@ export default function Index() {
           </div>
         </div>
 
+        {/* Daily Routine CTA */}
+        <Link to="/daily-routine" className="block animate-slide-up" style={{ animationDelay: '0.11s' }}>
+          <div className="glass-card p-4 flex items-center gap-3 active:scale-[0.98] transition-transform border border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-lg shadow-primary/30">
+              <Play className="w-6 h-6 text-primary-foreground" fill="currentColor" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-bold text-sm">Today's Daily Routine</p>
+              <p className="text-[11px] text-muted-foreground">AI workout · video demos · track sets &amp; reps</p>
+            </div>
+            <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
+          </div>
+        </Link>
+
         {/* Level & Rank Section */}
         <p className="section-header" style={{ animationDelay: '0.12s' }}>Progress</p>
         <LevelProgress />
